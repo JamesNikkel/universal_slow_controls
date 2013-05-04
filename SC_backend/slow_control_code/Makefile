@@ -39,6 +39,7 @@ SUBDIRS = lib \
 	TPG26X \
         TSctrl \
 	UTI \
+	UTILM_RH \
 	Watlow_EZ_TC \
         YLM001 \
 
