@@ -1,0 +1,27 @@
+
+
+
+
+Default IP address is:
+10.0.0.1
+Deafault password is 
+00000000
+(That's eight zeros.)
+
+Change IP address to 
+192.168.1.yyy using .NET Utility
+
+Change the password to just one space
+
+
+
+Adam-6000
+Function		Protocol	Port
+UDP ASCII comm.   	UDP  	   	1025
+Datastream        	UDP	 	5168
+GCL IO message	  	UDP		5168
+P2P message 	  	UDP		1025
+Search engine	  	UDP		5048
+TCP ASCII/Modbus comm.	TCP		502
+Download	 	TCP		5450
+Download Adam6024	TCP		7000
