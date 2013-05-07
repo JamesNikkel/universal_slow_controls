@@ -1,12 +1,13 @@
 <?php
 // general_fns.php
-// Part of the CLEAN slow control.  
-// James Nikkel, Yale University, 2006, 2010
+// Part of the astro slow control system.  
+// James Nikkel, 2006, 2010, 2013
 // james.nikkel@yale.edu
 //
 // Presumably there are better ways to write 
 // these functions, but here we are.
 //
+
 function make_unique($in_array)
 {
     // Takes and array of strings in $in_array, finds all of the
@@ -26,7 +27,7 @@ function make_unique($in_array)
 	if ($comp == 0)
 	    $out_array[] = $in_array[$i]; 
     }
-    return $out_array;
+    return($out_array);
 }
 
 function make_new_zero_array($array_size)
@@ -34,7 +35,7 @@ function make_new_zero_array($array_size)
     $out_array = array();
     for ($i=0; $i < $array_size; $i++)
 	$out_array[] = 0;
-    return $out_array;
+    return($out_array);
 }
 
 function make_new_ones_array($array_size)
@@ -42,7 +43,7 @@ function make_new_ones_array($array_size)
     $out_array = array();
     for ($i=0; $i < $array_size; $i++)
 	$out_array[] = 1;
-    return $out_array;
+    return($out_array);
 }
 
 function make_new_index_array($array_size)
@@ -50,7 +51,7 @@ function make_new_index_array($array_size)
     $out_array = array();
     for ($i=0; $i < $array_size; $i++)
 	$out_array[] = $i;
-    return $out_array;
+    return($out_array);
 }
 
 function make_new_data_array_dx($x0, $x1, $dxN)
@@ -58,23 +59,23 @@ function make_new_data_array_dx($x0, $x1, $dxN)
     $N = ($x1 - $x0)*$dxN + 1;
     $out_array = array();
     for ($i=0; $i < $N; $i++)
-	$out_array[] = $x0+$i/$dxN;
-    return $out_array;
+      $out_array[] = $x0+$i/$dxN;
+    return($out_array);
 }
 
 function make_new_data_array_N($x0, $x1, $N)
 {
-    $dxN = 1.0*($N - 1)/($x1 - $x0);
-    $out_array = array();
-    for ($i=0; $i < $N; $i++)
-	$out_array[] = $x0+$i/$dxN;
-    return $out_array;
+  $dxN = 1.0*($N - 1)/($x1 - $x0);
+  $out_array = array();
+  for ($i=0; $i < $N; $i++)
+    $out_array[] = $x0+$i/$dxN;
+  return($out_array);
 }
 
 function make_button($button_txt)
 {
-    $B1=$_POST['B1'];
-    echo ('
+  $B1=$_POST['B1'];
+  echo ('
      <FORM action="'.$_SERVER['PHP_SELF'].'" method="post">
      <P>
      <BUTTON name="B1" type="submit" value=1>
@@ -83,27 +84,27 @@ function make_button($button_txt)
      </P>
      </FORM>  
     ');
-    return $B1;
+  return($B1);
 }
 
 function TimeCallback($aVal) 
 {
-    return Date('H:i:s',$aVal);
+  return(Date('H:i:s',$aVal));
 }
 
 function DateCallback($aVal) 
 {
-    return Date('M d,y',$aVal);
+  return(Date('M d,y',$aVal));
 }
 
 function DateCallback2($aVal) 
 {
-    return Date('M d',$aVal);
+  return(Date('M d',$aVal));
 }
 
 function DateTimeCallback($aVal) 
 {
-    return  DateCallback($aVal)."\n".TimeCallback($aVal);
+  return(DateCallback($aVal)."\n".TimeCallback($aVal));
 }
 
 function str_to_delay($in_str)
@@ -123,62 +124,61 @@ function str_to_delay($in_str)
 
 function reduce_array($in_array, $n)
 {
-//  Takes $in_array and returns $out_array, such that the 
-//  size of $out_array is $n.
+  //  Takes $in_array and returns $out_array, such that the 
+  //  size of $out_array is $n.
     
-    $n_in = count($in_array);
+  $n_in = count($in_array);
     
-    if ($n_in < 1.6*$n)
-	return $in_array;
+  if ($n_in < 1.6*$n)
+    return($in_array);
     
-    $ratio = intval($n_in/$n);
-    $out_array = array();
-    for ($i = 0; $i < $n_in; $i+=$ratio)
+  $ratio = intval($n_in/$n);
+  $out_array = array();
+  for ($i = 0; $i < $n_in; $i+=$ratio)
     {
-	$out_array[] = $in_array[$i];
+      $out_array[] = $in_array[$i];
     }
 
-    return $out_array;
-}
-
-function format_num2($num_in, $num_format)
-{
-    if (strcmp($num_format, "null") == 0)
-    {
-	if ($num_in == 0)
-	    return "0";
-	if (abs($num_in) < 1e-2)
-	    return sprintf(" %1.3e ", $num_in);
-	if (abs($num_in) >= 1e4)
-	    return sprintf(" %1.3e ", $num_in);
-	return sprintf(" %1.3f ", $num_in);
-    }
-    else
-    {
-	return sprintf($num_format, $num_in);
-    }   
+  return($out_array);
 }
 
 function format_num($num_in)
 {
-    if ($num_in == 0)
-	return "0";
-    if (abs($num_in) < 1e-2)
-	return sprintf(" %1.3e ", $num_in);
-    if (abs($num_in) >= 1e4)
-	return sprintf(" %1.3e ", $num_in);
-    return sprintf(" %1.3f ", $num_in);
+  //  Formats a number for writing on a page
+  if ($num_in == 0)
+    return("0");
+  if (abs($num_in) < 1e-2)
+    return(sprintf(" %1.3e ", $num_in));
+  if (abs($num_in) >= 1e4)
+    return(sprintf(" %1.3e ", $num_in));
+  return(sprintf(" %1.3f ", $num_in));
+}
+
+function format_num2($num_in, $num_format)
+{
+  //  Formats a nunber according to $num_format,
+  //  or falls back to format_num() if $num_format is null.
+  if (strcmp($num_format, "null") == 0)
+    {
+      return(format_num($num_in));
+    }
+  else
+    {
+      return(sprintf($num_format, $num_in));
+    }   
 }
 
 function integrate_array($x, $y)
 {
-    $n=count($x);
-    $integral = 0;
-    for ($i = 0; $i < $n - 1; $i++)
+  // Integrate an ordered pair of arrays using the trapezoid method.
+  // Assumes the data is already sorted!
+  $n=count($x);
+  $integral = 0;
+  for ($i = 0; $i < $n - 1; $i++)
     {
-	$integral += ($x[$i+1] - $x[$i]) * ($y[$i+1] + $y[$i])/2.0; 
+      $integral += ($x[$i+1] - $x[$i]) * ($y[$i+1] + $y[$i])/2.0; 
     }
-    return($integral);
+  return($integral);
 }
 
 function mult_ab($a, $b)
@@ -212,11 +212,17 @@ function shift_array($array_in, $factor)
 
 function linear_regression($x, $y)
 {
+  // Calculate the linear regression of an ordered pair of arrays.
+  // Initially subtracts the minimum x value to prevent round-off errors for
+  // large values.
     $n = 1.0*count($x);
     $x_min = 1.0*min($x);
     $x_max = 1.0*max($x);
-    
+    $y_min = 1.0*min($y);
+
     $x = shift_array($x, -1*$x_min);
+    $y = shift_array($y, -1*$y_min);
+
 
     $sumx = 1.0*array_sum($x);
     $sumy = 1.0*array_sum($y);
@@ -227,6 +233,8 @@ function linear_regression($x, $y)
     
     $y_intercept = ($sumy - $slope*$sumx)/$n;
     $y_intercept -= $slope * $x_min;
+    $y_intercept += $y_min;
+
 
     $y_fit_min = $slope * $x_min + $y_intercept;
     $y_fit_max = $slope * $x_max + $y_intercept;
