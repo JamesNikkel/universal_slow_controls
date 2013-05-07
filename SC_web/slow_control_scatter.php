@@ -56,7 +56,7 @@ foreach ($sensor_names as $sensor_name)
 	{
 	    echo ('selected="selected"');
 	}
-	echo(' value="'.$sensor_name.'" >'.$sensor_name.'</option> ');
+	echo(' value="'.$sensor_name.'" >'.$sensor_descs[$sensor_name].'</option> ');
     }
 }
 echo ('</select>');
@@ -74,7 +74,7 @@ foreach ($sensor_names as $sensor_name)
 	{
 	    echo ('selected="selected"');
 	}
-	echo(' value="'.$sensor_name.'" >'.$sensor_name.'</option> ');
+	echo(' value="'.$sensor_name.'" >'.$sensor_descs[$sensor_name].'</option> ');
     }
 }
 echo ('</select>');
@@ -183,15 +183,19 @@ if (!empty($y_reg))
 $graph->Stroke($plot_name);
 
 
-////   This next section generate the HTML with the plot 
+////   This next section generate the HTML with the plot in a table.
 
+echo ('<TABLE border="0" cellpadding="0" frame="box" width=100%>');
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+echo ('<TR align=center>');
+echo ('<TD colspan=1>');
 echo ('<input type="image" src="'.$plot_name.'" name="click_position[]" border=0 align=center width ='.$_SESSION['single_view_x_size'].'>');
-echo ('<br>');
-echo ('&#160 &#160 &#160 <input type="image" src="pixmaps/int.png" name="int_y" value=1 title="Integrate">');
-echo ('&#160 &#160 &#160 <input type="image" src="pixmaps/lin_reg.png" name="lin_reg" value=1 title="Linear regression">');
+echo ('</TD>');
+echo ('</TR>');
 echo ('</FORM>');
-echo ('</FORM>');
+//echo ('&#160 &#160 &#160 <input type="image" src="pixmaps/int.png" name="int_y" value=1 title="Integrate">');
+//echo ('&#160 &#160 &#160 <input type="image" src="pixmaps/lin_reg.png" name="lin_reg" value=1 title="Linear regression">');
+//echo ('</FORM>');
 
 if (!empty($_POST['int_y']))
 {

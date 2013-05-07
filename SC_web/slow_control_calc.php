@@ -81,6 +81,8 @@ if (empty($_SESSION['single_view_x_size']))
     $_SESSION['single_view_y_size'] = 400;
 }
 
+///  Set the number of points in the plots to half that of the view size
+$num_plot_points = (int)($_SESSION['single_view_x_size']/2);
 
 ///  Define max and min times for display by finding the very first and very
 ///  last entry in the database.  These are stored as session variables
@@ -123,10 +125,10 @@ else
 
 if (strcmp($logxy, "intlog") == 0)
     $query = "SELECT time, value FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
-	" AND ".$_SESSION['t_max_p']." AND `value` > 0 ORDER BY RAND() LIMIT 2000";
+	" AND ".$_SESSION['t_max_p']." AND `value` > 0 ORDER BY RAND() LIMIT ".$num_plot_points;
 else
     $query = "SELECT time, value FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
-	" AND ".$_SESSION['t_max_p']." ORDER BY RAND() LIMIT 2000";
+	" AND ".$_SESSION['t_max_p']." ORDER BY RAND() LIMIT ".$num_plot_points;
 
 
 $result = mysql_query($query);
@@ -171,7 +173,8 @@ else
 
 mysql_close($connection);
 
-////   This next section generate the HTML with the plot names in a table.
+////   This next section generate the HTML with the plot in a table.
+
 echo ('<TABLE border="0" cellpadding="0" frame="box" width=100%>');
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
 echo ('<TR align=center>');
@@ -376,8 +379,8 @@ if (!empty($_POST['lin_reg']))
     echo (' &#160 Slope = '.format_num($y_reg[2]));
     echo ('('.$sensor_units[$sensor_name].'/s)');
     
-    echo (' &#160 &#160 Y-intercept = ');
-    echo (format_num($y_reg[3]));
+    echo (' &#160 &#160 (Local) Y-intercept = ');
+    echo (format_num($y_reg[1]));
     echo ('('.$sensor_units[$sensor_name].')');
     echo ('</TH>');
 

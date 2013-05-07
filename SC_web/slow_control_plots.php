@@ -79,6 +79,9 @@ if (empty($_SESSION['plot_view_x_size']))
     $_SESSION['plot_view_y_size'] = 400;
 }
 
+///  Set the number of points in the plots to half that of the view size
+$num_plot_points = (int)($_SESSION['plot_view_x_size']/2);
+
 
 ///  Now make a form where we can choose the time window from which to plot the data.
 ///  This creates/sets session variables, t_min_p and t_max_p used below. 
@@ -163,10 +166,10 @@ foreach ($my_sensor_names as $sensor_name)
 		
 	  if (strcmp($logxy, "intlog") == 0)
 	    $query = "SELECT time, value, rate FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
-	      " AND ".$_SESSION['t_max_p']." AND `value` > 0 ORDER BY RAND() LIMIT 500";
+	      " AND ".$_SESSION['t_max_p']." AND `value` > 0 ORDER BY RAND() LIMIT ".$num_plot_points;
 	  else
 	    $query = "SELECT time, value, rate FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
-	      " AND ".$_SESSION['t_max_p']." ORDER BY RAND() LIMIT 500";
+	      " AND ".$_SESSION['t_max_p']." ORDER BY RAND() LIMIT ".$num_plot_points;
 
 	  $result = mysql_query($query);
 	  if (!$result)
