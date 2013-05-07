@@ -20,4 +20,6 @@ ldconfig
 
 
 #   Remember to add the start script to your system startup system if
-#   you want the slow control system to start automatically upon boot 
+#   you want the slow control system to start automatically upon boot
+
+
