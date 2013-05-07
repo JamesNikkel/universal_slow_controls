@@ -274,43 +274,43 @@ function leq($a, $b)
 
 function closest_index($x, $x_array)
 {
-    $y_array = array_keys($x_array);
-    return((int)find_y($x, $x_array, $y_array));
+  $y_array = array_keys($x_array);
+  return((int)find_y($x, $x_array, $y_array));
 }
 
 function find_y($x, $x_array, $y_array)
 {
-    if ($x < min($x_array))
-	return $y_array[array_search(min($x_array), $x_array)];
-    if ($x > max($x_array))
-	return $y_array[array_search(max($x_array), $x_array)];
-    if (in_array($x, $x_array))
-	return $y_array[array_search($x, $x_array)];
+  if ($x < min($x_array))
+    return $y_array[array_search(min($x_array), $x_array)];
+  if ($x > max($x_array))
+    return $y_array[array_search(max($x_array), $x_array)];
+  if (in_array($x, $x_array))
+    return $y_array[array_search($x, $x_array)];
  
-    $xy_array = array_combine($y_array, $x_array);
-    asort($xy_array);
-    $x_array = array_values($xy_array);
-    $y_array = array_keys($xy_array);
+  $xy_array = array_combine($y_array, $x_array);
+  asort($xy_array);
+  $x_array = array_values($xy_array);
+  $y_array = array_keys($xy_array);
 
-    $ind = $x_array;
-    array_walk($ind, 'geq', $x);
-    $ind = array_filter($ind);
-    $ind = array_keys($ind);
-    $ind = $ind[0];
+  $ind = $x_array;
+  array_walk($ind, 'geq', $x);
+  $ind = array_filter($ind);
+  $ind = array_keys($ind);
+  $ind = $ind[0];
     
-    if (abs($x-$x_array[$ind]) < abs($x-$x_array[$ind - 1]))
-	return $y_array[$ind];
-    return $y_array[$ind - 1];
+  if (abs($x-$x_array[$ind]) < abs($x-$x_array[$ind - 1]))
+    return($y_array[$ind]);
+  return($y_array[$ind - 1]);
 }
 
 function abs_array($x)
 {
-   $n=count($x);
-   for ($i = 0; $i < $n - 1; $i++)
+  $n=count($x);
+  for ($i = 0; $i < $n - 1; $i++)
     {
-	$x[$i] = abs($x[$i]); 
+      $x[$i] = abs($x[$i]); 
     }
-    return $x;
+  return $x;
 }
 
 function make_data_file($x_array, $y_array, $file_name)
@@ -332,106 +332,104 @@ function make_data_file($x_array, $y_array, $file_name)
 
 function range_SI_units($units_in, $n)
 {
-    if ($n == 0)
-	return($units_in);
+  if ($n == 0)
+    return($units_in);
 
-    $SI_prefix = array(8 =>'y', 7 => 'z', 6 => 'a', 5 => 'f', 4 => 'p', 3 => 'n', 2 => 'u', 1 => 'm', 0 => '', 
-		       -1 => 'k', -2 => 'M', -3 => 'G', -4 => 'T', -5 => 'P', -6 => 'E', -7 => 'Z', -8 => 'Y');
-    $SI_flip = array_flip($SI_prefix);
+  $SI_prefix = array(8 =>'y', 7 => 'z', 6 => 'a', 5 => 'f', 4 => 'p', 3 => 'n', 2 => 'u', 1 => 'm', 0 => '', 
+		     -1 => 'k', -2 => 'M', -3 => 'G', -4 => 'T', -5 => 'P', -6 => 'E', -7 => 'Z', -8 => 'Y');
+  $SI_flip = array_flip($SI_prefix);
 
-    if (strlen($units_in) == 1)
-	return($SI_prefix[$n] . $units_in);
+  if (strlen($units_in) == 1)
+    return($SI_prefix[$n] . $units_in);
     
     
-    $prefix = substr($units_in, 0, 1);
-    $units_out = substr($units_in, 1);
+  $prefix = substr($units_in, 0, 1);
+  $units_out = substr($units_in, 1);
     
-    if (in_array($prefix, $SI_prefix))
+  if (in_array($prefix, $SI_prefix))
     {
-	$n_in = 0;
+      $n_in = 0;
 	
-	$n_in = $SI_flip[$prefix];
-	return($SI_prefix[$n+$n_in] . $units_out);
+      $n_in = $SI_flip[$prefix];
+      return($SI_prefix[$n+$n_in] . $units_out);
     }
     
-    else
+  else
     {
-	return($SI_prefix[$n] . $units_in);
+      return($SI_prefix[$n] . $units_in);
     }
-    
 }
 
 function int_to_colour($n)
 {  
-    if ($n == 0)
-	$c = "black";
-    else if ($n == 1)
-	$c = "white";
-    else if ($n == 2)
-	$c = "red";
-    else if ($n == 3)
-	$c = "green";
-    else if ($n == 4)
-	$c = "yellow";
-    else if ($n == 5)
-	$c = "magenta";
-    else
-	$c = "cyan";
-    
-    return $c;
+  if ($n == 0)
+    $c = "black";
+  else if ($n == 1)
+    $c = "white";
+  else if ($n == 2)
+    $c = "red";
+  else if ($n == 3)
+    $c = "green";
+  else if ($n == 4)
+    $c = "yellow";
+  else if ($n == 5)
+    $c = "magenta";
+  else
+    $c = "cyan";
+  return $c;
 }
 
 function int_to_style($n)
 {
-    if ($n == 0)
-	$s = "solid";
-    else if ($n == 1)
-	$s = "dotted";
-    else
-	$s = "dashed";
+  if ($n == 0)
+    $s = "solid";
+  else if ($n == 1)
+    $s = "dotted";
+  else
+    $s = "dashed";
     
-    return $s;
+  return $s;
 }
 
 function string_to_array($string, $separator, $value = NULL)
 {
-    if (strlen($string) > 0) 
+  if (strlen($string) > 0) 
     {
-        $splitter = explode($separator, $string);
-        $index = array_shift($splitter); // get first element
-        $function = __FUNCTION__;
-        return array($index => $function(implode($separator, $splitter), $separator, $value));
+      $splitter = explode($separator, $string);
+      $index = array_shift($splitter); // get first element
+      $function = __FUNCTION__;
+      return array($index => $function(implode($separator, $splitter), $separator, $value));
     }
-    return $value;
+  return $value;
 }
 
 
 function interpolate_arrays($x_array, $y_array, $x_index, $y_index)
 {
-    // Generates new y_array so that the times that y is sampled at (y_index)
-    // is the same as the times that x is sampled at (x_index)
+  // Generates new y_array so that the times that y is sampled at (y_index)
+  // is the same as the times that x is sampled at (x_index)
     
-    $y = $x_array;
+  $y = $x_array;
     
-    for ($i = 0; $i < count($x_index); $i++)
+  for ($i = 0; $i < count($x_index); $i++)
     {
-	$y[$i] = find_y($x_index[$i], $y_index, $y_array);
+      $y[$i] = find_y($x_index[$i], $y_index, $y_array);
     }
-    return $y;
+  return $y;
 }
 
 function isnull($strng)
 {
-    if ($strng == "")
-	return(1);
-    if ($strng == " ")
-	return(1);
-    if ($strng == "null")
-	return(1);
-    if ($strng == "NULL")
-	return(1);
-    else
-	return(0);
+  if ($strng == "")
+    return(1);
+  if ($strng == " ")
+    return(1);
+  if ($strng == "null")
+    return(1);
+  if ($strng == "NULL")
+    return(1);
+  else
+    return(0);
 }
 
 function get_disc_units_val($value, $disc_array)

@@ -380,7 +380,7 @@ if (!empty($_POST['lin_reg']))
     echo ('('.$sensor_units[$sensor_name].'/s)');
     
     echo (' &#160 &#160 (Local) Y-intercept = ');
-    echo (format_num($y_reg[2]));
+    echo (format_num($y_reg[0]));
     echo ('('.$sensor_units[$sensor_name].')');
     echo ('</TH>');
 
