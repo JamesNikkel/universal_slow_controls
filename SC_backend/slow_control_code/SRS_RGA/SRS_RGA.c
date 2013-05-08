@@ -58,7 +58,7 @@ int read_ion_val(char *val)
 	    tries++;
 	    if (tries > 100)
 		return(1);
-	    wait(100);
+	    msleep(100);
 	}
     } while (i < num_bytes);  
     return(0);
@@ -112,7 +112,6 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
     char       ret_string[1024];
     int        status_byte;
     int        status = 0;
-    char       current[4];
     
     struct  termios    tbuf;  // serial line settings 
    
@@ -286,28 +285,31 @@ void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
     char       cmd_string[1024];
     char       ret_string[1024];                      
     int        status = 0;
-    
-    
+   
     sprintf(cmd_string, "MR0%c", CR);   //  Turn off RF and DC to quadrapole
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
-	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     msleep(500);
     
     sprintf(cmd_string, "HV0%c", CR);   // Turn off electron multiplier
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
 	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     msleep(500);
  
     sprintf(cmd_string, "FL0%c", CR);    //  Turn off filament current
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
 	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     close(inst_dev);
+
+    if (status > 0)
+      fprintf(stderr, "Comm errors in clean_up_inst\n");
+
 }
 
 #define _def_read_sensor
@@ -319,7 +321,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     char       cmd_string[1024];
     char       ret_string[1024];
     
-    int        status;
+    int        status = 0;
     double     SP_Parm = 1;     // mA/Torr
     double     ST_Parm = 1;     // mA/Tort
     double     CDEM_gain = 1;   // gain of the electron multiplier
@@ -333,24 +335,24 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
     sprintf(cmd_string, "%c%c", CR, CR);  // Clear buffer
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
-	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     msleep(500);
     
     sprintf(cmd_string, "SP?%c", CR);   // get partial pressure conv. factor
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
-	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     msleep(500);
-    sscanf(ret_string, "%f", &SP_Parm);
+    sscanf(ret_string, "%lf", &SP_Parm);
     
     sprintf(cmd_string, "HV?%c", CR);         //  Read CEM voltage
     if (comm_type == TYPE_SERIAL)	// do serial write/read
-	status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     else                               // do tcp write/read
-	status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     msleep(500);
     sscanf(ret_string, "%d", &HV);
     
@@ -358,12 +360,12 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
 	sprintf(cmd_string, "MG?%c", CR);                             // get electron multiplier gain
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(200);
 	
-	sscanf(ret_string, "%f", &CDEM_gain);	
+	sscanf(ret_string, "%lf", &CDEM_gain);	
     }
     
 
@@ -371,9 +373,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
 	sprintf(cmd_string, "MR%d%c", s_s->num, CR);
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(200);
 	*val_out = 1e-4/SP_Parm/CDEM_gain*conv_to_current(ret_string, 4);
     }
@@ -384,24 +386,24 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
 	sprintf(cmd_string, "ST?%c", CR);            // get total pressure conv. factor
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(200);
-	sscanf(ret_string, "%f", &ST_Parm);
+	sscanf(ret_string, "%lf", &ST_Parm);
 
 	sprintf(cmd_string, "MI%d%c", (int)s_s->parm1, CR);        // Set start mass
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 
 	sprintf(cmd_string, "MI?%c", CR);        // Check set of start mass
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 	
 	sscanf(ret_string, "%d", &x0);
@@ -413,16 +415,16 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
 	sprintf(cmd_string, "MF%d%c", (int)s_s->parm2, CR);         // Set stop mass
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 	
 	sprintf(cmd_string, "MF?%c", CR);         // Check set of stop mass
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 
 	sscanf(ret_string, "%d", &x1);
@@ -434,16 +436,16 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
 	sprintf(cmd_string, "SA%d%c", (int)s_s->parm3, CR);        // Set number of points per AMU
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 	
 	sprintf(cmd_string, "SA?%c", CR);        // Check number of points per AMU
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
     
 	sscanf(ret_string, "%d", &dxN);
@@ -455,9 +457,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
 	sprintf(cmd_string, "AP?%c", CR);  // Count size of analog run
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_serial(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	else                               // do tcp write/read
-	    status = query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	    status += query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	msleep(100);
 
 	sscanf(ret_string, "%d", &num_points);
@@ -467,13 +469,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	//fprintf(stdout, "Starting analog run, %d to %d, (N = %d) \n ", x0, x1, num_points);
 	sprintf(cmd_string, "SC1%c", CR);
 	if (comm_type == TYPE_SERIAL)	// do serial write/read
-	    status = write_serial(inst_dev, cmd_string, strlen(cmd_string));
+	    status += write_serial(inst_dev, cmd_string, strlen(cmd_string));
 	else                               // do tcp write/read
-	    status = write_tcp(inst_dev, cmd_string, strlen(cmd_string));
+	    status += write_tcp(inst_dev, cmd_string, strlen(cmd_string));
 	msleep(100);
 	
 	memset(y_array, 0, sizeof(y_array));
-	sprintf(y_array, "");
+	y_array[0] = 0;
 
 	//  Read out points:
 	int num_read = 0;
@@ -522,7 +524,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	return(1);
     }
 
-    return(0);    
+    return(status);    
 }
 
 #define _def_set_sensor

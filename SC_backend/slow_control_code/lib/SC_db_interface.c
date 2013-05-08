@@ -4,7 +4,7 @@
 /* Copyright 2006, 2009, 2010 */
 /* James Public Licence. */
 
-#include "SC_db_interface.h"
+#include "SC_db_interface_raw.h"
 
 void print_my_error (MYSQL *conn, char *message)
 {
@@ -55,7 +55,7 @@ int process_result_set(MYSQL_RES *res_set, char *result_string, int *num_rows, i
   *num_rows = 0;
   *num_cols = 0;
   
-  sprintf (result_string, "");
+  result_string[0] = 0;
   while ((row = mysql_fetch_row(res_set)) != NULL)
     {
       sprintf(res_temp, "%s , ", row[0] != NULL ? row[0] : "NULL");
@@ -226,6 +226,46 @@ int read_mysql_int(char *stmt_str, int *result_int)
   return(ret_val);
 }
 
+int read_mysql_time(char *stmt_str, time_t *result_time)
+{
+  // Processes stmt_str from mysql db, and put into result_string. 
+  // Returns 0 is all is well, 1 if there is an error. 
+  int ret_val = 0;
+  MYSQL_RES *res_set;
+  MYSQL_ROW    row;
+  
+  if( start_mysql_conn() == 1 ) // connect failed
+    return 1;
+  
+  if (mysql_query(conn, stmt_str) != 0)   // the statement failed 
+    {
+      print_my_error(conn, "Could not execute statement");
+      mysql_close(conn);
+      return(1);
+    }
+  
+  res_set = mysql_store_result(conn);
+  if (res_set)            
+    {
+      // process set and write to int
+      while ((row = mysql_fetch_row(res_set)) != NULL)
+	{
+	  sscanf(row[0], "%lu",  result_time);
+	}
+      mysql_free_result(res_set);
+    }
+  else   // stmt_str should be written to always return something so error out if no result
+    {
+      mysql_close(conn);
+      return(1);
+    }
+  mysql_close(conn);
+  return(ret_val);
+}
+
+
+
+
 int read_mysql_int_array(char *stmt_str, int result_int_array[], int *array_count)
 {
   // Processes stmt_str from mysql db, and put into result_int_array. 
@@ -315,7 +355,7 @@ int insert_mysql_sensor_data (char *sensor_name, time_t t_in, double v_in, doubl
   //  Returns 0 is all is well, 1 if there is an error.
   char query_strng[512];  
   
-  sprintf(query_strng, "INSERT INTO `sc_sens_%s` SET `time` = %d, `value` = %e, `rate` = %e", sensor_name, t_in, v_in, r_in);        
+  sprintf(query_strng, "INSERT INTO `sc_sens_%s` SET `time` = %lu, `value` = %e, `rate` = %e", sensor_name, (unsigned long)t_in, v_in, r_in);        
   return(write_to_mysql(query_strng));
 }
 
@@ -325,8 +365,6 @@ int insert_mysql_sensor_array_data (char *sensor_name, time_t t_in, double v_in,
   //  Returns 0 is all is well, 1 if there is an error.
   int ret_val = 0;
   char *query_strng;  
-  int num_rows = 0;
-  int num_cols = 0;
   
   query_strng = malloc((strlen(sensor_name)+strlen(y)+1024) * sizeof(char));  
   if (query_strng == NULL)
@@ -335,8 +373,8 @@ int insert_mysql_sensor_array_data (char *sensor_name, time_t t_in, double v_in,
       return(1);
     }
   
-  sprintf(query_strng, "INSERT INTO `sc_sens_%s` SET `time` = %d, `value` = %e, `rate` = %e, `x0` = %e, `x1` = %e, `dxN` = %d, `y0` = %e, `y` = \"%s\"", 
-	  sensor_name, t_in, v_in, r_in, x0, x1, dxN, y0, y);
+  sprintf(query_strng, "INSERT INTO `sc_sens_%s` SET `time` = %lu, `value` = %e, `rate` = %e, `x0` = %e, `x1` = %e, `dxN` = %d, `y0` = %e, `y` = \"%s\"", 
+	  sensor_name, (unsigned long)t_in, v_in, r_in, x0, x1, dxN, y0, y);
   ret_val += write_to_mysql(query_strng);
   
   free(query_strng);
@@ -348,7 +386,6 @@ int read_mysql_sensor_data (char *sensor_name, time_t *t_out, double *v_out, dou
 {
   // Reads sensor data from the database.
   // Returns 0 is all is well, 1 if there is an error. 
-  int   ret_val = 0;
   char  query_strng[512]; 
   char  res_strng[512];
   int num_rows = 0;
@@ -358,7 +395,7 @@ int read_mysql_sensor_data (char *sensor_name, time_t *t_out, double *v_out, dou
   if(process_statement(query_strng, res_strng, &num_rows, &num_cols))
       return(1);
   
-  if (sscanf(res_strng, "%d , %le , %le", t_out, v_out, r_out) == 3)
+  if (sscanf(res_strng, "%lu , %le , %le", t_out, v_out, r_out) == 3)
       return(0);
   return(1);
 }
@@ -380,8 +417,8 @@ int insert_mysql_system_message(struct sys_message_struct *sm_s)
     }
   
   sprintf(query_strng, 
-	  "INSERT INTO `msg_log` ( `time`, `ip_address`, `subsys`, `msgs`, `type`, `is_error`) VALUES ( %d, \"%s\", \"%s\", \"%s\", \"%s\", %d)",
-	  time(NULL), sm_s->ip_address, sm_s->subsys, sm_s->msgs, sm_s->type, sm_s->is_error);
+	  "INSERT INTO `msg_log` ( `time`, `ip_address`, `subsys`, `msgs`, `type`, `is_error`) VALUES ( %lu, \"%s\", \"%s\", \"%s\", \"%s\", %d)",
+	  (unsigned long)time(NULL), sm_s->ip_address, sm_s->subsys, sm_s->msgs, sm_s->type, sm_s->is_error);
   ret_val += write_to_mysql(query_strng);
   
   free(query_strng);
@@ -444,7 +481,7 @@ int get_element(char *element, char *res_string, int num_rows, int num_cols, int
       return(1);
     }
   
-  sprintf(format_strng, '\0');
+  format_strng[0] = 0;
   for (i=0; i<n; i++)
     {
       if (i == n_ij)
@@ -456,7 +493,7 @@ int get_element(char *element, char *res_string, int num_rows, int num_cols, int
   free(format_strng);
   
   if (ret_val !=1)
-    sprintf(element, '\0');
+    element[0] = 0;
   
   return(0);
 }

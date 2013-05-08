@@ -5,13 +5,6 @@
 /* Copyright 2006, 2007, 2009 */
 /* James public licence. */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/fcntl.h>
-#include <unistd.h>
-#include <time.h>
-#include <signal.h>
-
 #include "SC_db_interface.h"
 #include "SC_aux_fns.h"
 #include "SC_sensor_interface.h"
@@ -61,8 +54,6 @@ int read_to_eol(char *val)
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)  
 {
-    char       cmd_string[64];   
-    char       val[64];
     struct  termios    tbuf;  /* serial line settings */
     
     if (( inst_dev = open(i_s->dev_address, (O_RDWR | O_NDELAY), 0)) < 0 ) 
@@ -100,7 +91,6 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     // Reads out the current value of the device
     // at given sensor.
     
-    char       cmd_string[64];
     char       val[32];                      
     double     val_out1, val_out2;
 

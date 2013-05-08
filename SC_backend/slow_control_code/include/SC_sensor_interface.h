@@ -8,7 +8,7 @@
 #define _SC_sens_H_
 
 #include "SC_aux_fns.h"
-#include "SC_db_interface.h"
+#include "SC_db_interface_raw.h"
 #include "SC_inst_interface.h"
 #include "modbus.h"
 

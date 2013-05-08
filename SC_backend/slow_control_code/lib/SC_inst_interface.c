@@ -6,8 +6,6 @@
 
 #include "SC_inst_interface.h"
 
-
-
 int register_inst(struct inst_struct *i_s)
 {
     //  If you are using daemonize(), you must call that
@@ -39,8 +37,8 @@ int update_inst_state(struct inst_struct *i_s)
     char   query_strng[1024];
     int    my_errors = 0;
 
-    sprintf(query_strng, "UPDATE `sc_insts` SET `PID`=%d, `start_time`=%d, `last_update_time`=%d  WHERE `name` = \"%s\" ", 
-	    i_s->PID, i_s->start_time, i_s->start_time, i_s->name);
+    sprintf(query_strng, "UPDATE `sc_insts` SET `PID`=%d, `start_time`=%lu, `last_update_time`=%lu  WHERE `name` = \"%s\" ", 
+	    i_s->PID, (unsigned long)i_s->start_time,  (unsigned long)i_s->start_time, i_s->name);
     my_errors += write_to_mysql(query_strng);
 
     return(my_errors);
@@ -124,10 +122,10 @@ int read_mysql_inst_struct(struct inst_struct *i_s, char *inst_name)
     if (read_mysql_string(query_strng, i_s->dev_address, sizeof(i_s->dev_address)))
 	return(1);
     sprintf(query_strng, "SELECT start_time FROM `sc_insts` WHERE `name` = \"%s\" LIMIT 1", inst_name);
-    if (read_mysql_int(query_strng, &i_s->start_time))
+    if (read_mysql_time(query_strng, &i_s->start_time))
 	return(1);
     sprintf(query_strng, "SELECT last_update_time FROM `sc_insts` WHERE `name` = \"%s\" LIMIT 1", inst_name);
-    if (read_mysql_int(query_strng, &i_s->last_update_time))
+    if (read_mysql_time(query_strng, &i_s->last_update_time))
 	return(1);
     sprintf(query_strng, "SELECT PID FROM `sc_insts` WHERE `name` = \"%s\" LIMIT 1", inst_name);
     if (read_mysql_int(query_strng, &i_s->PID))
@@ -177,7 +175,7 @@ int mysql_inst_run_status(struct inst_struct *i_s)
   
   if (time(NULL) - INST_TABLE_UPDATE_PERIOD > i_s->last_update_time)
     {
-      sprintf(query_strng, "UPDATE `sc_insts` SET `last_update_time` = %d WHERE `name` = \"%s\" ", time(NULL), i_s->name);
+      sprintf(query_strng, "UPDATE `sc_insts` SET `last_update_time` = %lu WHERE `name` = \"%s\" ",  (unsigned long)time(NULL), i_s->name);
       my_errors += write_to_mysql(query_strng);
       i_s->last_update_time = time(NULL);
     }

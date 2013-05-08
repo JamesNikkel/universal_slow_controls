@@ -5,7 +5,7 @@
 /* Copyright 2010 */
 /* James public licence. */
 
-#include "SC_db_interface.h"
+#include "SC_db_interface_raw.h"
 #include "SC_aux_fns.h"
 #include "SC_sensor_interface.h"
 
@@ -472,8 +472,6 @@ int read_mysql_HV_slot_ctrl_data(struct HV_ctrl_slot_struct *HV_s, char *name)
 
 int read_status(struct inst_struct *i_s)
 {       
-  int    status_byte;
-  int    status_bits[8];
   struct sys_message_struct sys_message_struc;
   
   if (read_HV_status())
@@ -482,7 +480,7 @@ int read_status(struct inst_struct *i_s)
   if ((Flt_sts == 1 || Intlck_sts == 1 ) && (has_error == 0))
     {
       has_error = 1;
-      sprintf(sys_message_struc.ip_address, "");
+      sprintf(sys_message_struc.ip_address, " ");
       sprintf(sys_message_struc.subsys, i_s->subsys);
       if (Flt_sts)
 	sprintf(sys_message_struc.msgs, "HV Supply: %s (%s) has tripped.", 
@@ -526,7 +524,6 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 {
   struct sensor_struct *s_s;
   struct HV_ctrl_slot_struct *HV_s;
-  char  cmd_string[16];   
   int   i;
   
   HV_s = malloc(sizeof(struct HV_ctrl_slot_struct));
@@ -559,19 +556,21 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       if (!(is_null(s_s->name)))  
 	{
 	  s_s->data_type = ARRAY_DATA; 
-	if (s_s->settable)    
-	  if ((strncmp(s_s->subtype, "Det", 3) == 0) || (strncmp(s_s->subtype, "Veto", 3) == 0))
-	    {
-	      init_HV_ctrl_slot_struct(HV_s, s_s->name, s_s->num);
-	      insert_mysql_HV_slot_ctrl_data(HV_s);
-	      s_s->new_set_time = time(NULL);
-	      s_s->last_set_time = s_s->new_set_time;
-	    }
-	  else if (strncmp(s_s->subtype, "Master", 1) == 0)
-	    {
-	      insert_mysql_sensor_data(s_s->name, time(NULL), HV_sts, 0);
-	      s_s->new_set_time = time(NULL);
-	      s_s->last_set_time = s_s->new_set_time;
+	  if (s_s->settable)
+	    {    
+	      if ((strncmp(s_s->subtype, "Det", 3) == 0) || (strncmp(s_s->subtype, "Veto", 3) == 0))
+		{
+		  init_HV_ctrl_slot_struct(HV_s, s_s->name, s_s->num);
+		  insert_mysql_HV_slot_ctrl_data(HV_s);
+		  s_s->new_set_time = time(NULL);
+		  s_s->last_set_time = s_s->new_set_time;
+		}
+	      else if (strncmp(s_s->subtype, "Master", 1) == 0)
+		{
+		  insert_mysql_sensor_data(s_s->name, time(NULL), HV_sts, 0);
+		  s_s->new_set_time = time(NULL);
+		  s_s->last_set_time = s_s->new_set_time;
+		}
 	    }
 	}
     }

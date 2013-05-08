@@ -9,15 +9,17 @@
 int query_serial(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count)
 {
     int i;
-    ssize_t wstatus, rdstatus;
 
     for (i = 0; i < MAX_SERIAL_RETRIES; i++)
     {
-	wstatus = write(fd, cmd_string, c_count);
+      if (write(fd, cmd_string, c_count) < 0)
+	{
+	  fprintf(stderr, "To many retries in query_serial. \n");
+	  return(1);
+	}
+      
 	msleep(200);
-	rdstatus = read(fd, ret_string, r_count);
-	
-	if (rdstatus > 0)
+	if (read(fd, ret_string, r_count) > 0)
 	    return(0);
     }
     
@@ -28,14 +30,11 @@ int query_serial(int fd, char *cmd_string, size_t c_count, char *ret_string, siz
 int write_serial(int fd, char *cmd_string, size_t c_count)
 {
     int i;
-    ssize_t wstatus;
 
     for (i = 0; i < MAX_SERIAL_RETRIES; i++)
     {
-	wstatus = write(fd, cmd_string, c_count);
-	
-	if (wstatus > 0)
-	    return(0);
+      if (write(fd, cmd_string, c_count) > 0)
+	return(0);
     }
     
     fprintf(stderr, "To many retries in write_serial. \n");
@@ -45,15 +44,12 @@ int write_serial(int fd, char *cmd_string, size_t c_count)
 int read_serial(int fd, char *ret_string, size_t r_count)
 {
     int i;
-    ssize_t rdstatus;
-
+    
     for (i = 0; i < MAX_SERIAL_RETRIES; i++)
-    {
-	rdstatus = read(fd, ret_string, r_count);
-	
-	if (rdstatus > 0)
-	    return(0);
-    }
+      {
+	if (read(fd, ret_string, r_count) > 0)
+	  return(0);
+      }
     
     fprintf(stderr, "To many retries in read_serial. \n");
     return(1);

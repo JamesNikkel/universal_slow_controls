@@ -40,13 +40,13 @@
 #ifndef _def_read_sensor
 // Generic read placeholder: to be found in instrument specific code
 int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *sensor_value) 
-{;}
+{return(0);}
 #endif // read_sensor
 
 #ifndef _def_set_sensor
 // Generic set placeholder: to be found in instrument specific code
 int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s) 
-{;}
+{return(0);}
 #endif // set_sensor
 
 #endif

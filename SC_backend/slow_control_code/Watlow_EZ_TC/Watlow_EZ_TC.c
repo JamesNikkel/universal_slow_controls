@@ -40,7 +40,6 @@ uint16_t conv_zone_to_offset(double zone)
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)  
 {
     struct sensor_struct *this_sensor_struc;
-    uint8_t ret_val[1];
     int i;
     
     modbus_init_tcp(&inst_dev, i_s->dev_address, mod_port);
@@ -61,7 +60,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 	    if (strncmp(this_sensor_struc->subtype, "power", 3) == 0)
 	    {
 		sprintf(this_sensor_struc->units, "%%");
-		sprintf(this_sensor_struc->discrete_vals, "");
+		sprintf(this_sensor_struc->discrete_vals, " ");
 		update_sensor_units(this_sensor_struc);
 	    }
 	    else if  (strncmp(this_sensor_struc->subtype, "mode", 4) == 0)

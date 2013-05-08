@@ -174,7 +174,6 @@ void diff_vals_sensor_struct(struct sensor_struct *s_s, int disc_high_n, int dis
     double sumy2    = 0.0;
     double sumxy    = 0.0;
     double sxx;
-    double syy;
     double sxy;
     double slope;
     time_t cur_time = time(NULL);  // need to subtract this off to keep from rounding to oblivion.
@@ -216,7 +215,6 @@ void diff_vals_sensor_struct(struct sensor_struct *s_s, int disc_high_n, int dis
     if (real_n > 1)
     {
 	sxx = sumx2 - (sumx * sumx / real_n);
-	syy = sumy2 - (sumy * sumy / real_n);
 	sxy = sumxy - (sumx * sumy / real_n);
 	    
 	if (sxx != 0)
@@ -249,7 +247,6 @@ void diff_vals_sensor_struct(struct sensor_struct *s_s, int disc_high_n, int dis
 	    val_index = dec_index(val_index);
 	}
 	sxx = sumx2 - (sumx * sumx / real_n);
-	syy = sumy2 - (sumy * sumy / real_n);
 	sxy = sumxy - (sumx * sumy / real_n);
 	
 	if (sxx != 0)
@@ -274,9 +271,6 @@ void write_temporary_sensor_data(struct sensor_struct *s_s)
     }
     fprintf(file_des, "# %s:%s (%s) || Rate: %e (%s/sec) \n",  
 	    s_s->name, s_s->description, s_s->units, s_s->rate, s_s->units);
-
-    int real_n = 0;      // actual number of averages
-    double avg_val = 0;
     
     for (i=0; i < NUM_TEMP_VALS; i++)
     {
@@ -284,7 +278,7 @@ void write_temporary_sensor_data(struct sensor_struct *s_s)
     }
     for (i=0; i < NUM_TEMP_VALS; i++)
     {
-	fprintf(file_des, "%d, %e \n",  s_s->times[val_index], s_s->vals[val_index]);
+      fprintf(file_des, "%lu, %e \n",  (unsigned long)s_s->times[val_index], s_s->vals[val_index]);
 	val_index = inc_index(val_index);
     }
     fclose(file_des);
@@ -329,7 +323,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      j++;
 		      if (j > max_retries)
 			{
-			  sprintf(this_sys_message_struc.ip_address, "");
+			  sprintf(this_sys_message_struc.ip_address, " ");
 			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
 			  sprintf(this_sys_message_struc.msgs, "New setpoint: %s = %e could not be set.", 
 				  this_sensor_struc->name , this_sensor_struc->new_set_val);
@@ -342,7 +336,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		    }
 		  if (sens_errors == 0)
 		    {
-		      sprintf(this_sys_message_struc.ip_address, "");
+		      sprintf(this_sys_message_struc.ip_address, " ");
 		      sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
 		      sprintf(this_sys_message_struc.msgs, "New setpoint: %s = %e.", 
 			      this_sensor_struc->name , this_sensor_struc->new_set_val);
@@ -361,7 +355,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		  j++;
 		  if (j > max_retries)
 		    {
-		      sprintf(this_sys_message_struc.ip_address, "");
+		      sprintf(this_sys_message_struc.ip_address, " ");
 		      sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
 		      sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 			      this_sensor_struc->name);
@@ -399,7 +393,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      j++;
 		      if (j > max_retries)
 			{
-			  sprintf(this_sys_message_struc.ip_address, "");
+			  sprintf(this_sys_message_struc.ip_address, " ");
 			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);

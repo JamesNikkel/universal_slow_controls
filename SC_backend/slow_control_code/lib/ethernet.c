@@ -61,13 +61,16 @@ int connect_tcp(struct inst_struct *i_s)
 
 int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count)
 {
-  int     i;
-  ssize_t wstatus, rdstatus;   
+  ssize_t rdstatus;   
   int     select_ret;
   fd_set  rfds;
   struct timeval tv;
   
-  wstatus = send(fd, cmd_string, c_count, 0);
+  if (send(fd, cmd_string, c_count, 0) < 0)
+    {
+      fprintf(stderr, "send error in query_tcp\n");
+      return(1);
+    }
   
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
@@ -124,12 +127,11 @@ int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t
 
 int write_tcp(int fd, char *cmd_string, size_t c_count)
 {
-  ssize_t wstatus;   
-  int     select_ret;
-  fd_set  rfds;
-  struct timeval tv;
-  
-  wstatus = send(fd, cmd_string, c_count, 0);
+  if (send(fd, cmd_string, c_count, 0) < 0)
+    {
+      fprintf(stderr, "send error in query_tcp\n");
+      return(1);
+    }
   
   return(0);
 }
@@ -137,7 +139,6 @@ int write_tcp(int fd, char *cmd_string, size_t c_count)
 
 int read_tcp(int fd, char *ret_string, size_t r_count)
 {
-  int     i;
   ssize_t rdstatus;   
   int     select_ret;
   fd_set  rfds;

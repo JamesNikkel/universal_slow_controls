@@ -8,11 +8,14 @@
 
 #include <stdio.h>
 #include <termios.h>
+#include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <asm/ioctls.h>
 #include <linux/serial.h>
+
+#include "SC_aux_fns.h"
 
 #define TYPE_SERIAL 232
 #define MAX_SERIAL_RETRIES 10

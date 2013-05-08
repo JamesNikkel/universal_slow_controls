@@ -185,17 +185,15 @@ int check_instruments(void)
       my_errors += read_mysql_inst_struct(&i_s, inst_name);
       if (time(NULL) - i_s.last_update_time > alert_timeout)
 	{
-	  sprintf(this_sys_message_struc.ip_address, "");
+	  sprintf(this_sys_message_struc.ip_address, " ");
 	  sprintf(this_sys_message_struc.subsys, i_s.dev_type);
 	  sprintf(this_sys_message_struc.msgs, "Daemon: %s has not updated in %d minutes", i_s.name, (int)(i_s.last_update_time/60.0));
 	  sprintf(this_sys_message_struc.type, "Alarm");
 	  this_sys_message_struc.is_error = 1;
 	  insert_mysql_system_message(&this_sys_message_struc);
 	}
-      
     }
-   
-  
+  return(my_errors);
 }
 
 int main (int argc, char *argv[])
@@ -242,7 +240,7 @@ int main (int argc, char *argv[])
 	  error_count++;
 	  if (error_count > 12)
 	    {
-	      sprintf(this_sys_message_struc.ip_address, "");
+	      sprintf(this_sys_message_struc.ip_address, " ");
 	      sprintf(this_sys_message_struc.subsys, this_inst.dev_type);
 	      sprintf(this_sys_message_struc.msgs, "Alert trip system failed!  Please fix and restart.");
 	      sprintf(this_sys_message_struc.type, "Error");
@@ -273,7 +271,7 @@ int main (int argc, char *argv[])
 	    fcntl(fd, F_SETFD, flag | FD_CLOEXEC);
 	}
       execv(my_argv[0], my_argv);
-      error(1, errno, "execv() failed: %s", strerror(errno));
+      fprintf(stderr, "execv() failed.");
       exit(1);
     }
   

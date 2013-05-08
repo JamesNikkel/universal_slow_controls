@@ -8,7 +8,7 @@
 #define _SC_inst_H_
 
 #include "SC_aux_fns.h"
-#include "SC_db_interface.h"
+#include "SC_db_interface_raw.h"
 
 #define INST_TABLE_UPDATE_PERIOD 30
 #define WATCHDOG_PERIOD 600

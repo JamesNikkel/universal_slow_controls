@@ -3,7 +3,7 @@ CC = gcc -O3
 
 CFLAGS = `mysql_config --cflags` -I../include
 
-LDFLAGS = -L../lib -lslow_control
+LDFLAGS = -L../lib -lslow_control -lm
 
 PROGS = ADAM6015 ADAM6017 ADAM6024 ADAM6060 ADAM6052
 

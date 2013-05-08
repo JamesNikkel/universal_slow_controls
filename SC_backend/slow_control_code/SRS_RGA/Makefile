@@ -9,7 +9,7 @@ PROGS = SRS_RGA
 
 all: $(PROGS) 
 
-CryoCon34: $(PROGS).o
+$(all): $(PROGS).o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
 	rm -f $@.o
 

@@ -108,7 +108,6 @@ int check_for_alerts(time_t *last_check_time, struct inst_struct *i_s)
     int ret_val = 0;
     
     char query_strng[1024];
-    char res_strng[1024];
     char message[4096];
     char submessage[1024];
     int  msg_id_array[64];
@@ -120,7 +119,7 @@ int check_for_alerts(time_t *last_check_time, struct inst_struct *i_s)
     struct sys_message_struct  this_sys_message_struc;
 
     check_time = time(NULL);
-    sprintf(query_strng, "SELECT `msg_id` FROM `msg_log` WHERE `is_error` = 1 AND `time` > %d ORDER BY `time` DESC", *last_check_time);
+    sprintf(query_strng, "SELECT `msg_id` FROM `msg_log` WHERE `is_error` = 1 AND `time` > %lu ORDER BY `time` DESC", (unsigned long)*last_check_time);
     ret_val += read_mysql_int_array(query_strng, msg_id_array, &num_msgs);
     
     if (num_msgs > 0)
@@ -233,7 +232,7 @@ int main (int argc, char *argv[])
 	    if (error_count > 12)
 	      {
 		fprintf(stderr, "Alert system failed!  Please fix and restart.\n");
-		sprintf(this_sys_message_struc.ip_address, "");
+		sprintf(this_sys_message_struc.ip_address, " ");
 		sprintf(this_sys_message_struc.subsys, this_inst.dev_type);
 		sprintf(this_sys_message_struc.msgs, "Alert system failed!  Please fix and restart.");
 		sprintf(this_sys_message_struc.type, "Error");
@@ -264,7 +263,7 @@ int main (int argc, char *argv[])
 		fcntl(fd, F_SETFD, flag | FD_CLOEXEC);
 	}
 	execv(my_argv[0], my_argv);
-	error("execv() failed: %s", strerror(errno));
+	fprintf(stderr, "execv() failed.");
 	exit(1);
     }
 

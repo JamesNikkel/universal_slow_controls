@@ -174,7 +174,7 @@ int main (int argc, char *argv[])
 	}
 	sleep(2);
 	execv(my_argv[0], my_argv);
-	error(1, errno, "execv() failed: %s", strerror(errno));
+	fprintf(stderr, "execv() failed.");
 	exit(1);
     }
 

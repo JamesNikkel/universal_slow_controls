@@ -18,6 +18,8 @@ int read_mysql_string(char *stmt_str, char *result_string, size_t size);
 
 int read_mysql_int(char *stmt_str, int *result_int);
 
+int read_mysql_time(char *stmt_str, time_t *result_time);
+
 int read_mysql_int_array(char *stmt_str, int *result_int_array, int *array_count);
 
 int read_mysql_double(char *stmt_str, double *result_double);
