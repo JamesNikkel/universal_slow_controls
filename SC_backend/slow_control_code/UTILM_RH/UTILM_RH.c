@@ -46,7 +46,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   int        int_val;
   global_tcp_timeout = 60;
 
-  sleep(3);
+  sleep(5);
 
   sprintf(cmd_string, "GetCap\n"); // Read out value for Capacitance.
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
@@ -67,9 +67,9 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
  
   if (strncmp(s_s->subtype, "Mode", 1) == 0)  // Set the Mode
     {
-      if (s_s->new_set_val < 1.1) //num 1 = HI mode
+      if (closest_int(s_s->new_set_val)  == 1 ) //num 1 = HI mode
 	sprintf(cmd_string, "SetMode High\n");
-      else if (s_s->new_set_val < 2.1) //num 2 = LOW mode
+      else if (closest_int(s_s->new_set_val) == 2 ) //num 2 = LOW mode
 	sprintf(cmd_string, "SetMode Low\n");
 
       else //print error for incorrect input.

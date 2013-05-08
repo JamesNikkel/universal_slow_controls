@@ -25,13 +25,13 @@
 
 #ifndef _IO_CHARS
 #define _IO_CHARS
-static char STX = 0x02;
-static char ENQ = 0x05;
-static char CR  = 0x0D;
-static char LF  = 0x0A;
-static char ACK = 0x06;
-static char NAK = 0x15;
-static char ETX = 0x03;
+static char STX  __attribute__ ((unused)) = 0x02;
+static char ENQ  __attribute__ ((unused)) = 0x05;
+static char CR   __attribute__ ((unused)) = 0x0D;
+static char LF   __attribute__ ((unused)) = 0x0A;
+static char ACK  __attribute__ ((unused)) = 0x06;
+static char NAK  __attribute__ ((unused)) = 0x15;
+static char ETX  __attribute__ ((unused)) = 0x03;
 #endif  // _IO_CHARS
 
 ////// Establishes a TCP connection, and return socket file descriptor

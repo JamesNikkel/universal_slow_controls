@@ -6,6 +6,23 @@
 
 #include "SC_aux_fns.h"
 
+int closest_int(double dbl_in)
+{
+  // Finds the closest integer to a double and returns it.
+
+  int sign = 1;
+  if (dbl_in < 0)
+    {
+      dbl_in *= -1;
+      sign = -1;
+    }
+  if ( (dbl_in - (int)dbl_in) < 0.5 )
+    return(sign * (int)dbl_in);
+  else
+    return(sign * (int)dbl_in + 1);
+}
+
+
 int STB_to_Array(int STB, int *STB_array)
 {
   int i;

@@ -1,7 +1,7 @@
 /* This is a header file for general misc. fns. */
 /* James Nikkel */
-/* james.nikkel@yale.edu */
-/* Copyright 2006, 2007, 2009 */
+/* james.nikkel@gmail.com */
+/* Copyright 2006, 2013 */
 /* James public licence. */
 
 #ifndef _SC_aux_H_
@@ -31,6 +31,7 @@
 
 int my_signal;
 
+int closest_int(double dbl_in);
 
 int STB_to_Array(int STB, int *STB_array);
 

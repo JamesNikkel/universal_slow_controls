@@ -23,15 +23,15 @@
 char db_conf_file[1024]; 
 #define DEF_DB_CONF_FILE "/etc/slow_control_db_conf.ini"
 
-static char *opt_host_name = NULL;      /* server host (default=localhost) */
-static char *opt_user_name = NULL;      /* username (default=login name) */
-static char *opt_password = NULL;       /* password (default=none) */
-static unsigned int opt_port_num = 0;   /* port number (use built-in value) */
-static char *opt_socket_name = NULL;    /* socket name (use built-in value) */
-static char *opt_db_name = NULL;        /* database name (default=none) */
-static unsigned int opt_flags = 0;      /* connection flags (none) */
-static int ask_password = 0;            /* whether to solicit password */
-static MYSQL *conn;                     /* pointer to connection handler */
+static char *opt_host_name __attribute__ ((unused)) = NULL;      /* server host (default=localhost) */
+static char *opt_user_name __attribute__ ((unused)) = NULL;      /* username (default=login name) */
+static char *opt_password __attribute__ ((unused))=  NULL;       /* password (default=none) */
+static unsigned int opt_port_num __attribute__ ((unused)) = 0;   /* port number (use built-in value) */
+static char *opt_socket_name __attribute__ ((unused)) = NULL;    /* socket name (use built-in value) */
+static char *opt_db_name __attribute__ ((unused)) = NULL;        /* database name (default=none) */
+static unsigned int opt_flags __attribute__ ((unused)) = 0;      /* connection flags (none) */
+static int ask_password __attribute__ ((unused)) = 0;            /* whether to solicit password */
+static MYSQL *conn __attribute__ ((unused));                     /* pointer to connection handler */
 
 // The generic globals structure
 struct global_struct {
