@@ -91,7 +91,8 @@ double get_pressure(int inst_num, char *gauge_string)
     query_status = query_serial(inst_dev, cmd_string, 9, ret_string, sizeof(ret_string)/sizeof(char));
   else                               // do tcp write/read
     query_status = query_tcp(inst_dev, cmd_string, 9, ret_string, sizeof(ret_string)/sizeof(char));
-
+  
+  /*
   fprintf(stderr, "cmd_string: \n");
   fprintf(stderr, "%x  \n", cmd_string[0]);
   fprintf(stderr, "%x  \n", cmd_string[1]);
@@ -113,6 +114,7 @@ double get_pressure(int inst_num, char *gauge_string)
   fprintf(stderr, "%x  \n", ret_string[6]);
   fprintf(stderr, "%x  \n", ret_string[7]);
   fprintf(stderr, "%x  \n", ret_string[8]);
+  */
 
   if (query_status != 0)
     {
@@ -121,7 +123,7 @@ double get_pressure(int inst_num, char *gauge_string)
     }
   if (ret_string[8] !=  Calculate_CRC8(ret_string, (char)(8))) 
     {
-      fprintf(stderr, "get_pressure: CRC failed.\n");   
+      //fprintf(stderr, "get_pressure: CRC failed.\n");   
       return(-1); 
     }
 
@@ -142,7 +144,6 @@ double get_pressure(int inst_num, char *gauge_string)
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)  
 {
   struct termios       tbuf;  /* serial line settings */
-  int                  i;
    
   if (strncmp(i_s->dev_type, "serial", 6) == 0) 
     {
@@ -204,11 +205,15 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   double               pressure;
 
   pressure =  get_pressure(s_s->num, s_s->subtype);
-  
+  msleep(200);
+  pressure =  get_pressure(s_s->num, s_s->subtype);
+
   if (pressure < 0)
     return(1);
   
   *val_out = pressure;
+
+  msleep(400);
 
   return(0);    
 }
@@ -225,7 +230,6 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
   unsigned char        ret_string[32];
   int                  query_status;
   int                  gauge_on = 0; // 1 for on, 0 for off
-  int                  i;
   struct sys_message_struct sys_message_struc;
 
   if (strncmp(s_s->subtype, "ion", 3) != 0)

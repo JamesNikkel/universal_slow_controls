@@ -77,6 +77,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	P_range = 5.0;
       else if (strncmp(ret_string, "HI", 2) == 0)
 	P_range = 50.0;
+      else if (strncmp(ret_string, "5V", 2) == 0)
+	P_range = 5.0;
+      else if (strncmp(ret_string, "10V", 3) == 0)
+	P_range = 10.0;
       else
 	{
 	  fprintf(stderr, "Bad return string: \"%s\" in read range!\n", ret_string);
@@ -149,7 +153,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
     }
     
-  else if (strncmp(s_s->subtype, "Relay", 1) == 0) // Queries status of relays
+  else if (strncmp(s_s->subtype, "Relay", 5) == 0) // Queries status of relays
     {
       if (s_s->num < 0 || s_s->num > 1) // Check correct Relay number
 	{
@@ -211,7 +215,40 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	    return(1);
 	  }
     }
+  
+  else if (strncmp(s_s->subtype, "Man", 3) == 0)  // Set the control loop setpoint
+    {
+      if ((s_s->new_set_val < 0 ) || (s_s->new_set_val > 100 ))  // check valid value for manual power setting
+	{
+	  fprintf(stderr, "%f is an incorrect setpoint. Power output is percentage of full scale between 0 and 100. \n", s_s->new_set_val);
+	  return(1);
+	}
     
+      sprintf(cmd_string, "LOOP %d:PMAnual %f\n", s_s->num, s_s->new_set_val);
+    
+      write_tcp(inst_dev, cmd_string, strlen(cmd_string));
+      sleep(1);
+	
+      sprintf(cmd_string, "LOOP %d:PManual?\n", s_s->num); //queries control loop setpoint
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      msleep(200);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+      if(sscanf(ret_string, "%lf", &ret_val) != 1)
+	{
+	  fprintf(stderr, "Bad return string: \"%s\" in read setpoint!\n", ret_string);
+	  return(1);
+	}
+	
+      if (s_s->new_set_val != 0)
+	if (fabs(ret_val - s_s->new_set_val)/s_s->new_set_val > 0.1)
+	  {
+	    fprintf(stderr, "New setpoint of: %f is not equal to read out value of %f\n", s_s->new_set_val, ret_val);
+	    return(1);
+	  }
+    }
+  
+
   else if (strncmp(s_s->subtype, "Mode", 4) == 0) // Set loop mode
     {
       if (s_s->new_set_val < 0.1) 
@@ -262,7 +299,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       sleep(1);
     }
     
-  else if (strncmp(s_s->subtype, "Relay", 1) == 0) // Set Relay Mode
+  else if (strncmp(s_s->subtype, "Relay", 5) == 0) // Set Relay Mode
     {	
       if (s_s->num < 0 || s_s->num > 1)
 	{
@@ -289,6 +326,17 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       msleep(200);
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
+      sleep(1);
+    }
+  
+  else if (strncmp(s_s->subtype, "Master", 6) == 0) // Master control for all channels
+    {
+      if ((s_s->new_set_val > 0.5) && (s_s->new_set_val < 1.5))
+	sprintf(cmd_string, "CONTROL");    // Start all loops
+      else
+	sprintf(cmd_string, "STOP");       // Stop all control loops
+      
+      write_tcp(inst_dev, cmd_string, strlen(cmd_string));
       sleep(1);
     }
 

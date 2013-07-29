@@ -87,6 +87,6 @@ void handler(int sent_signal);
 
 void daemonize(char *stdio_file_name);
 
-unsigned char Calculate_CRC8(char *cmd_string, char Length);
+unsigned char Calculate_CRC8(unsigned char *cmd_string, char Length);
 
 #endif

@@ -495,13 +495,13 @@ void daemonize(char *stdio_file_name)
 
 
 
-unsigned char Calculate_CRC8(char *cmd_string, char Length) 
+unsigned char Calculate_CRC8(unsigned char *cmd_string, char Length) 
 { 
-  char CRC_Value; 
-  char Counter; 
-  char BitCounter; 
-  char XOR_Byte; 
-  char TransmitByte; 
+  unsigned char CRC_Value; 
+  unsigned char Counter; 
+  unsigned char BitCounter; 
+  unsigned char XOR_Byte; 
+  unsigned char TransmitByte; 
     
   CRC_Value = 0xFF; 
 
