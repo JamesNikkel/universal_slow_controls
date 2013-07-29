@@ -9,7 +9,8 @@ SUBDIRS = lib \
 	CDL204 \
         disk_free \
  	DWP_scale \
-	CryoCon24C \
+	CryoCon18C \
+        CryoCon24C \
 	CryoCon34 \
 	CryoCon44 \
         CryoMag_LM500 \
@@ -38,6 +39,7 @@ SUBDIRS = lib \
 	SuperLogics \
 	TPG26X \
         TSctrl \
+	TTi_PowerSupply \
 	UTI \
 	UTILM_RH \
 	Watlow_EZ_TC \
