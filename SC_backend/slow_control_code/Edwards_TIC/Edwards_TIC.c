@@ -49,81 +49,31 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   double     val[2];
   int        i;
 
-  if (s_s->num < 1 || s_s->num > 2) // Checks to see that the channel is 1 or 2 (for dual supplies)
+  if (s_s->num < 1 || s_s->num > 3) // Checks to see that the channel is 1, 2, or 3.
     {
-      fprintf(stderr, "%d is an incorrect value for num. Must be 1 or 2. \n", s_s->num);
+      fprintf(stderr, "%d is an incorrect value for num. Must be 1, 2, or 2. \n", s_s->num);
       return(1);
     }
+  if (s_s->num == 1)
+      sprintf(cmd_string, "?V913\n", s_s->num);
+  else if (s_s->num == 2)
+    sprintf(cmd_string, "?V914\n", s_s->num)
+  else 
+    sprintf(cmd_string, "?V915\n", s_s->num);
   
-  if ((strncmp(s_s->subtype, "Power", 1) == 0) || (strncmp(s_s->subtype, "Resistance", 1) == 0))
-    {
-      sprintf(cmd_string, "V%dO?\n", s_s->num);
-      
-      for (i = 0; i < 2; i++)
-	{
-	  if (i == 1)
-	    sprintf(cmd_string, "I%dO?\n", s_s->num);
-	  
-	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-	  msleep(200);
-	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      
-	  if(sscanf(ret_string, "%lf%*s", &val[i]) != 1)
-	    {
-	      fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
-	      return(1);
-	    }
-	}
-
-      if (strncmp(s_s->subtype, "Power", 1) == 0)
-	*val_out = val[0]*val[1];
-      else  // For a resistance measurement
- 	{
-	  if (val[1] > 0)
-	    *val_out = val[0]/val[1];
-	  else
-	    *val_out = 0;
-	}
-      
-      msleep(1000);
-      return(0);
-    }
-  
-  if (strncmp(s_s->subtype, "Voltage", 1) == 0)  // Voltage output 
-    {
-      sprintf(cmd_string, "V%dO?\n", s_s->num);
-    }
-  else if (strncmp(s_s->subtype, "Current", 1) == 0) // Current output
-    {
-      sprintf(cmd_string, "I%dO?\n", s_s->num);
-    }
-  else if (strncmp(s_s->subtype, "Set_V", 5) == 0) // Queries the voltage setpoint 
-    {
-      sprintf(cmd_string, "V%d?\n", s_s->num);  
-    }
-  else if (strncmp(s_s->subtype, "Set_C", 5) == 0) // Queries the current setpoint 
-    {
-      sprintf(cmd_string, "I%d?\n", s_s->num);	  
-    }
-  else       // Print an error if invalid subtype is entered
-    {
-      fprintf(stderr, "Wrong type for %s \n", s_s->name);
-      return(1);
-    } 
-
-
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   msleep(200);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      
-  if(sscanf(ret_string, "%lf%*s", val_out) != 1)
+  
+  fsprintf(stdout, "R:  \n", ret_string);
+
+  if(sscanf(ret_string, "=V?%*s $lf;%*s", &val[i]) != 1)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
       return(1);
-    }	
+    }
   
-  msleep(1000);
-
+  msleep(4000);
   return(0);
 }
 
