@@ -55,7 +55,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
   if (s_s->num == 1)
-    sprintf(cmd_string, "?V913%c", CR);
+    sprintf(cmd_string, "?V902%c", CR);
   else if (s_s->num == 2)
     sprintf(cmd_string, "?V914%c", CR);
   else 
@@ -73,7 +73,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
   
-  msleep(4000);
+  msleep(1000);
   return(0);
 }
 
