@@ -55,9 +55,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
   if (s_s->num == 1)
-      sprintf(cmd_string, "?V913\n", s_s->num);
+    sprintf(cmd_string, "?V913\n", s_s->num);
   else if (s_s->num == 2)
-    sprintf(cmd_string, "?V914\n", s_s->num)
+    sprintf(cmd_string, "?V914\n", s_s->num);
   else 
     sprintf(cmd_string, "?V915\n", s_s->num);
   
