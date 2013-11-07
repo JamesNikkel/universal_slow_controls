@@ -44,10 +44,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   // returns the temp (which_sens_type == 1)
   // or the heater power (which_sens_type == 2)
 
-  char       cmd_string[64];
-  char       ret_string[64];                      
-  double     val[2];
-  int        i;
+  char       cmd_string[16];
+  char       ret_string[256];                      
 
   if (s_s->num < 1 || s_s->num > 3) // Checks to see that the channel is 1, 2, or 3.
     {
@@ -62,12 +60,12 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     sprintf(cmd_string, "?V915%c", CR);
   
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  msleep(200);
+  msleep(300);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   
   fprintf(stdout, "R:%s \n", ret_string);
 
-  if(sscanf(ret_string, "=V?%*s $lf;%*s", &val[i]) != 1)
+  if(sscanf(ret_string, "=V?%*s $lf;%*s", val_out) != 1)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
       return(1);
