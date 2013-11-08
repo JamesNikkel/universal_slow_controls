@@ -1,8 +1,8 @@
-<?php
+<?Php
 // slow_control_display.php
 // Part of the CLEAN slow control.  
-// James Nikkel, Yale University, 2006.
-// james.nikkel@yale.edu
+// James Nikkel, 2013.
+// james.nikkel@gmail.com
 //
 session_start();
 $req_priv = "basic";

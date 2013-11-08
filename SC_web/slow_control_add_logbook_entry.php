@@ -1,8 +1,8 @@
 <?php
 // slow_control_add_note.php
 // Part of the CLEAN slow control.  
-// James Nikkel, Yale University, 2006.
-// james.nikkel@yale.edu
+// James Nikkel, 2013.
+// james.nikkel@gmail.com
 //
 session_start();
 $never_ref = 1;
@@ -33,7 +33,7 @@ if (isset($_POST['Add']))
 	$subcat = $catsubcat[1];
 	
 	$query = "INSERT into `lug_entries` ";
-	$query = $query."(`action_user`, `action_time`, `entry_user`, `entry_time`, ";
+	$query = $query."(`action_user`, `action_time`, `edit_user`, `edit_time`, ";
 	$query = $query."`run_number`, `category`, `subcategory`, `entry_description`) ";
 	$query = $query."VALUES ('". $_POST['action_user']."', '".$_POST['action_time']."', '";
 	$query = $query.$_SESSION['user_name']."', '".time()."', '".$_POST['run_number']."', '";
