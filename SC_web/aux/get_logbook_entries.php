@@ -61,14 +61,14 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
     $lug_entry_ids[] = (int)$row['entry_id'];
     $lug_action_user[] = $row['action_user'];
     $lug_action_time[] = (int)$row['action_time'];
-    $lug_entry_user[] = $row['entry_user'];
-    $lug_entry_time[] = (int)$row['entry_time'];
+    $lug_entry_user[] = $row['edit_user'];
+    $lug_entry_time[] = (int)$row['edit_time'];
     $lug_run_number[] = (int)$row['run_number'];
     $lug_category[] = $row['category'];
     $lug_subcategory[] = $row['subcategory'];
     $lug_entry_description[] = $row['entry_description'];
     $lug_strikeme[] = (int)$row['strikeme'];
-    $lug_image_thumb[] = $row['image_thumb'];
+    $lug_image_thumb[] = $row['entry_image_thumb'];
 } 
 $lug_action_user = array_combine($lug_entry_ids, $lug_action_user);
 $lug_action_time = array_combine($lug_entry_ids, $lug_action_time);
