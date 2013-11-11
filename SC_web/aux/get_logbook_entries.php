@@ -1,48 +1,49 @@
 <?php
 // get_logbook_entries.php
 // Part of the CLEAN slow control.  
-// James Nikkel, Yale University, 2009, 2010
-// james.nikkel@yale.edu
+// James Nikkel, 2013
+// james.nikkel@gmail.com
 //
 
 $show_num = 7;
 
-$query = "SELECT `entry_id` FROM `lug_entries` ORDER BY `entry_id` DESC LIMIT 1";
-$result = mysql_query($query);
-if (!$result)
-    die ("Could not find logbook table. <br />" . mysql_error());
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-  $lug_nums = (int)$row['entry_id'];
+if (isset($_SESSION['lug_indx_offset'])  && empty($_POST['lug_last']))
+  $lug_nums =  (int)$_SESSION['lug_indx_offset'];
+ else
+   {
+     unset($_SESSION['lug_indx_offset']);
+     $query = "SELECT `entry_id` FROM `lug_entries` ORDER BY `entry_id` DESC LIMIT 1";
+     $result = mysql_query($query);
+     if (!$result)
+       die ("Could not find logbook table. <br />" . mysql_error());
+     
+     while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+       $lug_nums = (int)$row['entry_id'];
+   }
 
-if (!isset($_SESSION['lug_indx_offset']))
+if (!empty($_POST['lug_next']))
+  $lug_nums += ($show_num-1);
+if (!empty($_POST['lug_prev']))
+  $lug_nums -= ($show_num-1);
+if (!empty($_POST['lug_first']))
+  $lug_nums = $show_num+1;
+
+if (empty($_POST['lug_last']))
   $_SESSION['lug_indx_offset'] = $lug_nums;
 
-if (isset($_POST['lug_next']))
-    $_SESSION['lug_indx_offset'] += ($show_num-1);
-if (isset($_POST['lug_prev']))
-   $_SESSION['lug_indx_offset'] -= ($show_num-1);
-if (isset($_POST['lug_first']))
-    $_SESSION['lug_indx_offset'] = $show_num+1;
-if (isset($_POST['lug_last']))
-    $_SESSION['lug_indx_offset'] = $lug_nums;
-
-if ($_SESSION['lug_indx_offset'] > $lug_nums)
-    $_SESSION['lug_indx_offset'] = $lug_nums;
-if ($_SESSION['lug_indx_offset'] <  $show_num+1)
-    $_SESSION['lug_indx_offset'] = $show_num+1;
 
 if (isset($_POST['search_text']))
-{
+  {
     if (!get_magic_quotes_gpc())   
-	$_POST['search_text'] = addslashes($_POST['search_text']);
-    $query = "SELECT * FROM `lug_entries` WHERE ((".$q_select.") AND (`entry_description` LIKE '%".$_POST['search_text']."%')) ORDER BY `action_time` DESC LIMIT ".$show_num;
-}
-else
-  $query = "SELECT * FROM `lug_entries` WHERE ((".$q_select.") AND (`entry_id` <= ".$_SESSION['lug_indx_offset'].")) ORDER BY `action_time` DESC LIMIT ".$show_num;
+      $_POST['search_text'] = addslashes($_POST['search_text']);
+    $query = "SELECT * FROM `lug_entries` WHERE ((".$q_select.") AND (`entry_description` LIKE '%".$_POST['search_text']."%')) ORDER BY `action_time` DESC LIMIT 100";
+  }
+ else
+   $query = "SELECT * FROM `lug_entries` WHERE ((".$q_select.") AND (`entry_id` <= ".$lug_nums.")) ORDER BY `action_time` DESC LIMIT ".$show_num;
 $result = mysql_query($query);
 if (!$result)
-    die ("Could not find logbook table. <br />" . mysql_error());
+  die ("Could not find logbook table. <br />" . mysql_error());
 
 $lug_entry_ids = array();
 $lug_action_user = array();

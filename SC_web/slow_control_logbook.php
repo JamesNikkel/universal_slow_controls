@@ -93,12 +93,16 @@ echo ('</TH>');
 
 echo ('<TH align=center>');
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-echo ('<input type="image" src="pixmaps/top.png" name="lug_last" value="1" title="Go to latest entry">');
-echo('  ');
-echo ('<input type="image" src="pixmaps/up.png" name="lug_next" value="1" title="Go to more recent entries">');
-echo('  ');
-echo ('Action Time');  
+echo ('<input type="hidden" name="lug_last" value=1>');
+echo ('<input type="image" src="pixmaps/top.png" title="Go to latest entry">');
 echo ('</FORM>');
+echo('  ');
+echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+echo ('<input type="hidden"name="lug_next" value=1>');
+echo ('<input type="image" src="pixmaps/up.png" title="Go to more recent entries">');
+echo ('</FORM>');
+echo ('Action Time');  
+
 echo ('</TH>');
 
 echo ('<TH align=left>');
@@ -167,9 +171,13 @@ echo ('</TD>');
 
 echo ('<TD align=center>');   
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-echo ('<input type="image" src="pixmaps/bottom.png" name="lug_first" value="1" alt="Next" title="Go to first entry">');
+echo ('<input type="hidden" name="lug_prev" value=1>');
+echo ('<input type="image" src="pixmaps/down.png" title="Go to previous entries">');
+echo ('</FORM>');
 echo (' ');
-echo ('<input type="image" src="pixmaps/down.png" name="lug_prev" value="1" alt="Next" title="Go to previous entries">');
+echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+echo ('<input type="hidden" name="lug_first" value=1>');
+echo ('<input type="image" src="pixmaps/bottom.png" title="Go to first entry">');
 echo ('</FORM>');
 echo ('</TD>');
 
