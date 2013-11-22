@@ -9,7 +9,7 @@ PROGS = PDR2000
 
 all: $(PROGS)
 
-$(PROGS): $(PROGS).o
+$(all): $(PROGS).o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
 	rm -f $@.o
 
