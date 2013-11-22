@@ -93,7 +93,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   msleep(200);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  
+  msleep(500);
+
   sstatus = sscanf(ret_string, "%le %le", &val_out1, &val_out2);
   if (sstatus < 2)
     {
