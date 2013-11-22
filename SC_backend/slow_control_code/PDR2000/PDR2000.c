@@ -115,7 +115,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  val_out1 = -1;
 	  val_out2 = -1;
 	}
-      elsw
+      else
 	{
 	  fprintf(stderr, "Could not read instrument, returned: %s.\n", ret_string);
 	  return(1);
