@@ -63,7 +63,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   msleep(300);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   
-  fprintf(stdout, "R:%s \n", ret_string);
+  //fprintf(stdout, "R:%s \n", ret_string);
 
   if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)
     {
