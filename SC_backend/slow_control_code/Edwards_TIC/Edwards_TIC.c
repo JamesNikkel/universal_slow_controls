@@ -65,12 +65,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   
   //fprintf(stdout, "R:%s \n", ret_string);
 
-  if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)
+  if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)   // This is in Pascals!  Crazy.  I know, right?
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
       return(1);
     }
-  
+  *val_out *= 0.01;  // Convert to mBar
+
   msleep(1000);
   return(0);
 }
