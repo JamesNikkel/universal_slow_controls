@@ -47,25 +47,25 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       cmd_string[16];
   char       ret_string[256];                      
 
-  if (s_s->num < 1 || s_s->num > 3) // Checks to see that the channel is 1, 2, or 3.
-    {
-      fprintf(stderr, "%d is an incorrect value for num. Must be 1, 2, or 2. \n", s_s->num);
-      return(1);
-    }
   if (s_s->num == 1)
-    sprintf(cmd_string, "?V902%c", CR);
+    sprintf(cmd_string, "?V913%c", CR);
   else if (s_s->num == 2)
     sprintf(cmd_string, "?V914%c", CR);
-  else 
+  else if (s_s->num == 3)
     sprintf(cmd_string, "?V915%c", CR);
-  
+  else
+    {
+      fprintf(stderr, "Gauge number must be 1, 2, or 3, not %d.\n", s_s->num);
+      return(1);
+    }
+
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   msleep(300);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   
   fprintf(stdout, "R:%s \n", ret_string);
 
-  if(sscanf(ret_string, "=V?%*s $lf;%*s", val_out) != 1)
+  if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
       return(1);
