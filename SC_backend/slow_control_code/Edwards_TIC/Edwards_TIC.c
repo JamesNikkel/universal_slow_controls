@@ -46,32 +46,66 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   char       cmd_string[16];
   char       ret_string[256];                      
-
-  if (s_s->num == 1)
-    sprintf(cmd_string, "?V913%c", CR);
-  else if (s_s->num == 2)
-    sprintf(cmd_string, "?V914%c", CR);
-  else if (s_s->num == 3)
-    sprintf(cmd_string, "?V915%c", CR);
-  else
-    {
-      fprintf(stderr, "Gauge number must be 1, 2, or 3, not %d.\n", s_s->num);
-      return(1);
-    }
-
-  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  msleep(300);
-  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  int        v1, v2;
   
-  //fprintf(stdout, "R:%s \n", ret_string);
-
-  if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)   // This is in Pascals!  Crazy.  I know, right?
+  if (strncmp(s_s->subtype, "Pressure", 3) == 0)  // Read out value for pressure gauge 1, 2, or 3.
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
+      if (s_s->num == 1)
+	sprintf(cmd_string, "?V913%c", CR);
+      else if (s_s->num == 2)
+	sprintf(cmd_string, "?V914%c", CR);
+      else if (s_s->num == 3)
+	sprintf(cmd_string, "?V915%c", CR);
+      else
+	{
+	  fprintf(stderr, "Gauge number must be 1, 2, or 3, not %d.\n", s_s->num);
+	  return(1);
+	}
+      
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      msleep(300);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  
+      if(sscanf(ret_string, "=%*s %lf;%*s", val_out) != 1)   // This is in Pascals!  Crazy.  I know, right?
+	{
+	  fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
+	  return(1);
+	}
+      *val_out *= 0.01;  // Convert to mBar
+      
+    }
+  else if (strncmp(s_s->subtype, "Pump", 3) == 0)  // Read out pump status for turbo or backing.
+    {
+      if (s_s->num < 1 || s_s->num > 2) // Check correct pump number
+	{
+	  fprintf(stderr, "Pump number must be 1 (for turbo) or 2 (for backing), not %d.\n", s_s->num);
+	  return(1);
+	}
+      
+      sprintf(cmd_string, "?V902%c", CR);
+
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      msleep(300);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      
+      if(sscanf(ret_string, "=%*s %d;%d;%*s", v1, v2) != 2)   // 
+	{
+	  fprintf(stderr, "Bad return string: \"%s\" in read_sensor!\n", ret_string);
+	  return(1);
+	}
+      if (s_s->num == 1)
+	*val_out = (double)v1;
+      else
+	*val_out = (double)v2;
+    }
+  else
+    // Print an error if invalid subtype is entered
+    {
+      fprintf(stderr, "Wrong type for %s \n", s_s->name);
       return(1);
     }
-  *val_out *= 0.01;  // Convert to mBar
-
+  
+  
   msleep(1000);
   return(0);
 }
