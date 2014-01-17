@@ -1,6 +1,7 @@
 <?php
 include ("jpgraph/jpgraph.php");	
 include	("jpgraph/jpgraph_line.php");
+include	("jpgraph/jpgraph_scatter.php");
 include ("jpgraph/jpgraph_log.php");
 include ("jpgraph/jpgraph_plotline.php");
 
@@ -31,8 +32,8 @@ function make_plot($plot_name, $x_data, $y_data, $logxy, $title,
     
     $graph->SetScale($logxy, $y_min, $y_max, $x_min, $x_max);
     $graph->img->SetMargin(100, 5, 10, 80);  
-    $graph ->xgrid->Show(true);
-    $graph ->ygrid->Show(true);
+    $graph->xgrid->Show(true);
+    $graph->ygrid->Show(true);
     $graph->xaxis->title->Set("time (s)");
     $graph->yaxis->title->Set($y_label);
     $graph->xaxis->Setcolor($_SESSION['textcolour']);
@@ -66,8 +67,8 @@ function make_plot($plot_name, $x_data, $y_data, $logxy, $title,
 	$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
 	$graph->SetColor("darkblue");
 	$graph->SetMarginColor($_SESSION['bgcolour']);
-	$graph ->xgrid->SetColor("black");
-	$graph ->ygrid->SetColor("black");
+	$graph->xgrid->SetColor("black");
+	$graph->ygrid->SetColor("black");
     }
     $graph->xaxis->SetPos("min");
 
@@ -155,8 +156,8 @@ function make_point_plot($plot_name, $x_data, $y_data, $logxy, $title,
     
     $graph->SetScale($logxy, $y_min, $y_max, $x_min, $x_max);
     $graph->img->SetMargin(100, 5, 10, 80);  
-    $graph ->xgrid->Show(true);
-    $graph ->ygrid->Show(true);
+    $graph->xgrid->Show(true);
+    $graph->ygrid->Show(true);
     $graph->xaxis->title->Set("time (s)");
     $graph->yaxis->title->Set($y_label);
     $graph->xaxis->Setcolor($_SESSION['textcolour']);
@@ -190,8 +191,8 @@ function make_point_plot($plot_name, $x_data, $y_data, $logxy, $title,
 	$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
 	$graph->SetColor("darkblue");
 	$graph->SetMarginColor($_SESSION['bgcolour']);
-	$graph ->xgrid->SetColor("black");
-	$graph ->ygrid->SetColor("black");
+	$graph->xgrid->SetColor("black");
+	$graph->ygrid->SetColor("black");
     }
     $graph->xaxis->SetPos("min");
 
