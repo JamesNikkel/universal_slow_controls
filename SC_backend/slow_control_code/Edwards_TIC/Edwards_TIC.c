@@ -110,47 +110,60 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   return(0);
 }
 
-/*
+
 #define _def_set_sensor
 int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 {
   char       cmd_string[64];
   char       ret_string[64];
-  double     ret_val;
+  int        ret_status;
 
-  if (strncmp(s_s->subtype, "Temp", 4) == 0)  // Set the control loop setpoint
+  if (strncmp(s_s->subtype, "Pump", 3) == 0)  // Set the control loop setpoint
     {
-      if (s_s->new_set_val < 0 ) // check valid value for Temp (>0)
+      if (s_s->num < 1 || s_s->num > 2) // Check correct pump number
 	{
-	  fprintf(stderr, "%f is an incorrect temperature. Temp must be greater than 0... You Fool! \n", s_s->new_set_val);
+	  fprintf(stderr, "Pump number must be 1 (for turbo) or 2 (for backing), not %d.\n", s_s->num);
 	  return(1);
 	}
-    
-      sprintf(cmd_string, "LOOP %d:SETPt %f\n", s_s->num, s_s->new_set_val);
-    
-      write_tcp(inst_dev, cmd_string, strlen(cmd_string));
-      sleep(1);
-	
-      sprintf(cmd_string, "LOOP %d:SETPt?\n", s_s->num); //queries control loop setpoint
+      
+      if (s_s->num == 1)  //Turbo
+	{
+	  if (s_s->new_set_val > 0.5)   
+	    sprintf(cmd_string, "!C904 1%c", CR);   // On
+	  else
+	    sprintf(cmd_string, "!C904 0%c", CR);   // Off
+	}
+      else        //  Backing
+ 	{
+	  if (s_s->new_set_val > 0.5)   
+	    sprintf(cmd_string, "!C910 1%c", CR);   // On
+	  else
+	    sprintf(cmd_string, "!C910 0%c", CR);   // Off
+	}
+      
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      msleep(200);
+      msleep(1000);
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-      if(sscanf(ret_string, "%lf", &ret_val) != 1)
+      if(sscanf(ret_string, "*%*s %d", &ret_status) != 1)   // 
 	{
-	  fprintf(stderr, "Bad return string: \"%s\" in read setpoint!\n", ret_string);
+	  fprintf(stderr, "Bad return string: \"%s\" in set_sensor!\n", ret_string);
 	  return(1);
 	}
-	
-      if (s_s->new_set_val != 0)
-	if (fabs(ret_val - s_s->new_set_val)/s_s->new_set_val > 0.1)
-	  {
-	    fprintf(stderr, "New setpoint of: %f is not equal to read out value of %f\n", s_s->new_set_val, ret_val);
-	    return(1);
-	  }
+
+      if (s_s->new_set_val > 0.5) 
+	{
+	  if (ret_status != 1)
+	    fprintf(stderr, "Trouble turning on pump! (%s)\n", s_s->name);
+	}
+      else
+	{
+	  if (ret_status != 0)
+	    fprintf(stderr, "Trouble turning off pump! (%s)\n", s_s->name);
+	}	
+      
     }
-    
-
+  
   else       // Print an error if invalid subtype is entered
     {
       fprintf(stderr, "Wrong type for %s \n", s_s->name);
@@ -159,7 +172,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 
   return(0);
 }
-*/
+
 
 
 #include "main.h"
