@@ -86,7 +86,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       sprintf(cmd_string, "r\n"); 
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      insert_mysql_sensor_data (s_s->name, time(NULL), 0.0, 0.0);
+      insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
     }
 
   return(0);

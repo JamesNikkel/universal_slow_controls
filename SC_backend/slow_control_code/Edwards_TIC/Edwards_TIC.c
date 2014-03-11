@@ -3,7 +3,7 @@
 /* and putting said readings in to a mysql database. */
 /* James Nikkel */
 /* james.nikkel@rhul.ac.uk */
-/* Copyright 2012 */
+/* Copyright 2014 */
 /* James public licence. */
 
 #include "SC_db_interface.h"
@@ -141,7 +141,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 
       set_value = closest_int(s_s->new_set_val);
       
-      sprintf(cmd_string, "!C%d %d%c", object_ID, set_value, CR); 
+      sprintf(cmd_string, "!C%d %d%c", object_ID, set_value, CR);   // This generates the command string
       
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       msleep(1000);
@@ -174,7 +174,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       
       set_value = closest_int(s_s->new_set_val);   // 0 for off, 1 for on
 
-      sprintf(cmd_string, "!C%d %d%c", object_ID, set_value, CR); 
+      sprintf(cmd_string, "!C%d %d%c", object_ID, set_value, CR);  // This generates the command string
       
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       msleep(1000);

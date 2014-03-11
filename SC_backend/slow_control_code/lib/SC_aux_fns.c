@@ -19,7 +19,7 @@ int closest_int(double dbl_in)
   if ( (dbl_in - (int)dbl_in) < 0.5 )
     return(sign * (int)dbl_in);
   else
-    return(sign * (int)dbl_in + 1);
+    return(sign * ((int)dbl_in + 1));
 }
 
 
