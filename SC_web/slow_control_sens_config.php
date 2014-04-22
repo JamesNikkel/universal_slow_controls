@@ -580,7 +580,7 @@ foreach ($my_sensor_names as $sensor_name)
     echo ('Number: <input type="text" name="sens_num" value="'.$sensor_numbers[$sensor_name].'" size = 6>');
     echo ('</TD>');
     echo ('<TD align="right" colspan = 2>');
-    echo ('Physical Instrument: <input type="text" name="sens_inst" value="'.$sensor_instruments[$sensor_name].'" size = 16>');
+    echo ('Instrument Name: <input type="text" name="sens_inst" value="'.$sensor_instruments[$sensor_name].'" size = 16>');
     echo ('</TD>');
     echo ('</TR>');  
 	    
