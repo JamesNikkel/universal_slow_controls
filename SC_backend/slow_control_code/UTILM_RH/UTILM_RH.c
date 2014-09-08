@@ -28,6 +28,9 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 	  my_signal = SIGTERM;
 	  return(1);
 	}
+
+   global_tcp_timeout = 20;
+   
    return(0);
 }
 
@@ -43,19 +46,18 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   char       cmd_string[32];
   char       ret_string[32];                      
-  int        int_val;
-  global_tcp_timeout = 60;
+  long int   int_val;
 
   sleep(5);
 
-  sprintf(cmd_string, "GetCap\n"); // Read out value for Capacitance.
+  sprintf(cmd_string, "GetCap\n"); // Read out value for Capacitance (microFarads).
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "capout : %s \n", ret_string);
 
   if(sscanf(ret_string, "%d", &int_val) !=1) 
     return(1);	
     
-  *val_out = (double)int_val/1000000.0;
+  *val_out = (double)int_val/1000000.0;   // Convert from uF to pF
   return(0);
 }
 
