@@ -1,5 +1,5 @@
 /*
-  Read out of UTI chip in 3 capacitor mode using 
+  Read out of UTI chip
   Arduino ethernet.
 */
 
@@ -21,18 +21,18 @@ char ret_string[128];
 int  buff_pos = 0;
 
 // Define Arduino Pins:
-int SEL_1    = 2;
-int SEL_2    = 3;
-int SEL_3    = 5;
-int SEL_4    = 6;
+int SEL_1    = 3;
+int SEL_2    = 5;
+int SEL_3    = 6;
+int SEL_4    = 7;
 
-int UTI_PD   = 7;
-int UTI_OUT  = 8;
+int UTI_PD   = 8;
+int UTI_OUT  = 2;
 
 int LED      = 9;
 
 // Global reference capacitor value
-float capREF = 2.2;
+float capREF = 100.0;
 
 void SetUTImode(int mode_select)
 {
@@ -63,22 +63,22 @@ void SetUTImode(int mode_select)
         sel_bits[i] = 0;
     }
     
-  digitalWrite(SEL_1, sel_bits[0] );
-  digitalWrite(SEL_2, sel_bits[1] );
-  digitalWrite(SEL_3, sel_bits[2] );
-  digitalWrite(SEL_4, sel_bits[3] );
+  digitalWrite(SEL_1, sel_bits[3] );
+  digitalWrite(SEL_2, sel_bits[2] );
+  digitalWrite(SEL_3, sel_bits[1] );
+  digitalWrite(SEL_4, sel_bits[0] );
 
 }
 
 void TurnOnUTI(void)
 {
-  digitalWrite(UTI_PWR, HIGH);
+  digitalWrite(UTI_PD, HIGH);
   delay(1000);
 }
   
 void TurnOffUTI(void)
 {
-  digitalWrite(UTI_PWR, LOW);
+  digitalWrite(UTI_PD, LOW);
 }
 
 
@@ -205,15 +205,15 @@ void setup()
   pinMode (SEL_2,   OUTPUT);
   pinMode (SEL_3,   OUTPUT);
   pinMode (SEL_4,   OUTPUT);
-  pinMode (UTI_PWR, OUTPUT);
+  pinMode (UTI_PD, OUTPUT);
   pinMode (UTI_OUT, INPUT);   
   pinMode (LED,     OUTPUT);  
   delay(1000);
   
-  digitalWrite(LED,     LOW);
-  digitalWrite(UTI_PWR, LOW);
+  digitalWrite(LED,    LOW);
+  digitalWrite(UTI_PD, LOW);
 
-  SetUTImode(4); // Deafault to High (300 pf) mode.
+  SetUTImode(4); // Default to high capacitance (300 pf) mode.
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
