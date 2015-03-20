@@ -8,8 +8,7 @@
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
-byte mac[] = { 
-  0x11, 0xAD, 0xBC, 0xFE, 0xEE, 0xED };
+byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0xE8, 0xD3 };
 IPAddress ip(192,168,1,85);
 
 // Initialize the Ethernet server library
@@ -24,12 +23,16 @@ unsigned long count_B = 0;
 void countPulseA()
 {
   count_A++;
+  if (count_A > 100000000)
+    count_A = 0;
 }
 
 
 void countPulseB()
 {
   count_B++;
+  if (count_B > 100000000)
+    count_B = 0;
 }
 
 
