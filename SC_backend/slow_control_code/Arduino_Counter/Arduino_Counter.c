@@ -69,6 +69,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
     
+  *val_out = (double)counts;
+  return(0);
+  
+  /*
   if (counts > 0)
     {
       add_val_sensor_struct(s_s, time(NULL), (double)counts);
@@ -85,6 +89,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     }
   else 
     return(1);
+  */
+
 }
 
 
