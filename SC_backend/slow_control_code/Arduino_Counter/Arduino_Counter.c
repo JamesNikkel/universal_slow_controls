@@ -17,7 +17,8 @@
 #define INSTNAME "Arduino_Counter"
 
 int inst_dev;
-
+time_t last_read_time_A;
+time_t last_read_time_B;
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
@@ -28,6 +29,10 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       my_signal = SIGTERM;
       return(1);
     }
+  
+  last_read_time_A = time(NULL);
+  last_read_time_B = time(NULL);
+
   return(0);
 }
 
@@ -46,8 +51,11 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       cmd_string[64];
   char       ret_string[64];             
   unsigned long  counts;
+  time_t         this_time;
+  time_t         diff_time;
+  double         this_rate;
 
-  sleep(5);
+  s_s->data_type = ARRAY_DATA;
 
   if (s_s->num == 0)             // For Channel A
     sprintf(cmd_string, "0\n"); 
@@ -70,9 +78,25 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
     
-  *val_out = (double)counts;
+  this_time = time(NULL);
+  
+  if (s_s->num == 0)             // For Channel A
+    {
+      diff_time =  this_time - last_read_time_A; 
+      last_read_time_A = this_time;
+    }
+  else   // For Channel B
+    {
+      diff_time =  this_time - last_read_time_B; 
+      last_read_time_B = this_time;
+    }
+  
+  if (diff_time > 0)
+    this_rate = (double)counts / (double)diff_time;
+  else
+    this_rate = 0;
 
-  return(0);
+  return(insert_mysql_sensor_data(s_s->name, this_time, (double)counts, this_rate));
 }
 
 
