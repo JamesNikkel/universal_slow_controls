@@ -417,6 +417,41 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		}
 	      msleep(500);
 	    }
+	  else if (this_sensor_struc->data_type == COUNTER_DATA)           
+	    {
+	      if (this_sensor_struc->next_update_time <= time(NULL))
+		{
+		  j = 0;
+		  while ((sens_errors = read_sensor(i_s, this_sensor_struc, &sensor_value)) != 0)
+		    {
+		      j++;
+		      if (j > max_retries)
+			{
+			  sprintf(this_sys_message_struc.ip_address, " ");
+			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
+				  this_sensor_struc->name);
+			  sprintf(this_sys_message_struc.type, "Error");
+			  this_sys_message_struc.is_error = 1;
+			  insert_mysql_system_message(&this_sys_message_struc);	
+			  break;
+			}
+		      msleep(500);
+		    }
+		  if (sens_errors == 0)
+		    {
+		      //add_val_sensor_struct(this_sensor_struc, time(NULL), sensor_value);
+		      //write_temporary_sensor_data(this_sensor_struc);
+		      //avg_vals_sensor_struct(this_sensor_struc, NUM_DISC_HIGH, NUM_DISC_LOW);
+		      //diff_vals_sensor_struct(this_sensor_struc, NUM_DISC_HIGH, NUM_DISC_LOW);
+		      read_mysql_sensor_refresh_time(this_sensor_struc);
+		      this_sensor_struc->last_update_time = time(NULL);
+		      this_sensor_struc->next_update_time = time(NULL) + this_sensor_struc->update_period;
+		    }
+		}
+	      msleep(500);
+	    }
+	  
 	}
       msleep(100);
     }
