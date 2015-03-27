@@ -59,7 +59,6 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
 
-
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   msleep(200);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
@@ -70,17 +69,22 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
     
-   add_val_sensor_struct(s_s, time(NULL), (double)counts);
+  if (counts > 0)
+    {
+      add_val_sensor_struct(s_s, time(NULL), (double)counts);
       
-   if (s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)] > 0 )
-     s_s->rate = (s_s->vals[s_s->index] - s_s->vals[dec_index(s_s->index)]) /
-       ((double)(s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)]));
-   else
-     s_s->rate = 0;
-
-   write_temporary_sensor_data(s_s);
-
-  return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
+      if (s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)] > 0 )
+	s_s->rate = (s_s->vals[s_s->index] - s_s->vals[dec_index(s_s->index)]) /
+	  ((double)(s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)]));
+      else
+	s_s->rate = 0;
+      
+      write_temporary_sensor_data(s_s);
+      
+      return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
+    }
+  else 
+    return(1);
 }
 
 
