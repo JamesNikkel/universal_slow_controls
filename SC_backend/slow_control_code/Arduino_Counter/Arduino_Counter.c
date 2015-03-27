@@ -17,8 +17,6 @@
 #define INSTNAME "Arduino_Counter"
 
 int inst_dev;
-time_t last_read_time_A;
-time_t last_read_time_B;
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
@@ -30,9 +28,6 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       return(1);
     }
   
-  last_read_time_A = time(NULL);
-  last_read_time_B = time(NULL);
-
   return(0);
 }
 
@@ -51,8 +46,6 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       cmd_string[64];
   char       ret_string[64];             
   unsigned long  counts;
-  time_t         this_time;
-  time_t         diff_time;
   double         this_rate;
 
   s_s->data_type = ARRAY_DATA;
@@ -78,25 +71,16 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
     
-  this_time = time(NULL);
-  
-  if (s_s->num == 0)             // For Channel A
-    {
-      diff_time =  this_time - last_read_time_A; 
-      last_read_time_A = this_time;
-    }
-  else   // For Channel B
-    {
-      diff_time =  this_time - last_read_time_B; 
-      last_read_time_B = this_time;
-    }
-  
-  if (diff_time > 0)
-    this_rate = (double)counts / (double)diff_time;
-  else
-    this_rate = 0;
+   add_val_sensor_struct(s_s, time(NULL), (double)counts);
+   write_temporary_sensor_data(s_s);
+   
+   if (s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)] > 0 )
+     this_rate = (s_s->vals[s_s->index] - s_s->vals[dec_index(s_s->index)]) /
+       ((double)(s_s->times[s_s->index] - s_s->times[dec_index(s_s->index)]));
+   else
+     this_rate = 0;
 
-  return(insert_mysql_sensor_data(s_s->name, this_time, (double)counts, this_rate));
+  return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], this_rate));
 }
 
 

@@ -124,4 +124,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *sens
 // returns 1 if there is a problem, 0 if all's good
 int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s);
 
+int inc_index(int idx);
+int dec_index(int idx);
+
 #endif

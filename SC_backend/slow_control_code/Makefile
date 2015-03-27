@@ -5,6 +5,7 @@ SUBDIRS = lib \
 	ADAM6000 \
 	Alicat \
 	AMI286 \
+	Arduino_Counter \
 	cams \
 	CDL204 \
         disk_free \
