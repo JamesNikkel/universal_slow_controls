@@ -12,6 +12,17 @@ include("slow_control_page_setup.php");
 include("aux/get_sensor_info.php"); 
 include("aux/make_plot.php");
 
+///  Decide if we want to use the rate or regular value
+if (!(isset($_SESSION['use_rate'])))
+  $_SESSION['use_rate'] = 0;    /// by default, do not use rate value
+if (!(empty($_POST['use_rate'])))   // then toggle if set
+{
+    if ($_SESSION['use_rate'])
+	$_SESSION['use_rate'] = 0;
+    else
+	$_SESSION['use_rate'] = 1;
+}
+
 $click_t = NULL;
 if (empty($_SESSION['click_type']))
     $_SESSION['click_type'] = 2;
@@ -124,10 +135,10 @@ else
 
 
 if (strcmp($logxy, "intlog") == 0)
-    $query = "SELECT time, value FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
+    $query = "SELECT time, value, rate FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
 	" AND ".$_SESSION['t_max_p']." AND `value` > 0 ORDER BY RAND() LIMIT ".$num_plot_points;
 else
-    $query = "SELECT time, value FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
+    $query = "SELECT time, value, rate FROM sc_sens_".$sensor_name." WHERE `time` BETWEEN ".$_SESSION['t_min_p'].
 	" AND ".$_SESSION['t_max_p']." ORDER BY RAND() LIMIT ".$num_plot_points;
 
 
@@ -143,7 +154,11 @@ $value = array();
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
 {	
     $time[] = (int)$row['time'];
-    $value[] = (double)$row['value'];
+
+    if ($_SESSION['use_rate'])
+      $value[] = (double)$row['rate'];
+    else 
+      $value[] = (double)$row['value'];
 }  
 
 if (count($time) > 1)
@@ -162,8 +177,12 @@ if (count($time) > 1)
     
     $plot_name = "jpgraph_cache/plot_single.png";
     $plot_title = $sensor_descs[$sensor_name]." (".$sensor_name.")";
-    $plot_y_label = " (".$sensor_units[$sensor_name].")";
-   
+    
+    if ($_SESSION['use_rate'])
+      $plot_y_label = " (".$sensor_units[$sensor_name]."/s)";
+    else
+      $plot_y_label = " (".$sensor_units[$sensor_name].")";
+
     make_plot($plot_name, $time, $value, $logxy, $plot_title, $plot_y_label, 
 	      $sensor_al_trip[$sensor_name],
 	      $_SESSION['single_view_x_size'], $_SESSION['single_view_y_size'], $y_reg, $click_t);
@@ -176,9 +195,19 @@ mysql_close($connection);
 ////   This next section generate the HTML with the plot in a table.
 
 echo ('<TABLE border="0" cellpadding="0" frame="box" width=100%>');
-echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
 echo ('<TR align=center>');
-echo ('<TD colspan=2>');
+echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+echo ('<TD align=left>');
+echo ('Use Rate: ');
+echo('<input type="hidden" name="use_rate" value="1">');
+if ($_SESSION['use_rate'] == 1)
+    echo ('<input type="image" src="pixmaps/checked.png" alt="Click to use normal sensor value" title="Click to use normal sensor value">');
+else
+    echo ('<input type="image" src="pixmaps/unchecked.png" alt="Click to use rate value" title="Click to use rate value">');
+echo ('</TD>');
+echo ('</FORM>');
+echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+echo ('<TD>');
 echo ('Clicking on the plot: ');
 echo ('</TD>');
 echo ('<TD>');
