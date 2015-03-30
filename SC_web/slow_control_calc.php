@@ -156,10 +156,16 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
     $time[] = (int)$row['time'];
 
     if ($_SESSION['use_rate'])
-      $value[] = (double)$row['rate'];
+      {
+	$value[] = (double)$row['rate'];
+	$s_units = $sensor_units[$sensor_name]."/s";
+      }
     else 
-      $value[] = (double)$row['value'];
-}  
+      {
+	$value[] = (double)$row['value'];
+	$s_units = $sensor_units[$sensor_name];
+      }  
+ }
 
 if (count($time) > 1)
 {
@@ -178,11 +184,8 @@ if (count($time) > 1)
     $plot_name = "jpgraph_cache/plot_single.png";
     $plot_title = $sensor_descs[$sensor_name]." (".$sensor_name.")";
     
-    if ($_SESSION['use_rate'])
-      $plot_y_label = " (".$sensor_units[$sensor_name]."/s)";
-    else
-      $plot_y_label = " (".$sensor_units[$sensor_name].")";
-
+    $plot_y_label = " (".$s_units.")";
+   
     make_plot($plot_name, $time, $value, $logxy, $plot_title, $plot_y_label, 
 	      $sensor_al_trip[$sensor_name],
 	      $_SESSION['single_view_x_size'], $_SESSION['single_view_y_size'], $y_reg, $click_t);
@@ -332,7 +335,7 @@ if (!empty($_POST['int_y']))
 
     echo ('<TH align="left">');
     echo (format_num($int_y));
-    echo ('('.$sensor_units[$sensor_name].'*s)');
+    echo ('('.$s_units.'*s)');
     echo ('</TH>');
     echo ('</TR>');
     
@@ -343,10 +346,10 @@ if (!empty($_POST['int_y']))
 
     echo ('<TD align="left">');
     echo (format_num($int_y/60.0));
-    echo ('('.$sensor_units[$sensor_name].'*min)');
+    echo ('('.$s_units.'*min)');
     echo (' &#160 = &#160 ');
     echo (format_num($int_y/3600.0));
-    echo ('('.$sensor_units[$sensor_name].'*hour))');
+    echo ('('.$s_units.'*hour))');
     echo ('</TD>');
 
     echo ('</TR>');
@@ -364,7 +367,7 @@ if (!empty($_POST['avg_y']))
     echo (format_num($avg_y));
     echo ('</TH>');
     echo ('<TH align="left">');
-    echo ('('.$sensor_units[$sensor_name].')');
+    echo ('('.$s_units.')');
     echo ('</TH>');
     echo ('</TABLE>'); 
 }
@@ -379,7 +382,7 @@ if (!empty($click_t))
     echo ('Value on  ');
     echo (date("M d, Y @ G:i:s", $click_t).' &#160 = &#160 ');
     echo (format_num($found_y));
-    echo ('('.$sensor_units[$sensor_name].')');
+    echo ('('.$s_units.')');
     echo ('</TH>');
     echo ('</TR>');
    
@@ -406,11 +409,11 @@ if (!empty($_POST['lin_reg']))
     
     echo ('<TH align="left">');
     echo (' &#160 Slope = '.format_num($y_reg[2]));
-    echo ('('.$sensor_units[$sensor_name].'/s)');
+    echo ('('.$s_units.'/s)');
     
     echo (' &#160 &#160 (Local) Y-intercept = ');
     echo (format_num($y_reg[0]));
-    echo ('('.$sensor_units[$sensor_name].')');
+    echo ('('.$s_units.')');
     echo ('</TH>');
 
     if (!empty($_POST['lin_reg_target']))
@@ -419,7 +422,7 @@ if (!empty($_POST['lin_reg']))
 	$targ_time=interp_y($targ_val, $y_reg[2], $y_reg[3]);
 	
 	echo ('<TH align="left">');
-	echo (' &#160 &#160 Will reach '.$targ_val.'('.$sensor_units[$sensor_name].') on:');
+	echo (' &#160 &#160 Will reach '.$targ_val.'('.$s_units.') on:');
 	echo ('</TH>');
 	echo ('<TH align="left">');
 	echo (date("M d, Y @ G:i:s", $targ_time));
@@ -434,7 +437,7 @@ if (!empty($_POST['lin_reg']))
 	echo ('<input type="hidden" name="lin_reg" value="'.$sensor_name.'" >');
 	echo ('</TH>');
 	echo ('<TH align="left">');
-	echo ('('.$sensor_units[$sensor_name].')');
+	echo ('('.$s_units.')');
 	echo ('</TH>');
 	echo ('</FORM>');
 	echo ('</TR>');	
@@ -445,9 +448,9 @@ if (!empty($_POST['lin_reg']))
     
     echo ('<TD align="left">');
     echo (' &#160 (Slope = '.format_num($y_reg[2]*60.0));
-    echo ('('.$sensor_units[$sensor_name].'/min)');
+    echo ('('.$s_units.'/min)');
     echo (' &#160  = '.format_num($y_reg[2]*3600.0));
-    echo ('('.$sensor_units[$sensor_name].'/hour))');
+    echo ('('.$s_units.'/hour))');
     echo ('</TD>');
 
     echo ('</TR>');	
