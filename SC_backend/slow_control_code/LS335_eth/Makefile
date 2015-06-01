@@ -9,7 +9,7 @@ PROGS = LS335
 
 all: $(PROGS) 
 
-CryoCon34: $(PROGS).o
+LS335: $(PROGS).o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
 	rm -f $@.o
 
