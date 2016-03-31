@@ -39,7 +39,9 @@ if (!empty($_POST['new_priv']))
 	$_POST['new_priv'] = addslashes($_POST['new_priv']);
 	$_POST['new_priv_host'] = addslashes($_POST['new_priv_host']);
     }
-    
+    $_POST['new_priv'] = preg_replace('/\s+/', '', $_POST['new_priv']);
+    $_POST['new_priv_host'] = preg_replace('/\s+/', '', $_POST['new_priv_host']);
+
     $query = "INSERT into `user_privileges` (`name`, `allowed_host`) VALUES ('".$_POST['new_priv']."', '".$_POST['new_priv_host']."')"; 
     $result = mysql_query($query);
     if (!$result)
@@ -52,8 +54,8 @@ if (isset($_POST['del_priv']))
     include("master_db_login.php");
     if (!get_magic_quotes_gpc())
     {
-	$_POST['del_priv'] = addslashes($_POST['del_priv']);
-	$_POST['del_priv_host'] = addslashes($_POST['del_priv_host']);
+      $_POST['del_priv'] = addslashes($_POST['del_priv']);
+      $_POST['del_priv_host'] = addslashes($_POST['del_priv_host']);
     }
     if ( (strcmp($_POST['del_priv'], "config") == 0) ||  (strcmp($_POST['del_priv'], "admin") == 0) ||
 	 (strcmp($_POST['del_priv'], "basic") == 0) ||  (strcmp($_POST['del_priv'], "full") == 0))
@@ -77,7 +79,8 @@ if (!empty($_POST['new_sens_type']))
     include("master_db_login.php");
     if (!get_magic_quotes_gpc())
       $_POST['new_sens_type'] = addslashes($_POST['new_sens_type']);
-    
+    $_POST['new_sens_type'] = preg_replace('/\s+/', '', $_POST['new_sens_type']);
+
     $query = "INSERT into `sc_sensor_types` (`name`)  VALUES ('".$_POST['new_sens_type']."')"; 
 
     $result = mysql_query($query);

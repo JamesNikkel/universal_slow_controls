@@ -13,8 +13,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <my_global.h>
-#include <my_sys.h>
-#include <my_getopt.h>
+//#include <my_sys.h>
+//#include <my_getopt.h>
 #include <mysql.h>
 #include <unistd.h>
 

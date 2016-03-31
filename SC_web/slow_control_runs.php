@@ -7,12 +7,12 @@
 //////// do this first as it re-dirrects to another page
 if (isset($_POST['set_times']))
 {
-    $_SESSION['t_min_p'] =  $_POST['start_t'];
+    $_SESSION['t_min_p'] = $_POST['start_t'];
     if ($_POST['end_t'] == 0)
 	$_SESSION['t_max_now'] = 1;
     else
     {
-	$_SESSION['t_max_p'] =  $_POST['end_t'];
+	$_SESSION['t_max_p'] = $_POST['end_t'];
 	$_SESSION['t_max_now'] = -1;
     }
     header('Location: slow_control_plots.php'); 
@@ -22,12 +22,6 @@ session_start();
 $req_priv = "full";
 include("db_login.php");
 include("slow_control_page_setup.php");
-
-if (isset($_POST['play_stuff']))
-  {
-    echo('<embed src="wave_files/SirenWebAlert_LUX.wav" width="300" height="90" loop="true" autostart="true" />');
-  }
-
 
 if (isset($_POST['new_run']))
 {
@@ -41,7 +35,7 @@ if (isset($_POST['new_run']))
     $query = "UPDATE `runs` SET `end_t` = '".time()."' ORDER BY `num` DESC LIMIT 1";
     $result = mysql_query($query);
     
-    $query = "INSERT into `runs` (`start_t`, `note`) VALUES ('".time()."', '".$_POST['note']."')"; 
+    $query = "INSERT into `runs` (`start_t`, `end_t`, `note`) VALUES ('".time()."', 0, '".$_POST['note']."')"; 
     $result = mysql_query($query);
     if (!$result)
 	die ("Could not query the database <br />" . mysql_error());
@@ -165,10 +159,11 @@ for ($i = 1; $i < count($run_nums); $i++)
 
     echo ('<TD align=center>');    
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-    echo ('<input type="image" src="pixmaps/plot_2lines.png" name="set_times" value="1" 
-        alt="Set view limits to this run." title="Set view limits to this run.">');
+    echo ('<input type="hidden" name="set_times" value="1" >');
     echo ('<input type="hidden" name="start_t" value="'.$run_start_ts[$run_nums[$i]].'" >');
     echo ('<input type="hidden" name="end_t" value="'.$run_end_ts[$run_nums[$i]].'" >');
+    echo ('<input type="image" src="pixmaps/plot_2lines.png"
+        alt="Set view limits to this run." title="Set view limits to this run.">');
     echo ('</FORM>');
     echo ('</TD>');
     
@@ -212,20 +207,19 @@ echo ('<TD align=center colspan="3">');
 echo ('</TD>');
 echo ('</TR>');
 
+//echo ('<TR valign="center">');
+//echo ('<TD align=center colspan="1">');
+//echo ('</TD>');
 
-echo ('<TR valign="center">');
-echo ('<TD align=center colspan="1">');
-echo ('</TD>');
+//echo ('<TD align=center>');   
+//echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+//echo ('<input type="image" src="pixmaps/error.png" name="play_stuff" value="1">');
+//echo ('</FORM>');
+//echo ('</TD>');
 
-echo ('<TD align=center>');   
-echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-echo ('<input type="image" src="pixmaps/error.png" name="play_stuff" value="1">');
-echo ('</FORM>');
-echo ('</TD>');
-
-echo ('<TD align=center colspan="3">');
-echo ('</TD>');
-echo ('</TR>');
+//echo ('<TD align=center colspan="3">');
+//echo ('</TD>');
+//echo ('</TR>');
 
 echo ('</TABLE>');
 

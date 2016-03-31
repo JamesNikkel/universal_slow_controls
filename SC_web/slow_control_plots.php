@@ -21,11 +21,14 @@ include("aux/make_plot.php");
 ///  last entry in the database.  These are stored as session variables
 ///  t_min and t_max.  We then initialize the plotting limits, t_min_p and t_max_p
 include("aux/get_time_max_min.php"); 
-if ((empty($_SESSION['t_min_p'])) || (empty($_SESSION['t_max_p'])))
-{
+if (empty($_SESSION['t_min_p']))
+  {
     $_SESSION['t_min_p'] = $_SESSION['t_max'] - (24 * 3600);  // plot only last 24 hours of data
+  }
+if (empty($_SESSION['t_max_p']))
+  { 
     $_SESSION['t_max_p'] = time();  // set to now
-}
+  }
 
 ///   This session variable array sets the log scaling behavior for _each_ plot.  That is why
 ///   it is defined here after we get the sensor info, but before we choose the type.

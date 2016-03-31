@@ -13,7 +13,7 @@ if (isset($_POST['set_sens_name']))
 	$new_val = floatval($_POST['new_set_val']);
 	if (is_float($new_val))
 	{
-	    $query = "INSERT INTO sc_sens_".$_POST['set_sens_name']." SET time = ".time().", value = ".$new_val;
+	    $query = "INSERT INTO sc_sens_".$_POST['set_sens_name']." SET time = ".time().", value = ".$new_val.", rate = 0";
 	    $result = mysql_query($query);
 	    if (!$result)
 	    {	

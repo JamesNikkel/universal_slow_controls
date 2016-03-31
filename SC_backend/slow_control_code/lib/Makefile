@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 CC = gcc -O3
 
-CFLAGS = `mysql_config --cflags` -I../include
+CFLAGS = `mysql_config --cflags` -I../include 
 LDFLAGS = `mysql_config --libs`
 
 AR = ar
