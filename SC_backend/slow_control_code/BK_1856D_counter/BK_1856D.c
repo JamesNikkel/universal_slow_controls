@@ -74,17 +74,23 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   unsigned long  counts;
   char       ret_string[32];         
   ssize_t wstatus, rdstatus;
-  
+
+  sleep(1);
+
   wstatus = write(inst_dev, "D", sizeof(char));   
   wstatus = write(inst_dev, &CR, sizeof(char));  
   
   rdstatus = read(inst_dev, &ret_string, 32);
-  sscanf(ret_string, "%lu%*s ", counts);
   fprintf(stdout, "Ret string: %s \n", ret_string);
+
+   if (sscanf(ret_string, "%lu", &counts) !=1) 
+    {
+      fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+      return(1);
+    }
+
   *val_out = (double)counts;
-  
-  sleep(1);
-  
+    
   if (counts > 0)
     {
       add_val_sensor_struct(s_s, time(NULL), (double)counts);
