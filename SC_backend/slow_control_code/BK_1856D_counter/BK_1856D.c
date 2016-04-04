@@ -41,6 +41,11 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
     exit(1);
   }
 
+  sprintf(cmd_string, "R1");
+  wstatus = write(inst_dev, cmd_string, strlen(cmd_string));
+  wstatus = write(inst_dev, &CR, sizeof(char));  
+  sleep(1);
+
   sprintf(cmd_string, "F4");
   wstatus = write(inst_dev, cmd_string, strlen(cmd_string));
   wstatus = write(inst_dev, &CR, sizeof(char));  
