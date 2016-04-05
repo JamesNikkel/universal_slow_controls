@@ -49,7 +49,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   sleep(1);
   
-  if (s_s->num < 0 || s_s->num > 5)
+  if (s_s->num < 0 || s_s->num > 15)
     {
       fprintf(stderr, "Channel must be between 0 and 5 (inclusive), not %d.\n", s_s->num);
       return(1);
