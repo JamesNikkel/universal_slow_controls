@@ -38,7 +38,7 @@ int update_inst_state(struct inst_struct *i_s)
     int    my_errors = 0;
 
     sprintf(query_strng, "UPDATE `sc_insts` SET `PID`=%d, `start_time`=%lu, `last_update_time`=%lu  WHERE `name` = \"%s\" ", 
-	    i_s->PID, (unsigned long)i_s->start_time,  (unsigned long)i_s->start_time, i_s->name);
+	    i_s->PID, (long)i_s->start_time,  (long)i_s->start_time, i_s->name);
     my_errors += write_to_mysql(query_strng);
 
     return(my_errors);
