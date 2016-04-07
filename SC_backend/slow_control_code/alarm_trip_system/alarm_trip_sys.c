@@ -101,6 +101,11 @@ int check_for_trip_condition (struct sensor_struct *s_s)
 	  if ((s_s->al_arm_rate_high) && (rate > s_s->al_set_rate_high))
 	    sprintf(this_sys_message_struc.msgs, "Alarm rate setpoint tripped on sensor %s: %s: %f (%s/s) > %f (%s/s)", 
 		    s_s->name, s_s->description, rate, s_s->units, s_s->al_set_rate_high, s_s->units);  
+	  else
+	    sprintf(this_sys_message_struc.msgs, "Unknown alarm tripped on sensor %s: %s: %f (%s/s) > %f (%s/s)", 
+		    s_s->name, s_s->description, rate, s_s->units, s_s->al_set_rate_high, s_s->units);  
+	  sprintf(this_sys_message_struc.ip_address, " ");
+	  sprintf(this_sys_message_struc.subsys, s_s->type);
 	  sprintf(this_sys_message_struc.type, "Alarm");
 	  this_sys_message_struc.is_error = 1;
 	  ret_val += insert_mysql_system_message(&this_sys_message_struc);
