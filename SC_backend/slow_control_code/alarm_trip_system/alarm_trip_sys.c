@@ -92,18 +92,18 @@ int check_for_trip_condition (struct sensor_struct *s_s)
 	  if ((s_s->al_arm_val_low) && (value < s_s->al_set_val_low))
 	    sprintf(this_sys_message_struc.msgs, "Alarm setpoint tripped on sensor %s: %s: %f (%s) < %f (%s)", 
 		    s_s->name, s_s->description, value, s_s->units, s_s->al_set_val_low, s_s->units);
-	  if ((s_s->al_arm_val_high) && (value > s_s->al_set_val_high))
+	  else if ((s_s->al_arm_val_high) && (value > s_s->al_set_val_high))
 	    sprintf(this_sys_message_struc.msgs, "Alarm setpoint tripped on sensor %s: %s: %f (%s) > %f (%s)", 
 		    s_s->name, s_s->description, value, s_s->units, s_s->al_set_val_high, s_s->units);  
-	  if ((s_s->al_arm_rate_low) && (rate < s_s->al_set_rate_low)) 
+	  else if ((s_s->al_arm_rate_low) && (rate < s_s->al_set_rate_low)) 
 	    sprintf(this_sys_message_struc.msgs, "Alarm rate setpoint tripped on sensor %s: %s: %f (%s/s) < %f (%s/s)", 
 		    s_s->name, s_s->description, rate, s_s->units, s_s->al_set_rate_low, s_s->units);
-	  if ((s_s->al_arm_rate_high) && (rate > s_s->al_set_rate_high))
+	  else if ((s_s->al_arm_rate_high) && (rate > s_s->al_set_rate_high))
 	    sprintf(this_sys_message_struc.msgs, "Alarm rate setpoint tripped on sensor %s: %s: %f (%s/s) > %f (%s/s)", 
 		    s_s->name, s_s->description, rate, s_s->units, s_s->al_set_rate_high, s_s->units);  
 	  else
-	    sprintf(this_sys_message_struc.msgs, "Unknown alarm tripped on sensor %s: %s: %f (%s/s) > %f (%s/s)", 
-		    s_s->name, s_s->description, rate, s_s->units, s_s->al_set_rate_high, s_s->units);  
+	    sprintf(this_sys_message_struc.msgs, "Unknown alarm tripped on sensor %s: %s: %f (%s)", 
+		    s_s->name, s_s->description, value, s_s->units);  
 	  sprintf(this_sys_message_struc.ip_address, " ");
 	  sprintf(this_sys_message_struc.subsys, s_s->type);
 	  sprintf(this_sys_message_struc.type, "Alarm");
