@@ -44,14 +44,10 @@ $master_alarm_on = $global_int1[$master_alarm_name];
 
 if ($master_alarm_on) 
   echo('
-<audio id="siren" controls>
+<audio controls autoplay loop>
   <source src="wave_files/SirenWebAlert_LUX.wav" type="audio/wav">
     Your browser does not support the audio element.
 </audio>
-var clip = document.getElementById("siren");
-clip.autoplay = true;
-clip.loop = true;
-clip.load();
 ');
 
 
