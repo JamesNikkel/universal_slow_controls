@@ -39,8 +39,15 @@ include("slow_control_header.php");
 $master_alarm_name = "Master_alarm";
 $master_alarm_on = $global_int1[$master_alarm_name];
 
+//if ($master_alarm_on) 
+//  echo('<embed src="wave_files/SirenWebAlert_LUX.wav" width="300" height="90" loop="true" autostart="true" />');
+
 if ($master_alarm_on) 
-  echo('<embed src="wave_files/SirenWebAlert_LUX.wav" width="300" height="90" loop="true" autostart="true" />');
+  echo('<audio controls>
+  <source src="wave_files/SirenWebAlert_LUX.wav" type="audio/wav">
+   Your browser does not support the audio element.
+  </audio>');
+
 
 ///  Decide if we want to show the sensor names with the descriptions on the various pages
 if (!(isset($_SESSION['show_sens_name'])))
