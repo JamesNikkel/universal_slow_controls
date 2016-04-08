@@ -48,14 +48,10 @@ if ($master_alarm_on)
   <source src="wave_files/SirenWebAlert_LUX.wav" type="audio/wav">
     Your browser does not support the audio element.
 </audio>
-<script>
 var clip = document.getElementById("siren");
-function enableAutoplay() { 
-    clip.autoplay = true;
-    clip.load();
-}
-</script> 
-
+clip.autoplay = true;
+clip.loop = true;
+clip.load();
 ');
 
 
