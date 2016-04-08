@@ -43,10 +43,17 @@ $master_alarm_on = $global_int1[$master_alarm_name];
 //  echo('<embed src="wave_files/SirenWebAlert_LUX.wav" width="300" height="90" loop="true" autostart="true" />');
 
 if ($master_alarm_on) 
-  echo('<audio controls>
+  echo('
+<audio id="siren" controls>
   <source src="wave_files/SirenWebAlert_LUX.wav" type="audio/wav">
-   Your browser does not support the audio element.
-  </audio>');
+    Your browser does not support the audio element.
+</audio>
+var clip = document.getElementById("siren");
+function enableAutoplay() { 
+    clip.autoplay = true;
+    clip.load();
+}
+');
 
 
 ///  Decide if we want to show the sensor names with the descriptions on the various pages
