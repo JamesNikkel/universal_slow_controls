@@ -263,25 +263,27 @@ int send_mail_message(char *address, char *message)
   int ret_val = 0;
     
   char message_file_name[64];
-  char *sys_command;
+  char sys_command[256];
   int  message_file;    
   ssize_t w_status = 0;
 
+  /*
   sys_command = malloc((strlen(message) + 128) * sizeof(char)); 
   if (sys_command == NULL)
     {
       fprintf(stderr, "Malloc failed\n");
       return(1);
     }
-    
+  */
+
   sprintf(message_file_name , "/tmp/warning_message_file.txt");
-  message_file = open(message_file_name, O_WRONLY|O_CREAT|O_TRUNC,  S_IRWXU);  ///   Write the alarm message to a file 
+  message_file = open(message_file_name, O_WRONLY|O_CREAT|O_TRUNC|O_APPEND,  S_IRWXU);  ///   Write the alarm message to a file 
   w_status += write(message_file, message, strlen(message));                    ///   as that appears to be the only way
   w_status += write(message_file, "\n", 1);                     
   close(message_file);  
     
   if (w_status > 0)
-    fprintf(stderr, "Trouble writing message file in send_mail_message\n");
+    fprintf(stderr, "Trouble writing message file in send_mail_message, w_status=%d\n", w_status);
     
 
   sprintf(sys_command, "/bin/mail %s -s \"Slow control alarm\" < %s > /dev/null ", address,  message_file_name);
@@ -298,7 +300,7 @@ int send_mail_message(char *address, char *message)
       ret_val++;
     }
 
-  free(sys_command);
+  //free(sys_command);
         
   return(ret_val + w_status);
 } 
