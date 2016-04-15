@@ -282,7 +282,7 @@ int send_mail_message(char *address, char *message)
   w_status += write(message_file, "\n", 1);                     
   close(message_file);  
     
-  if (w_status > 0)
+  if (w_status < 0)
     fprintf(stderr, "Trouble writing message file in send_mail_message, w_status=%d\n", w_status);
     
 
