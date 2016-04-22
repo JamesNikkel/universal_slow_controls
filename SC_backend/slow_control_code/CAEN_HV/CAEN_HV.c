@@ -10,11 +10,14 @@
 #include "SC_sensor_interface.h"
 
 #include "ethernet.h"
+#include "v65xx.h"
+#include "CAENComm.h"
+
 
 // This is the default instrument entry, but can be changed on the command line when run manually.
 // When called with the watchdog, a specific instrument is always given even if it is the same
 // as the default. 
-#define INSTNAME "Arduino_ADC"
+#define INSTNAME "CAEN_HV"
 
 int inst_dev;
 

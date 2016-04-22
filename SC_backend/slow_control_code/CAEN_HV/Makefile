@@ -4,7 +4,7 @@ CC = gcc -O3
 CFLAGS = `mysql_config --cflags` -I../include 
 
 LDFLAGS =  -L../lib 
-LIBS = -lslow_control
+LIBS = -lslow_control -lCAENComm
 
 PROGS = CAEN_HV
 
