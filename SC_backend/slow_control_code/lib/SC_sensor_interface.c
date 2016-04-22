@@ -324,7 +324,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      if (j > max_retries)
 			{
 			  sprintf(this_sys_message_struc.ip_address, " ");
-			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+			  sprintf(this_sys_message_struc.subsys, "%s", this_sensor_struc->type);
 			  sprintf(this_sys_message_struc.msgs, "New setpoint: %s = %e could not be set.", 
 				  this_sensor_struc->name , this_sensor_struc->new_set_val);
 			  sprintf(this_sys_message_struc.type, "Setpoint");
@@ -337,7 +337,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		  if (sens_errors == 0)
 		    {
 		      sprintf(this_sys_message_struc.ip_address, " ");
-		      sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+		      sprintf(this_sys_message_struc.subsys, "%s", this_sensor_struc->type);
 		      sprintf(this_sys_message_struc.msgs, "New setpoint: %s = %e.", 
 			      this_sensor_struc->name , this_sensor_struc->new_set_val);
 		      sprintf(this_sys_message_struc.type, "Setpoint");
@@ -356,7 +356,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		  if (j > max_retries)
 		    {
 		      sprintf(this_sys_message_struc.ip_address, " ");
-		      sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+		      sprintf(this_sys_message_struc.subsys, "%s", this_sensor_struc->type);
 		      sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 			      this_sensor_struc->name);
 		      sprintf(this_sys_message_struc.type, "Error");
@@ -394,7 +394,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      if (j > max_retries)
 			{
 			  sprintf(this_sys_message_struc.ip_address, " ");
-			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+			  sprintf(this_sys_message_struc.subsys, "%s", this_sensor_struc->type);
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);
 			  sprintf(this_sys_message_struc.type, "Error");
@@ -428,7 +428,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      if (j > max_retries)
 			{
 			  sprintf(this_sys_message_struc.ip_address, " ");
-			  sprintf(this_sys_message_struc.subsys, this_sensor_struc->type);
+			  sprintf(this_sys_message_struc.subsys, "%s", this_sensor_struc->type);
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);
 			  sprintf(this_sys_message_struc.type, "Error");

@@ -69,7 +69,7 @@ int check_instruments (struct inst_struct *wd_inst)
 	sleep(5);
 	
 	sprintf(this_sys_message_struc.ip_address, " ");
-	sprintf(this_sys_message_struc.subsys, i_s.dev_type);
+	sprintf(this_sys_message_struc.subsys, "%s", i_s.dev_type);
 	sprintf(this_sys_message_struc.msgs, "Watchdog system restarting instrument: %s ", i_s.name);
 	sprintf(this_sys_message_struc.type, "Warning");
 	this_sys_message_struc.is_error = 0;
@@ -144,7 +144,7 @@ int main (int argc, char *argv[])
 	    if (error_count > 5)
 	    {
 	      sprintf(this_sys_message_struc.ip_address, " ");
-	      sprintf(this_sys_message_struc.subsys, this_inst.dev_type);
+	      sprintf(this_sys_message_struc.subsys, "%s", this_inst.dev_type);
 	      sprintf(this_sys_message_struc.msgs, "Watchdog system failed!  Please fix and restart.");
 	      sprintf(this_sys_message_struc.type, "Error");
 	      this_sys_message_struc.is_error = 1;

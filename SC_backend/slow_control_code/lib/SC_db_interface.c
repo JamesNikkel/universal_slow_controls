@@ -176,7 +176,7 @@ int read_mysql_string(char *stmt_str, char *result_string, size_t size)
       // process set and write to string
       while ((row = mysql_fetch_row(res_set)) != NULL)
 	{
-	  snprintf(result_string, size, row[0]);
+	  snprintf(result_string, size, "%s", row[0]);
 	}
       mysql_free_result(res_set);
     }
