@@ -55,7 +55,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   uint16_t data=0;
   uint8_t  ch;
-  ch = uint8_t(channel);
+  ch = uint8_t(s_s->num);
 
   // Check whether board is in alarm state
   CAENComm_Read16(handle, 0x58, &data); // Alarm?
