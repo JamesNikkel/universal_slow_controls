@@ -1,15 +1,15 @@
-/* Program for reading a custom made Arduino POE ADC  */
+/* Program for reading out a CAEN HV VME module  */
 /* and putting said readings in to a mysql database. */
 /* James Nikkel */
-/* james.nikkel@rhul.ac.uk */
-/* Copyright 2013 */
+/* james.nikkel@gmail.com */
+/* Copyright 2016 */
 /* James public licence. */
 
 #include "SC_db_interface.h"
 #include "SC_aux_fns.h"
 #include "SC_sensor_interface.h"
 
-#include "v65xx.h"
+//#include "v65xx.h"
 #include "CAENComm.h"
 
 // This is the default instrument entry, but can be changed on the command line when run manually.
@@ -58,7 +58,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   // Check whether board is in alarm state
   CAENComm_Read16(handle, 0x58, &data); // Alarm?
-  fprintf(stdout, "Alarm=%d  ",data);
+  if (data != 0)
+    {
+      fprintf(stderr, "%s alarm = %d\n", i_s->name, data);
+    }
   
   if (strncmp(s_s->subtype, "Vmon", 1) == 0)  // get the specific data from the sensor structure
     {
