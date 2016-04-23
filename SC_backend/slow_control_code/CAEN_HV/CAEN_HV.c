@@ -33,14 +33,16 @@ void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 #define _def_read_sensor
 int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_out)
 {
-  sleep(5);
+  sleep(4);
   
   int32_t  connectionType = CAENComm_OpticalLink;
   int32_t  link = 0;
   int32_t  conet = 0;
   uint32_t vme_address = 0xaaaa0000;
   int32_t  handle;
-  
+  uint16_t data=0;
+  uint8_t  ch;
+
   CAENComm_ErrorCode  ret=0;
   
   // Open the HV module for communication
@@ -53,15 +55,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     return(1);
   }
 
-  uint16_t data=0;
-  uint8_t  ch;
-  ch = uint8_t(s_s->num);
+  ch = (uint8_t)s_s->num;   // get the channel number from the sensor structure
 
   // Check whether board is in alarm state
   CAENComm_Read16(handle, 0x58, &data); // Alarm?
   fprintf(stdout, "Alarm=%d  ",data);
   
-  if (strncmp(s_s->subtype, "Vmon", 1) == 0) 
+  if (strncmp(s_s->subtype, "Vmon", 1) == 0)  // get the specific data from the sensor structure
     {
       CAENComm_Read16(handle, 0x88+(128*ch), &data) ;	// Read Vmon
       *val_out = (double)data / 10.0;
@@ -86,7 +86,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       CAENComm_Read16(handle, 0x94+(128*ch), &data) ;	// Read Ch Status
       *val_out = (double)data;
     }
-  else if (strncmp(s_s->subtype, "Status", 1) == 0) 
+  else if (strncmp(s_s->subtype, "Power", 1) == 0) 
     {
       CAENComm_Read16(handle, 0x90+(128*ch), &data) ;	// Read Power
       *val_out = (double)data;
