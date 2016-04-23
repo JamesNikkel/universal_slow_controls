@@ -27,7 +27,6 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 #define _def_clean_up_inst
 void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 {
-  return(0);
 }
 
 #define _def_read_sensor
@@ -93,7 +92,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     }
   else
     {
-      fprintf(stderr, "No such subtype in %s. \n" i_s->name);	
+      fprintf(stderr, "No such subtype in %s. \n", i_s->name);	
       CAENComm_CloseDevice(handle);
       return(1);
     }
