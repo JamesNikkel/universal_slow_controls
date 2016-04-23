@@ -9,7 +9,6 @@
 #include "SC_aux_fns.h"
 #include "SC_sensor_interface.h"
 
-//#include "v65xx.h"
 #include "CAENComm.h"
 
 // This is the default instrument entry, but can be changed on the command line when run manually.
