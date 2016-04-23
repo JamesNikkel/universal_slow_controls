@@ -58,8 +58,6 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       CAENComm_Write16(handle, 0x80+(128*ch),  (uint16_t)(s_s->new_set_val*10)) ;	// Set voltage
       sleep(1);
-      CAENComm_Read16(handle, 0x80+(128*ch), &data) ;	// Read Vmon
-      *val_out = (double)data / 10.0;
     }
   else if (strncmp(s_s->subtype, "Power", 1) == 3)
     {
@@ -67,6 +65,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	CAENComm_Write16(handle, 0x80+(128*ch), (uint16_t)1) ;	// Turn channel on
       else
 	CAENComm_Write16(handle, 0x80+(128*ch), (uint16_t)0) ;	// Turn channel off
+      sleep(1);
     }
   else
     {
