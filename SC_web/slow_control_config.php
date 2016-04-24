@@ -134,7 +134,7 @@ if (!empty($_POST['new_lug_subcat']))
       die ("Could not query the database <br />" . mysql_error());
   }
     
-if (isset($_POST['del_cat']))
+if (isset($_POST['del_subcat']))
   {
     mysql_close($connection);
     include("master_db_login.php");
