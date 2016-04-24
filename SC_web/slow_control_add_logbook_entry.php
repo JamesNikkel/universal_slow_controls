@@ -112,9 +112,13 @@ echo ('<OPTION selected label="none" value="none">None</OPTION>');
 foreach ($lug_cat_array as $lug_cat)
 {
   echo('<OPTGROUP label="'.$lug_cat.'"> ');
-  foreach ($lug_subcat_array as $lug_subcat=>$lug_subcatcat)
-    if (strcmp($lug_subcatcat, $lug_cat) == 0)
-      echo('<option label="'.$lug_subcat.'" value="'.$lug_cat.':_:'.$lug_subcat.'" >'.$lug_cat.' / '.$lug_subcat.'</option>');
+  for ($i = 0; $i < count($lug_subcat_array[0]); $i++)
+    {
+      if (strcmp($lug_subcat_array[0][$i], $lug_cat) == 0)
+	{
+	  echo('<option label="'.$lug_subcat_array[1][$i].'" value="'.$lug_cat.':_:'.$lug_subcat_array[1][$i].'" >'.$lug_cat.' / '.$lug_subcat_array[1][$i].'</option>');
+	}
+    }
   echo('</OPTGROUP> '); 
 }
 echo ('</select>');
