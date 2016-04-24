@@ -45,30 +45,45 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-$lug_cat_array = array();
-$query = "SELECT `category` FROM `lug_categories` ORDER BY `category`";
-$result = mysql_query($query);
-if (!$result)	
-    die ("Could not query the database for message types <br>" . mysql_error());
+/* $lug_cat_array = array(); */
+/* $query = "SELECT `category` FROM `lug_categories` ORDER BY `category`"; */
+/* $result = mysql_query($query); */
+/* if (!$result)	 */
+/*     die ("Could not query the database for message types <br>" . mysql_error()); */
 
-while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-    $lug_cat_array[] = $row['category'];
+/* while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) */
+/*     $lug_cat_array[] = $row['category']; */
 
+/* //////////////////////////////////////////////////////////////////////////////////////// */
+
+/* $lug_subcat_array = array(); */
+/* $temp = array(); */
+/* $query = "SELECT `subcategory`, `category`  FROM `lug_subcategories` ORDER BY `subcategory`"; */
+/* $result = mysql_query($query); */
+/* if (!$result)	 */
+/*     die ("Could not query the database for message types <br>" . mysql_error()); */
+
+/* while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) */
+/* {      */
+/*     $lug_subcat_array[] = $row['subcategory']; */
+/*     $temp[] = $row['category']; */
+/* } */
+/* $lug_subcat_array = array_combine($lug_subcat_array, $temp); */
 ////////////////////////////////////////////////////////////////////////////////////////
 
+$lug_cat_array = array();
 $lug_subcat_array = array();
-$temp = array();
-$query = "SELECT `subcategory`, `category`  FROM `lug_subcategories` ORDER BY `subcategory`";
+$query = "SELECT `category`, `subcategory` FROM `lug_categories` ORDER BY `category`";
 $result = mysql_query($query);
 if (!$result)	
     die ("Could not query the database for message types <br>" . mysql_error());
-
 while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-{     
+  {
+    $lug_cat_array[] = $row['category'];
     $lug_subcat_array[] = $row['subcategory'];
-    $temp[] = $row['category'];
-}
-$lug_subcat_array = array_combine($lug_subcat_array, $temp);
+  }
+$lug_subcat_array = array($lug_cat_array, $lug_subcat_array);
+$lug_cat_array = make_unique($lug_cat_array);
 
 ////////////////////////////////////////////////////////////////////////////////////////
 

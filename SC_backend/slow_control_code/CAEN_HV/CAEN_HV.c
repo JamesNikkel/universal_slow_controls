@@ -107,8 +107,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   ch = (uint8_t)s_s->num;   // get the channel number from the sensor structure
 
-  // Check whether board is in alarm state
-  CAENComm_Read16(handle, 0x58, &data); // Alarm?
+  // Check board status
+  // anything other than 0 is a problem of some sort
+  CAENComm_Read16(handle, 0x58, &data); 
   if (data != 0)
     {
       fprintf(stderr, "%s alarm = %d\n", i_s->name, data);
