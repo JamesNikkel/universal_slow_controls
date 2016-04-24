@@ -135,22 +135,22 @@ if (!empty($_POST['new_lug_subcat']))
   }
     
 if (isset($_POST['del_cat']))
-{
+  {
     mysql_close($connection);
     include("master_db_login.php");
     if (!get_magic_quotes_gpc())
-    {
-      $_POST['del_cat'] = addslashes($_POST['del_cat']);
-      $_POST['del_subcat'] = addslashes($_POST['del_subcat']);
-    }
+      {
+	$_POST['del_cat'] = addslashes($_POST['del_cat']);
+	$_POST['del_subcat'] = addslashes($_POST['del_subcat']);
+      }
     else
-    {
+      {
 	$query = "DELETE FROM `lug_categories` WHERE `category` = \"".$_POST['del_cat']."\"  AND `subcategory` = \"".$_POST['del_subcat']."\" LIMIT 1";
 	$result = mysql_query($query);
 	if (!$result)
-	    die ("Could not query the database <br />" . mysql_error());
-    }
- }
+	  die ("Could not query the database <br />" . mysql_error());
+      }
+  }
 
 //////////////////////////////////////////////////////////////////////
 
