@@ -339,7 +339,7 @@ echo ('</TR>');
 echo ('<TR>');
 echo ('<TD colspan="2">');
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-echo ('<input type="text" name="new_lug_cat" size = 16>');
+echo ('<input type="text" name="new_lug_cat" size = 24>');
 echo ('<BUTTON type="submit"> New </BUTTON>');
 echo ('</FORM>');
 echo ('</TD>');
@@ -367,15 +367,15 @@ foreach ($lug_cat_array as $lug_cat)
 	  echo ('<input type="hidden" name="del_subcat" value='.$lug_subcat_array[1][$i].'>');
 	  echo ('</FORM>');
 	  echo ('</TD>');
-	  echo ('<TD>');
-	  echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-	  echo ('<input type="text" name="new_lug_subcat" size = 16>');
-	  echo ('<input type="hidden" name="new_lug_subcat_cat" value='.$lug_cat.'>');
-	  echo ('<BUTTON type="submit"> New </BUTTON>');
-	  echo ('</FORM>');
-	  echo ('</TD>');
 	}
     }
+  echo ('<TD>');
+  echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+  echo ('<input type="text" name="new_lug_subcat" size = 16>');
+  echo ('<input type="hidden" name="new_lug_subcat_cat" value='.$lug_cat.'>');
+  echo ('<BUTTON type="submit"> New </BUTTON>');
+  echo ('</FORM>');
+  echo ('</TD>');
   echo ('</TABLE>');
   echo ('</TD>');
   echo ('</TR>');
