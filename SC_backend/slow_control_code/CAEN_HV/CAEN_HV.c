@@ -59,12 +59,12 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       CAENComm_Write16(handle, 0x80+(128*ch),  (uint16_t)(s_s->new_set_val*10)) ;	// Set voltage
       sleep(1);
     }
-  else if (strncmp(s_s->subtype, "Power", 1) == 3)
+  else if (strncmp(s_s->subtype, "Power", 3) == 0)
     {
       if (s_s->new_set_val > 0.5)
-	CAENComm_Write16(handle, 0x80+(128*ch), (uint16_t)1) ;	// Turn channel on
+	CAENComm_Write16(handle, 0x90+(128*ch), (uint16_t)1) ;	// Turn channel on
       else
-	CAENComm_Write16(handle, 0x80+(128*ch), (uint16_t)0) ;	// Turn channel off
+	CAENComm_Write16(handle, 0x90+(128*ch), (uint16_t)0) ;	// Turn channel off
       sleep(1);
     }
   else
@@ -83,7 +83,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 #define _def_read_sensor
 int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_out)
 {
-  sleep(4);
+  sleep(2);
   
   int32_t  connectionType = CAENComm_OpticalLink;
   int32_t  link = 0;
