@@ -32,6 +32,9 @@ if (isset($_POST['new_run']))
 	$_POST['note'] = addslashes($_POST['note']);
     $_POST['note'] = $_POST['note']." -- ".$_SESSION['user_name'];
     
+    $_POST['file_root'] = preg_replace('/\s+/', '', $_POST['file_root']);
+    $_POST['file_path'] = preg_replace('/\s+/', '', $_POST['file_path']);
+
     $query = "UPDATE `runs` SET `end_t` = '".time()."' ORDER BY `num` DESC LIMIT 1";
     $result = mysql_query($query);
     
