@@ -14,20 +14,20 @@ $run_file_paths = array();
 $run_file_roots = array();
 $run_notes = array();
 
-/* $query = "SELECT * FROM `runs` ORDER BY `num` DESC LIMIT 1"; */
-/* $result = mysql_query($query); */
-/* if (!$result) */
-/*     die ("Could not find runs table. <br />" . mysql_error()); */
+$query = "SELECT * FROM `runs` ORDER BY `num` DESC LIMIT 1";
+$result = mysql_query($query);
+if (!$result)
+    die ("Could not find runs table. <br />" . mysql_error());
 
-/* while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) */
-/* { */
-/* 	$run_nums[] = (int)$row['num']; */
-/* 	$run_start_ts[] = (int)$row['start_t']; */
-/* 	$run_end_ts[] = (int)$row['end_t']; */
-/* 	$run_file_paths[] = $row['file_path']; */
-/* 	$run_file_roots[] = $row['file_root']; */
-/* 	$run_notes[] = $row['note']; */
-/* } */
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+{
+	$run_nums[] = (int)$row['num'];
+	$run_start_ts[] = (int)$row['start_t'];
+	$run_end_ts[] = (int)$row['end_t'];
+	$run_file_paths[] = $row['file_path'];
+	$run_file_roots[] = $row['file_root'];
+	$run_notes[] = $row['note'];
+}
 
 if (!isset($_SESSION['run_indx_offset']))
   $_SESSION['run_indx_offset'] = $run_nums[0];
