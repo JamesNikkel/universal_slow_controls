@@ -111,6 +111,7 @@ echo ('<br>');
 
 
 /////  add new run if available:
+echo ('<center>');
 if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['shift_status'], "Leader")))
 { 
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
@@ -126,7 +127,7 @@ if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['
     echo ('</FORM>');
     echo ('<br>');
 }
-
+echo ('</center>');
 
 /////  search runs:
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
