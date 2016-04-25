@@ -65,7 +65,6 @@ echo ('<TH align=left>');
 echo ('File Name');  
 echo ('</TH>');
 
-
 echo ('<TH align=left>'); 
 echo ('Note');  
 echo ('</TH>');
@@ -92,7 +91,7 @@ echo (date("M d, Y   G:i:s", $run_start_ts[$run_nums[0]]));
 echo ('</TD>');
 
 echo ('<TD align=left>');
-echo ($run_file_paths[$run_nums[0]].$run_file_roots[$run_nums[0]]);
+echo ($run_file_paths[$run_nums[0]].'/'.$run_file_roots[$run_nums[0]]);
 echo ('</TD>');
 
 echo ('<TD align=left>');
@@ -160,6 +159,10 @@ echo ('<TH align=left>');
 echo ('End Time');  
 echo ('</TH>');
 
+echo ('<TH align=left>');
+echo ('File Name');  
+echo ('</TH>');
+
 echo ('<TH align=left>'); 
 echo ('Note');  
 echo ('</TH>');
@@ -197,6 +200,11 @@ for ($i = 1; $i < count($run_nums); $i++)
     else
 	echo (date("M d, Y   G:i:s", $run_end_ts[$run_nums[$i]]));
     echo ('</TD>');
+    
+    echo ('<TD align=left>');
+    echo ($run_file_paths[$run_nums[$i]].'/'.$run_file_roots[$run_nums[$i]]);
+    echo ('</TD>');
+    
     
     echo ('<TD align=left>');
     echo ('<PRE>');
