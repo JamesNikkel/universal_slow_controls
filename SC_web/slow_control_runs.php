@@ -35,7 +35,8 @@ if (isset($_POST['new_run']))
     $query = "UPDATE `runs` SET `end_t` = '".time()."' ORDER BY `num` DESC LIMIT 1";
     $result = mysql_query($query);
     
-    $query = "INSERT into `runs` (`start_t`, `end_t`, `note`) VALUES ('".time()."', 0, '".$_POST['note']."')"; 
+    $query = "INSERT into `runs` (`start_t`, `end_t`, `file_path`, `file_root`, `note`) VALUES 
+                                 ('".time()."', 0, '".$_POST['file_path']."', '".$_POST['file_root']."', '".$_POST['note']."')"; 
     $result = mysql_query($query);
     if (!$result)
 	die ("Could not query the database <br />" . mysql_error());
@@ -103,10 +104,11 @@ if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['
 { 
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
     echo ('<input type="submit" name="new_run" value="New Run" title="Increment run">');
-    echo ('File path: <input type="text" name="file_path" value='.$run_file_paths[$run_nums[0]].' size=64>');
-    echo ('File root: <input type="text" name="file_root" value='.$run_file_roots[$run_nums[0]].'size=64>');
     echo ('<br>');
-    echo ('&#160 &#160 &#160 &#160 New run note (<100 characters): <TEXTAREA name="note" rows="1" cols="50"></TEXTAREA>');
+    echo ('&#160 &#160 &#160 &#160  File path: <input type="text" name="file_path" value='.$run_file_paths[$run_nums[0]].' size=64>');
+    echo ('&#160 &#160 &#160 &#160  File root: <input type="text" name="file_root" value='.$run_file_roots[$run_nums[0]].'size=64>');
+    echo ('<br>');
+    echo ('&#160 &#160 &#160 &#160  Run note (<100 characters): <TEXTAREA name="note" rows="1" cols="50"></TEXTAREA>');
     echo ('</FORM>');
     echo ('<br>');
 }
