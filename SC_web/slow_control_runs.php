@@ -104,16 +104,15 @@ echo ('</PRE>');
 echo ('</TD>');
 echo ('</TR>');    
 echo ('</TABLE>');
-echo ('<TABLE border="1" cellpadding="4" cellspacing="2">');
 
-echo ('</TABLE>');
 echo ('<br>');
 
-
 /////  add new run if available:
-echo ('<center>');
 if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['shift_status'], "Leader")))
-{ 
+  { 
+    echo ('<TABLE border="1" cellpadding="4" cellspacing="2">');
+    echo ('<TR>');
+    echo ('<TD align=center>');
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
     //echo ('<input type="submit" name="new_run" value="New Run" title="Increment run">');
     //echo ('<br>');
@@ -123,11 +122,22 @@ if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['
     echo ('&#160 &#160 &#160 &#160  Run note (<100 characters): <TEXTAREA name="note" rows="1" cols="50"></TEXTAREA>');
     echo ('<br>');
     echo ('<input type="submit" name="new_run" value="New Run" title="Increment run">');
-
     echo ('</FORM>');
+    echo ('</TD>');
+
+    echo ('<TD align=center>');
+    echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
+    if ($daq_running)
+      echo ('<input type="image" src="pixmaps/stop_sm.png" name="stop_daq" value="1" alt="Stop" title="Stop data aquisition">');
+    else
+       echo ('<input type="image" src="pixmaps/go_sm.png" name="start_daq" value="1" alt="Start" title="Start data aquisition">');
+    echo ('</FORM>');
+    echo ('</TD>');
+    echo ('</TR>');    
+    echo ('</TABLE>');
     echo ('<br>');
 }
-echo ('</center>');
+
 
 /////  search runs:
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
@@ -136,6 +146,7 @@ echo ('</FORM>');
 echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
 echo ('&#160 &#160 &#160 &#160 Find run number: <input type="text" name="search_num" size = 6>');
 echo ('</FORM>');
+echo ('<br>');
 
 /////  list runs
 echo ('<TABLE border="1" cellpadding="4" cellspacing="2">');
