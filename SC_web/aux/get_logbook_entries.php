@@ -1,12 +1,11 @@
 <?php
 // get_logbook_entries.php
-// Part of the CLEAN slow control.  
-// James Nikkel, 2013
+// Part of the astro slow control.  
+// James Nikkel, 2016
 // james.nikkel@gmail.com
 //
 
-$show_num = 7;
-
+$show_num = 9;
 
 if (isset($_SESSION['lug_indx_offset'])  && empty($_POST['lug_last']))
   $lug_nums =  (int)$_SESSION['lug_indx_offset'];

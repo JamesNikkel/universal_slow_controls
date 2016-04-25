@@ -1,7 +1,7 @@
 <?php
 // slow_control_runs.php
-// Part of the CLEAN slow control.  
-// James Nikkel, Yale University, 2010.
+// Part of the astro slow control.  
+// James Nikkel, Yale University, 2016.
 // james.nikkel@yale.edu
 //
 //////// do this first as it re-dirrects to another page
@@ -102,9 +102,11 @@ echo ('<br>');
 if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['shift_status'], "Leader")))
 { 
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-    //echo ('New run notes: <input type="text" name="note" size = 64>');
+    echo ('<input type="submit" name="new_run" value="New Run" title="Increment run">');
+    echo ('File path: <input type="text" name="file_path" value='.$run_file_paths[$run_nums[0]].' size=64>');
+    echo ('File root: <input type="text" name="file_root" value='.$run_file_roots[$run_nums[0]].'size=64>');
+    echo ('<br>');
     echo ('&#160 &#160 &#160 &#160 New run note (<100 characters): <TEXTAREA name="note" rows="1" cols="50"></TEXTAREA>');
-    echo ('<input type="submit" name="new_run" value="Increment Run" title="Increment run number with this note">');
     echo ('</FORM>');
     echo ('<br>');
 }
@@ -206,20 +208,6 @@ echo ('</TD>');
 echo ('<TD align=center colspan="3">');
 echo ('</TD>');
 echo ('</TR>');
-
-//echo ('<TR valign="center">');
-//echo ('<TD align=center colspan="1">');
-//echo ('</TD>');
-
-//echo ('<TD align=center>');   
-//echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
-//echo ('<input type="image" src="pixmaps/error.png" name="play_stuff" value="1">');
-//echo ('</FORM>');
-//echo ('</TD>');
-
-//echo ('<TD align=center colspan="3">');
-//echo ('</TD>');
-//echo ('</TR>');
 
 echo ('</TABLE>');
 
