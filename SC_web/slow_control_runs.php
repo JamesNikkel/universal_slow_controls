@@ -105,8 +105,8 @@ if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['
     echo ('<FORM action="'.$_SERVER['PHP_SELF'].'" method="post">');
     echo ('<input type="submit" name="new_run" value="New Run" title="Increment run">');
     echo ('<br>');
-    echo ('&#160 &#160 &#160 &#160  File path: <input type="text" name="file_path" value='.$run_file_paths[$run_nums[0]].' size=64>');
-    echo ('&#160 &#160 &#160 &#160  File root: <input type="text" name="file_root" value='.$run_file_roots[$run_nums[0]].'size=64>');
+    echo ('&#160 &#160 &#160 &#160  File path: <input type="text" name="file_path" value="'.$run_file_paths[$run_nums[0]].'" size=64>');
+    echo ('&#160 &#160 &#160 &#160  File root: <input type="text" name="file_root" value="'.$run_file_roots[$run_nums[0]].'" size=64>');
     echo ('<br>');
     echo ('&#160 &#160 &#160 &#160  Run note (<100 characters): <TEXTAREA name="note" rows="1" cols="50"></TEXTAREA>');
     echo ('</FORM>');
