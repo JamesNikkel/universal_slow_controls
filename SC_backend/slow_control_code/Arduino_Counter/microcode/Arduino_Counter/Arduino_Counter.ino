@@ -8,7 +8,7 @@
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
-byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0xE8, 0xD3 };
+byte mac[] = { 0x90, 0xA2, 0xDA, 0x0D, 0xDA, 0xD4 };
 IPAddress ip(192,168,1,85);
 
 // Initialize the Ethernet server library
@@ -42,8 +42,8 @@ void setup()
   Ethernet.begin(mac, ip);
   server.begin();
   
-  attachInterrupt(0, countPulseA, RISING);
-  attachInterrupt(1, countPulseB, RISING);    
+  attachInterrupt(digitalPinToInterrupt(2), countPulseA, RISING);  // physical pin 2
+  attachInterrupt(digitalPinToInterrupt(3), countPulseB, RISING);  // physical pin 3
 }
 
 

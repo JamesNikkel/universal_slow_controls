@@ -108,7 +108,7 @@ echo ('</TABLE>');
 echo ('<br>');
 
 /////  add new run if available:
-if ((strpos($_SESSION['privileges'], "config") !== false) && (strpos($_SESSION['shift_status'], "Leader")))
+if (strpos($_SESSION['privileges'], "DAQ") !== false)
   { 
     echo ('<TABLE border="1" cellpadding="4" cellspacing="2">');
     echo ('<TR>');

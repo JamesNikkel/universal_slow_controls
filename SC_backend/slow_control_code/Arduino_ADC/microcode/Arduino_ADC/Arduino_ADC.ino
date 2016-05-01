@@ -9,8 +9,8 @@
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = { 
-  0x90, 0xA2, 0xDA, 0x00, 0x60, 0x72 };
-IPAddress ip(192,168,1,91);
+  0x90, 0xA2, 0xDA, 0x0F, 0x66, 0xD8 };
+IPAddress ip(192,168,1,90);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use 
@@ -40,7 +40,7 @@ void loop()
         
         if (c == '\n') 
         {
-          if (channel < 0 || channel > 5)
+          if (channel < 0 || channel > 15)
             client.println(-1);
           else
           {
