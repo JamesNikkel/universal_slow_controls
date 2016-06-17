@@ -59,6 +59,12 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	  printf(cmd_string, "WD %d 0\n", s_s->num);
 
        write_tcp(inst_dev, cmd_string, strlen(cmd_string));
+    }
+    else       // Print an error if invalid subtype is entered
+    {
+      fprintf(stderr, "Wrong type for %s \n", s_s->name);
+      return(1);
+    } 
 }
 
 
