@@ -33,7 +33,7 @@ void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 {
   int32_t  connectionType = CAENComm_OpticalLink;
-  int32_t  link = 0;
+  int32_t  link = 1;
   int32_t  conet = 0;
   uint32_t vme_address = 0xaaaa0000;
   int32_t  handle;
@@ -47,7 +47,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 
   // Break if the HV module could not be opened
   if(ret < 0 ) {
-    fprintf(stderr, "Could not connect to the HV unit ($s)\n", i_s->name);
+    fprintf(stderr, "Could not connect to the HV unit (%s)\n", i_s->name);
     CAENComm_CloseDevice(handle);
     return(1);
   }
@@ -86,7 +86,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   sleep(2);
   
   int32_t  connectionType = CAENComm_OpticalLink;
-  int32_t  link = 0;
+  int32_t  link = 1;
   int32_t  conet = 0;
   uint32_t vme_address = 0xaaaa0000;
   int32_t  handle;
@@ -100,7 +100,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   // Break if the HV module could not be opened
   if(ret < 0 ) {
-    fprintf(stderr, "Could not connect to the HV unit ($s)\n", i_s->name);
+    fprintf(stderr, "Could not connect to the HV unit (%s)\n", i_s->name);
     CAENComm_CloseDevice(handle);
     return(1);
   }

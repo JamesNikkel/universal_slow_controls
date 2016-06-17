@@ -103,30 +103,6 @@ void print_error (char *message)
   fprintf(stderr, "  %s\n", message); 
 }
 
-double poly_interpolation (double x, double poly_parms[])
-{
-  //  This function takes the parameters of a previously fit polynomial 
-  //   and and finds 'y' for a given 'x'.  The polynomial can be any order,  
-  //   and is defined by: 
-  //             y = A[0] + A[1] * x + A[2] * x^2 + A[3] * x^3 + ... 
-  
-  int n;
-  int i;
-  double y;
-  double yi;
-  double xn;
-  n = sizeof(poly_parms)/sizeof(double);
-
-  y = poly_parms[0];
-  xn = 1;
-  for (i=1; i<n; i++)
-    {
-      yi = poly_parms[i];
-      xn *= x;
-      y += yi * xn; 
-    }
-  return(y);
-}
 
 double linear_interp(double x, double slope, double y0)
 {
