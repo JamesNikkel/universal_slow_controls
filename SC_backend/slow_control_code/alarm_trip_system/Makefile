@@ -3,15 +3,15 @@ CC = gcc -O3
 
 CFLAGS = `mysql_config --cflags` -I../include
 
-LDFLAGS =  -L../lib -lslow_control
+LDFLAGS =  -L../lib
+
+LIBS = -lslow_control
 
 PROGS = alarm_trip_sys
 
-all: $(PROGS)
-
-$(all): $(PROGS).o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
-	rm -f $@.o
+$all: 
+	$(CC) $(CFLAGS) $(PROGS).c $(LDFLAGS) $(LIBS) -o $(PROGS) 
+	rm -f $(PROGS).o
 
 clean:
 	rm -f *.o $(PROGS)	

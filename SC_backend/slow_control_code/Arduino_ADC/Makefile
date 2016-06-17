@@ -9,7 +9,6 @@ LIBS = -lslow_control
 
 PROGS = Arduino_ADC
 
-
 $all: 
 	$(CC) $(CFLAGS) $(PROGS).c $(LDFLAGS) $(LIBS) -o $(PROGS) 
 	rm -f $(PROGS).o
