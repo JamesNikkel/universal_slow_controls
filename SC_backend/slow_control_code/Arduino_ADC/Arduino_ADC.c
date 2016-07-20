@@ -43,7 +43,6 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 {
   char       cmd_string[64];
   char       ret_string[64];
-  double     int_val;
   
   if (strncmp(s_s->subtype, "DIO", 3) == 0)  // Do DIO reads
     {
@@ -54,10 +53,10 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	}
        
        if (s_s->new_set_val > 0.5)
-	 printf(cmd_string, "WD %d 1\n", s_s->num);
+	 sprintf(cmd_string, "WD %d 1\n", s_s->num);
        else
-	  printf(cmd_string, "WD %d 0\n", s_s->num);
-
+	 sprintf(cmd_string, "WD %d 0\n", s_s->num);
+       
        write_tcp(inst_dev, cmd_string, strlen(cmd_string));
     }
     else       // Print an error if invalid subtype is entered
