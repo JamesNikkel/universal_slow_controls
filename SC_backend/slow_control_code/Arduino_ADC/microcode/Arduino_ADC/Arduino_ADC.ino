@@ -1,60 +1,127 @@
 /*
- 
- 
- */
+
+
+*/
+
 
 #include <SPI.h>
 #include <Ethernet.h>
+#include <SparkFunBME280.h>
+#include <Wire.h>
+
+BME280 pthSensor;
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
-byte mac[] = { 
-  0x90, 0xA2, 0xDA, 0x0F, 0x66, 0xD8 };
-IPAddress ip(192,168,1,90);
+byte mac[] = {
+  0x90, 0xA2, 0xDA, 0x0F, 0x66, 0xD8
+};
+IPAddress ip(192, 168, 1, 90);
 
 // Initialize the Ethernet server library
-// with the IP address and port you want to use 
+// with the IP address and port you want to use
 EthernetServer server(5000);
 
-void setup() 
+char ret_string[128];
+int  buff_pos = 0;
+
+void setup()
 {
+  pthSensor.settings.commInterface = I2C_MODE;
+  pthSensor.settings.I2CAddress = 0x77;
+  pthSensor.settings.runMode = 3;
+  pthSensor.settings.tStandby = 0;
+
+  pthSensor.settings.filter = 3;
+  pthSensor.settings.tempOverSample = 3;
+  pthSensor.settings.pressOverSample = 3;
+  pthSensor.settings.humidOverSample = 3;
+
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
+
+  delay(100);
 }
 
 
-void loop() 
+void loop()
 {
-  int channel = -1;
-  int reading;
+  unsigned int channel;
+  int value = 0;
+
+  boolean done_read = false;
+
   // listen for incoming clients
   EthernetClient client = server.available();
-  if (client) 
+  if (client)
   {
-    while (client.connected())  
+    char c = client.read();
+    if (c == '\n')
     {
-      if (client.available()) 
+      ret_string[buff_pos] = '\0';
+      done_read = true;
+      buff_pos = 0;
+    }
+    else
+    {
+      ret_string[buff_pos] = c;
+      buff_pos++;
+    }
+
+    if (done_read)
+    {
+      if (sscanf(ret_string, "RA %d", &channel) == 1)
       {
-        char c = client.read();
-        
-        if (c == '\n') 
+        if (channel < 0 || channel > 15)
+          client.println(-1);
+        else
         {
-          if (channel < 0 || channel > 15)
-            client.println(-1);
-          else
-          {
-            reading = analogRead(channel);
-            client.println(reading);
-          }
+          value = analogRead(channel);
+          client.println(value);
         }
-        else 
-          channel = c - '0';
+      }
+      else if (sscanf(ret_string, "RD %d", &channel) == 1)
+      {
+        if (channel < 22 || channel > 53)
+          client.println(-1);
+        else
+        {
+          pinMode(channel, INPUT);
+          value = digitalRead(channel);
+          client.println(value);
+        }
+      }
+      else if (strncmp(ret_string, "RDT", 3) == 0)
+      {
+        client.println(pthSensor.readTempC());
+      }
+      else if (strncmp(ret_string, "RDP", 3) == 0)
+      {
+        client.println(pthSensor.readFloatPressure());
+      }
+      else if (strncmp(ret_string, "RDH", 3) == 0)
+      {
+        client.println(pthSensor.readFloatHumidity());
+      }
+      else if (sscanf(ret_string, "WD %d %d", &channel, &value) == 2)
+      {
+        if (channel < 22 || channel > 53)
+          client.println(-1);
+        else
+        {
+          pinMode(channel, OUTPUT);
+          if (value > 0)
+            digitalWrite(channel, HIGH);
+          else
+            digitalWrite(channel, LOW);
+        }
       }
     }
-    delay(10);
+
+    //delay(10);
     // close the connection:
-    client.stop();
+    //client.stop();
   }
 }
 
