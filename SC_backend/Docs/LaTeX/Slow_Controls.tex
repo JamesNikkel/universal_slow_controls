@@ -59,7 +59,7 @@ The primary user interface uses simple forms based on php and html. This means t
 
 \section{Hardware}
 
-The slow control system consists of one or more PCs running Linux.  These can be pretty modest ;  two cores, at least 2 GB of RAM, a couple of hard drives is not a bad idea.  A machine with integrated video is a good idea as they normally use less power than a discrete video card.  Get a good UPS.  
+The slow control system consists of one or more PCs running Linux.  These can be pretty modest;  two cores, at least 2 GB of RAM, a couple of hard drives is not a bad idea.  A machine with integrated video is a good idea as they normally use less power than a discrete video card.  Get a good UPS.  
 
 One machine is designated the `master'.  It contains the master database, and all database writes are done there.  One set of computers (which may contain the master) are used for the hardware interfaces, though each non-master machine should have its own watchdog system.  Another set of machines (which may also contain the master) run the frontend web server(s), and contain a replicated copy (slave) of the master database.  If there are a large number of slaves, it can be a good idea to distribute the load in a tree fashion, with a small number of primary slaves, then secondary slaves replicating them.  Alternatively, for small control systems, everything (frontend and backend) can be done on a single machine.
 
@@ -85,13 +85,14 @@ During installation, you need to install:
 
 \begin{itemize}
 \item{MySql}
+\item{All the MYSQL client development packages}
 \item{Apache  (or any other webserver)}
 \item{php}
 \item{php-mysql}
 \item{phpMyAdmin (not necessary but convenient)}
 \item{C/C++ dev tools}
 \item{gspca  (for cameras)}
-\item{subversion}
+\item{git}
 \item{kernel source (for hardware that uses kernel modules)}
 \end{itemize}
 
@@ -104,7 +105,7 @@ Systems are normally run headless and at runlevel 3.  There isn't any point in h
 
 Now for the actual slow control software.  There are two repositories to make the system easier to use and keep updated.  All the documentation (including this one) is kept in the backend repository.  The front end can be checked out directly into your web server directory and contains only php code. To check out the slow control backend, type:
 
-\texttt{svn co svn://clean.physics.yale.edu/SC\_backend}
+\texttt{git clone https://bitbucket.org/jnikkel/astro-slow-control.git}
 
 \noindent  
 go to:
@@ -160,7 +161,7 @@ Set permissions so that the  \texttt{jpgraph\_cache} directory can be written to
 
 \section{The `Backend'}
 
-The `Back-end' is made up of individual programs that are each dedicated to a small number of tasks.  These programs are largely controlled through the web `Front-end' (see section~\ref{sec:inst-conf}).  The exception to this is the `Watchdog' program which has to be started either manually or by the operating system upon boot-up.  A script for starting the Watchdog is created by running the install script during installation (section~\ref{sec:inst-back-end}).
+The `Back-end' is made up of individual programs that are each dedicated to a small number of tasks.  These programs are largely controlled through the web `Front-end' (see section~\ref{sec:inst-conf}).  The exception to this is the `Watchdog' program which has to be started either manually or by the operating system upon boot-up.  A script for starting the Watchdog is created by running the install script during installation (section~\ref{sec:inst-backend}).  By default, all the processes run detached and with full root privileges.  This is unfortunately normally necessary to enable communication with hardware that uses many third party kernel modules.  If you find this is not necessary, you may edit how the watchdog is started.
 
 
 \section{The `Frontend'}
