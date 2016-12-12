@@ -37,6 +37,17 @@ if (!empty($_POST['array_data']))
     
     echo("# ".$_POST['export']." : ".$sensor_descs[$_POST['export']]."\n");
     echo("# Mass (AMU) , Partial Pressure (pTorr) \n"); 
+
+    
+    $n = count($x);
+    if ($n > 0)
+      {
+	for ($i = 0; $i < $n; $i++)
+	  {
+	    echo( $x[$i]." , ".$y[$i]." , ".$dy[$i]." \n" );
+	  }
+      }
+
 }
 else
 {
@@ -50,27 +61,35 @@ else
 	die ("Could not query the database <br>" . mysql_error());
     }
     
-    $x = array();
-    $y = array();
-    $dy = array();
-    while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-    {	
-	$x[] = (int)$row['time'];
-	$y[] = (double)$row['value'];
-	$dy[] = (double)$row['rate'];
-    }
-    
     echo("# ".$_POST['export']." : ".$sensor_descs[$_POST['export']]."\n");
     echo("# Time (s) , ".$sensor_types[$_POST['export']]." (".$sensor_units[$_POST['export']].") , Rate (".$sensor_units[$_POST['export']]."/s) \n");
-}
 
-$n = count($x);
-if ($n > 0)
-{
-    for ($i = 0; $i < $n; $i++)
-    {
-	echo( $x[$i]." , ".$y[$i]." , ".$dy[$i]." \n" );
+    //$x = array();
+    //$y = array();
+    //$dy = array();
+    while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
+    {	
+      	$x = (int)$row['time'];
+	$y = (double)$row['value'];
+	$dy = (double)$row['rate'];
+
+	echo( $x." , ".$y." , ".$dy." \n" );
     }
-}
+
+    /*
+    echo("# ".$_POST['export']." : ".$sensor_descs[$_POST['export']]."\n");
+    echo("# Time (s) , ".$sensor_types[$_POST['export']]." (".$sensor_units[$_POST['export']].") , Rate (".$sensor_units[$_POST['export']]."/s) \n");
+
+    $n = count($x);
+    if ($n > 0)
+      {
+	for ($i = 0; $i < $n; $i++)
+	  {
+	    echo( $x[$i]." , ".$y[$i]." , ".$dy[$i]." \n" );
+	  }
+      }
+    */
+
+ }
 
 ?>
