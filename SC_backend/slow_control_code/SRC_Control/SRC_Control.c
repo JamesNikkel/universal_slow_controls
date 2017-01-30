@@ -45,6 +45,14 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       cmd_string[64];
   char       ret_string[64];             
 
+  if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
+    {
+      sprintf(cmd_string, "R\n");
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      msleep(200);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+    }
+  msleep(1000);
   return(0);
 }
 
@@ -70,18 +78,13 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	{     
 	  sprintf(cmd_string, "G %d\n", (int)s_s->new_set_val);
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
 	}
     }
   else if (strncmp(s_s->subtype, "E", 1) == 0)  // Extent specified amount
     {
-      if (s_s->new_set_val > 0) 
-	{     
-	  sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
-	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
-
-	}
+      sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	
     }
   else if (strncmp(s_s->subtype, "R", 1) == 0)  // Retract specified amount
     {
@@ -89,7 +92,6 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	{     
 	  sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
 	}
     }
   
