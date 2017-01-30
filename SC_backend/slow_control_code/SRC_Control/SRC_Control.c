@@ -57,32 +57,38 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
  
   if (strncmp(s_s->subtype, "H", 1) == 0)  // Go home
     {  
-      sprintf(cmd_string, "H\n"); 	    
+      sprintf(cmd_string, "H\n"); 	   
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
     }
   else if (strncmp(s_s->subtype, "G", 1) == 0)  // Goto specified position
-  {
-    if (s_s->new_set_val > 0) 
-      {     
-	sprintf(cmd_string, "G %d\n", (int)s_s->new_set_val);
-      }
-  }
+    {
+      if (s_s->new_set_val > 0) 
+	{     
+	  sprintf(cmd_string, "G %d\n", (int)s_s->new_set_val);
+	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+	}
+    }
   else if (strncmp(s_s->subtype, "E", 1) == 0)  // Extent specified amount
-  {
-    if (s_s->new_set_val > 0) 
-      {     
-	sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
-      }
-  }
+    {
+      if (s_s->new_set_val > 0) 
+	{     
+	  sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
+	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+
+	}
+    }
   else if (strncmp(s_s->subtype, "R", 1) == 0)  // Retract specified amount
-  {
-    if (s_s->new_set_val > 0) 
-      {     
-	sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
-      }
-  }
-  
-  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
+    {
+      if (s_s->new_set_val > 0) 
+	{     
+	  sprintf(cmd_string, "E %d\n", (int)s_s->new_set_val);
+	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+	}
+    }
   
   return(0);
 }
