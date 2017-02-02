@@ -85,16 +85,22 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if (s_s->new_set_val > 0) 
 	{     
-	  sprintf(cmd_string, "G %d\n", 10*(int)s_s->new_set_val);
+	  sprintf(cmd_string, "G %d\n", (int)(10*s_s->new_set_val));
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
   else if (strncmp(s_s->subtype, "E", 1) == 0)  // Extent specified amount
     {
-      sprintf(cmd_string, "E %d\n", 10*(int)s_s->new_set_val);
+      sprintf(cmd_string, "E %d\n", (int)(10*s_s->new_set_val));
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	
     }
+  else if (strncmp(s_s->subtype, "S", 1) == 0)  // Extent specified amount
+    {
+      sprintf(cmd_string, "S %d\n", (int)s_s->new_set_val);
+      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+    }
+
   
   return(0);
 }
