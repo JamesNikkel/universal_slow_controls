@@ -7,7 +7,7 @@ LDFLAGS =  -L../lib
 
 LIBS = -lslow_control
 
-PROGS = SRC_Control
+PROGS = SRC_Control_test
 
 
 $all: 
