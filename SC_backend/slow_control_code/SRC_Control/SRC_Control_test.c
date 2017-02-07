@@ -13,43 +13,69 @@
 // as the default. 
 #define INSTNAME "SRC_Control_test"
 
-int number_of_loops = 2;
 double max_extension = 300;
+double current_position = 0;
+int do_run = 0;
+int max_loops = 2;
+int loop_counter = 0;
+char *pos_sens_name;
+time_t last_command_time = 0;
+int time_between_commands = 30;
+
+
+#ifndef _def_set_up_inst
+// Generic set up placeholder: to be found in instrument specific code
+int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)  
+{return(0);}
+#endif // set_up_inst
+
+#ifndef  _def_clean_up_inst
+// Generic clean up placeholder: to be found in instrument specific code
+void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
+{;}
+#endif // clean_up_inst
+
+#ifndef _def_read_sensor
+// Generic read placeholder: to be found in instrument specific code
+int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *sensor_value) 
+{return(0);}
+#endif // read_sensor
 
 
 
-void do_loop(struct inst_struct *i_s ,struct sensor_struct *s_s)
+void do_loop(void)
 {
-  int i;
-  double current_position =  max_extension;
-  for (i = 0; i < number_of_loops; i++)
+  if ((loop_counter < max_loops) && (time(NULL) - time_between_commands > last_command_time))
     {
-      insert_mysql_sensor_data(i_s->user1, time(NULL), current_position, 0.0);
-      sleep(60);
+      last_command_time = time(NULL);
+      insert_mysql_sensor_data(pos_sens_name, time(NULL), current_position, 0.0);
       current_position =- 50;
       if  (current_position < 50)
 	current_position = max_extension;
+      loop_counter++;
     }
 }
 
 #define _def_set_sensor
 int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 {
- 
- 
   if (strncmp(s_s->subtype, "RUN", 3) == 0)  // Start run
     {  
-      if (s_s->new_set_val > 0.5) 
-	{  
-	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
-	  do_loop(i_s, s_s);
+      pos_sens_name = s_s->user1;
+      if (s_s->new_set_val > 0.5)   
+	{
+	  loop_counter = 0;
+	} 
+      else
+	{
+	  loop_counter = max_loops;
 	}
     }
   else if (strncmp(s_s->subtype, "NUM", 3) == 0)  // max number of loops
     {
       if (s_s->new_set_val > 0) 
 	{     
-	  number_of_loops = (int)s_s->new_set_val;
+	  max_loops = (int)s_s->new_set_val;
 	}
     }
   else if (strncmp(s_s->subtype, "MAX", 3) == 0)  // maximum extension of belt 
@@ -60,8 +86,86 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	 }
       
     }
-  
   return(0);
 }
 
-#include "main.h"
+int main (int argc, char *argv[])
+{
+  char                   **my_argv;
+  char                   inst_name[16];
+  int                    i;
+  struct inst_struct     this_inst;
+  struct sensor_struct   *all_sensors;
+
+  // save restart arguments
+  my_argv = malloc(sizeof(char *) * (argc + 1));
+  for (i = 0; i < argc; i++) 
+    my_argv[i] = strdup(argv[i]);
+   
+  my_argv[i] = NULL;   
+    
+  sprintf(db_conf_file, DEF_DB_CONF_FILE);
+
+  parse_CL_for_string(argc,  argv, INSTNAME, inst_name);
+  read_mysql_inst_struct(&this_inst, inst_name);
+  generate_sensor_structs(&this_inst, &all_sensors);
+    
+  // detach current process
+  daemonize(this_inst.name);
+    
+  my_signal = 0;
+  // ignore these signals 
+  signal(SIGINT, SIG_IGN);
+  signal(SIGQUIT, SIG_IGN);    
+  // install signal handler
+  signal(SIGHUP, handler);
+  signal(SIGINT, handler);
+  signal(SIGQUIT, handler);
+  signal(SIGTERM, handler);
+
+  register_inst(&this_inst);
+
+  if (set_up_inst(&this_inst, all_sensors))
+    {
+      msleep(1000);
+      my_signal = SIGHUP;
+    }
+  mysql_inst_run_status(&this_inst);
+   
+  while (my_signal == 0)     //  main loop here!
+    {
+      sensor_loop(&this_inst, all_sensors);
+      do_loop();
+      mysql_inst_run_status(&this_inst);
+      sleep(2);
+    }
+    
+  /////////////  Clean up if we get a signal
+  clean_up_inst(&this_inst, all_sensors);
+
+  unregister_inst(&this_inst);
+  free(all_sensors);
+
+  if (my_signal == SIGHUP)         ///  restart called
+    {
+      long fd;
+      // close all files before restart
+      for (fd = sysconf(_SC_OPEN_MAX); fd > 2; fd--) 
+	{
+	  int flag;
+	  if ((flag = fcntl(fd, F_GETFD, 0)) != -1)
+	    fcntl(fd, F_SETFD, flag | FD_CLOEXEC);
+	}
+      sleep(2);
+      execv(my_argv[0], my_argv);
+      fprintf(stderr, "execv() failed.");
+      exit(1);
+    }
+
+  for (i = 0; my_argv[i] != NULL; i++)
+    free(my_argv[i]);
+    
+  free(my_argv);
+
+  exit(0);
+}
