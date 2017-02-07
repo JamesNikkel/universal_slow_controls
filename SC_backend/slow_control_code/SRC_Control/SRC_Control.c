@@ -46,9 +46,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       ret_string[64];             
   int        return_int;
 
+  
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
     {
+      s_s->data_type = DONT_AVERAGE_DATA;
+
       sprintf(cmd_string, "R\n");
+
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       msleep(200);
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
