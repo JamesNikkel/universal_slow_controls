@@ -49,7 +49,7 @@ void do_loop(void)
     {
       last_command_time = time(NULL);
       insert_mysql_sensor_data(pos_sens_name, time(NULL), current_position, 0.0);
-      current_position =- 50;
+      current_position -= 50;
       if  (current_position < 50)
 	current_position = max_extension;
       loop_counter++;
