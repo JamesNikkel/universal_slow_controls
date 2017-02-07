@@ -14,10 +14,8 @@
 #define INSTNAME "SRC_Control_test"
 
 double max_extension = 300;
-double current_position = 0;
+double current_position = 10;
 int do_run = 0;
-int max_loops = 2;
-int loop_counter = 2;
 char *pos_sens_name;
 time_t last_command_time = 0;
 int time_between_commands = 30;
@@ -45,14 +43,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *sens
 
 void do_loop(void)
 {
-  if ((loop_counter < max_loops) && (time(NULL) - time_between_commands > last_command_time))
+  if ((do_run==1) && (time(NULL) - time_between_commands > last_command_time))
     {
       last_command_time = time(NULL);
       insert_mysql_sensor_data(pos_sens_name, time(NULL), current_position, 0.0);
       current_position -= 50;
       if  (current_position < 50)
 	current_position = max_extension;
-      loop_counter++;
     }
 }
 
@@ -64,18 +61,11 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       pos_sens_name = s_s->user1;
       if (s_s->new_set_val > 0.5)   
 	{
-	  loop_counter = 0;
+	  do_run = 1;
 	} 
       else
 	{
-	  loop_counter = max_loops;
-	}
-    }
-  else if (strncmp(s_s->subtype, "NUM", 3) == 0)  // max number of loops
-    {
-      if (s_s->new_set_val > 0) 
-	{     
-	  max_loops = (int)s_s->new_set_val;
+	  do_run = 0;
 	}
     }
   else if (strncmp(s_s->subtype, "MAX", 3) == 0)  // maximum extension of belt 
