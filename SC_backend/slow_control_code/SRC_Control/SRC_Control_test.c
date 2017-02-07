@@ -17,7 +17,7 @@ double max_extension = 300;
 double current_position = 0;
 int do_run = 0;
 int max_loops = 2;
-int loop_counter = 0;
+int loop_counter = 2;
 char *pos_sens_name;
 time_t last_command_time = 0;
 int time_between_commands = 30;
