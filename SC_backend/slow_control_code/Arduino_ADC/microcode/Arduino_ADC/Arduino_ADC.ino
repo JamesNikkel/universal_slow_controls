@@ -2,12 +2,14 @@
 
 
 */
+#include <stdint.h>
+#include "SparkFunBME280.h"
 
+#include "Wire.h"
+#include "SPI.h"
 
-#include <SPI.h>
 #include <Ethernet.h>
-#include <SparkFunBME280.h>
-#include <Wire.h>
+
 
 BME280 pthSensor;
 
@@ -27,21 +29,29 @@ int  buff_pos = 0;
 
 void setup()
 {
+  pinMode(53, OUTPUT);
+  pinMode(4, OUTPUT);
+  digitalWrite(4, HIGH);
+
+
   pthSensor.settings.commInterface = I2C_MODE;
   pthSensor.settings.I2CAddress = 0x77;
   pthSensor.settings.runMode = 3;
   pthSensor.settings.tStandby = 0;
 
-  pthSensor.settings.filter = 3;
-  pthSensor.settings.tempOverSample = 3;
-  pthSensor.settings.pressOverSample = 3;
-  pthSensor.settings.humidOverSample = 3;
+  pthSensor.settings.filter = 0;
+  pthSensor.settings.tempOverSample = 1;
+  pthSensor.settings.pressOverSample = 1;
+  pthSensor.settings.humidOverSample = 1;
 
+  delay(10);
+  //pthSensor.begin();
+  delay(100);
+  
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
   server.begin();
 
-  delay(100);
 }
 
 
