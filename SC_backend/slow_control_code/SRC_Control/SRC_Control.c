@@ -39,9 +39,6 @@ void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 #define _def_read_sensor
 int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_out)
 {
-  // returns the temp (which_sens_type == 1)
-  // or the heater power (which_sens_type == 2)
-
   char       cmd_string[64];
   char       ret_string[64];             
   int        return_int;
