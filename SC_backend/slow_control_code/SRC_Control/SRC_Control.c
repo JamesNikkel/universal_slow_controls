@@ -48,7 +48,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       //s_s->data_type = DONT_AVERAGE_DATA;
 
-      sprintf(cmd_string, "%d R\n", s_s->num);
+      sprintf(cmd_string, "%d R 0\n", s_s->num);
 
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       msleep(200);
@@ -77,7 +77,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {  
       if (s_s->new_set_val > 0.5) 
 	{  
-	  sprintf(cmd_string, "%d H\n", s_s->num); 	   
+	  sprintf(cmd_string, "%d H 0\n", s_s->num); 	   
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
 	}
