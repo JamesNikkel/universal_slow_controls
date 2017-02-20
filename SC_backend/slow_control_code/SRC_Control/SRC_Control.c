@@ -51,7 +51,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       //s_s->data_type = DONT_AVERAGE_DATA;
 
-      sprintf(cmd_string, "R\n");
+      sprintf(cmd_string, "%d R\n", s_s->num);
 
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       msleep(200);
@@ -80,7 +80,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {  
       if (s_s->new_set_val > 0.5) 
 	{  
-	  sprintf(cmd_string, "H\n"); 	   
+	  sprintf(cmd_string, "%d H\n", s_s->num); 	   
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
 	}
@@ -89,19 +89,19 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if (s_s->new_set_val > 0) 
 	{     
-	  sprintf(cmd_string, "G %d\n", (int)(10*s_s->new_set_val));
+	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*s_s->new_set_val));
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
   else if (strncmp(s_s->subtype, "E", 1) == 0)  // Extent specified amount
     {
-      sprintf(cmd_string, "E %d\n", (int)(10*s_s->new_set_val));
+      sprintf(cmd_string, "%d E %d\n", s_s->num, (int)(10*s_s->new_set_val));
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	
     }
-  else if (strncmp(s_s->subtype, "S", 1) == 0)  // Extent specified amount
+  else if (strncmp(s_s->subtype, "S", 1) == 0)  // Set speed
     {
-      sprintf(cmd_string, "S %d\n", (int)s_s->new_set_val);
+      sprintf(cmd_string, "%d S %d\n", s_s->num, (int)s_s->new_set_val);
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
     }
 
