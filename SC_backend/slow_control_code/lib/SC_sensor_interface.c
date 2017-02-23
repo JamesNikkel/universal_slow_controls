@@ -402,16 +402,15 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 			  insert_mysql_system_message(&this_sys_message_struc);	
 			  break;
 			}
-		      msleep(2000);
+		      msleep(1000);
 		    }
 		  if (sens_errors == 0)
 		    {
 		      add_val_sensor_struct(this_sensor_struc, time(NULL), sensor_value);
 		      write_temporary_sensor_data(this_sensor_struc);
-		     
 		      diff_vals_sensor_struct(this_sensor_struc, 0, 0);
 		      insert_mysql_sensor_data(this_sensor_struc->name, time(NULL), 
-					       this_sensor_struc->avg, this_sensor_struc->rate);
+					       sensor_value, this_sensor_struc->rate);
 		      read_mysql_sensor_refresh_time(this_sensor_struc);
 		      this_sensor_struc->last_update_time = time(NULL);
 		      this_sensor_struc->next_update_time = time(NULL) + this_sensor_struc->update_period;

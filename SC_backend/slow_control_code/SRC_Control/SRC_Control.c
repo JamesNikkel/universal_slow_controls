@@ -46,7 +46,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
     {
-      //s_s->data_type = DONT_AVERAGE_DATA;
+      s_s->data_type = DONT_AVERAGE_DATA;
 
       sprintf(cmd_string, "%d R 0\n", s_s->num);
 

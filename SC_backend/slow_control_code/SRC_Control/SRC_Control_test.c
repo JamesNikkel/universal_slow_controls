@@ -13,7 +13,9 @@
 // as the default. 
 #define INSTNAME "SRC_Control_test"
 
-double max_extension = 300;
+double max_extension = 100; (cm)
+double min_extension = 50; (cm)
+double delta_extension = 50; (cm)
 double current_position = 10;
 int do_run = 0;
 char *pos_sens_name;
@@ -47,8 +49,8 @@ void do_loop(void)
     {
       last_command_time = time(NULL);
       insert_mysql_sensor_data(pos_sens_name, time(NULL), current_position, 0.0);
-      current_position -= 50;
-      if  (current_position < 50)
+      current_position -= delta_extension;
+      if  (current_position < min_extension)
 	current_position = max_extension;
     }
 }
@@ -59,6 +61,10 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
   if (strncmp(s_s->subtype, "RUN", 3) == 0)  // Start run
     {  
       pos_sens_name = s_s->user1;
+      min_extension = s_s->parm1;
+      max_extension = s_s->parm2;
+      delta_extension = s_s->parm3;
+      current_position = max_extension;
       if (s_s->new_set_val > 0.5)   
 	{
 	  do_run = 1;
@@ -67,14 +73,6 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	{
 	  do_run = 0;
 	}
-    }
-  else if (strncmp(s_s->subtype, "MAX", 3) == 0)  // maximum extension of belt 
-    {
-      if (s_s->new_set_val > 0) 
-	 {     
-	   max_extension = s_s->new_set_val;
-	 }
-      
     }
   return(0);
 }
