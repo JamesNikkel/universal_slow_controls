@@ -13,14 +13,14 @@
 // as the default. 
 #define INSTNAME "SRC_Control_test"
 
-double max_extension = 100; (cm)
-double min_extension = 50; (cm)
-double delta_extension = 50; (cm)
-double current_position = 10;
+double max_extension = 100; //(cm)
+double min_extension = 50; //(cm)
+double delta_extension = 50; //(cm)
+double current_position = 10; //(cm)
 int do_run = 0;
 char *pos_sens_name;
 time_t last_command_time = 0;
-int time_between_commands = 30;
+int time_between_commands = 30;  // (s)
 
 
 #ifndef _def_set_up_inst
