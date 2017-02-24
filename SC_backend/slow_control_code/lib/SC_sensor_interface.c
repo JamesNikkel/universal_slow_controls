@@ -453,7 +453,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 	      msleep(500);
 	    }
 	  //////////////////////////////////////////////////////////////// let read_sensor() take care of inserting and calculating slope
-	  else if (this_sensor_struc->data_type == COUNTER_DATA)           
+	  else if (this_sensor_struc->data_type == DONT_AVERAGE_DATA_OR_INSERT)           
 	    {
 	      if (this_sensor_struc->next_update_time <= time(NULL))
 		{

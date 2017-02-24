@@ -27,6 +27,7 @@
 #define SCALAR_DATA 0
 #define ARRAY_DATA 1
 #define DONT_AVERAGE_DATA 2
+#define DONT_AVERAGE_DATA_OR_INSERT 3
 #define COUNTER_DATA 3
 
 
