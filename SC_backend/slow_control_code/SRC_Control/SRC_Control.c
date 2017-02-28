@@ -63,10 +63,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       if (return_int == -1)
 	return(0);
        
-      *val_out = return_int/10.0;
+      *val_out = (double)return_int/10.0;
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
-      s_s->rate = 0;
+      s_s->rate = 2.3;
       write_temporary_sensor_data(s_s);
       return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
     }
