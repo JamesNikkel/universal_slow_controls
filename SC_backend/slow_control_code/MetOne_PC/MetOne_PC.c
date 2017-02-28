@@ -54,7 +54,14 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       my_signal = SIGTERM;
       return(1);	
     }
-    
+
+
+  char       cmd_string[64];
+  char       ret_string[64];             
+ 
+  sprintf(cmd_string, "U01\n");   // start comms
+  query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
   return(0);
 }
 
@@ -74,17 +81,15 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
-  
-  
-  sprintf(cmd_string, "U01\nS");   // start counting
+  sprintf(cmd_string, "U01\nS\n");   // start counting
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(20);
    
-  sprintf(cmd_string, "U01\nE");   // stop counting
+  sprintf(cmd_string, "U01\nE\n");   // stop counting
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(5);
   
-  sprintf(cmd_string, "U01\nL");   // list output
+  sprintf(cmd_string, "U01\nL\n");   // list output
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
   fprintf(stdout, "Return string:\n %s \n", ret_string);
@@ -92,13 +97,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   if(sscanf(ret_string, "%d", &return_int) != 1)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
-      return(1);
+      return(0);
     }
 
   if (query_status != 0)
     {
       fprintf(stderr, "One of the queries failed.\n");
-      return(-1);
+      return(0);
     }
 
        
