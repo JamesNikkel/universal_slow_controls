@@ -76,16 +76,16 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   
   
-  sprintf(cmd_string, "U01\nS\n");   // start counting
-  query_status = query_serial(inst_dev, cmd_string, 7, ret_string, sizeof(ret_string)/sizeof(char));
-  sleep(60);
+  sprintf(cmd_string, "U01\nS");   // start counting
+  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  sleep(20);
    
-  sprintf(cmd_string, "U01\nE\n");   // stop counting
-  query_status = query_serial(inst_dev, cmd_string, 7, ret_string, sizeof(ret_string)/sizeof(char));
+  sprintf(cmd_string, "U01\nE");   // stop counting
+  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(5);
   
-  sprintf(cmd_string, "U01\nL\n");   // list output
-  query_status = query_serial(inst_dev, cmd_string, 7, ret_string, sizeof(ret_string)/sizeof(char));
+  sprintf(cmd_string, "U01\nL");   // list output
+  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
   fprintf(stdout, "Return string:\n %s \n", ret_string);
 
