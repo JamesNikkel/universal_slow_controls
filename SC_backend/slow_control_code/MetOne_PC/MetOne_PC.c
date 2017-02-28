@@ -84,15 +84,17 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   sprintf(cmd_string, "U01\nS\n");   // start counting
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(20);
-   
+     fprintf(stdout, "S Return string:\n %s \n", ret_string);
+
   sprintf(cmd_string, "U01\nE\n");   // stop counting
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(5);
-  
+    fprintf(stdout, "E Return string:\n %s \n", ret_string);
+
   sprintf(cmd_string, "U01\nL\n");   // list output
   query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-  fprintf(stdout, "Return string:\n %s \n", ret_string);
+  fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
   if(sscanf(ret_string, "%d", &return_int) != 1)
     {
