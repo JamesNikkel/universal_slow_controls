@@ -60,7 +60,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  return(1);
 	}
 
-      if (return_int == -1)
+      if (return_int < 0)
 	return(0);
        
       *val_out = (double)return_int/10.0;
