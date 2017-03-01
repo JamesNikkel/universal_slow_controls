@@ -41,7 +41,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 {
   char       cmd_string[64];
   char       ret_string[64];             
-  int        return_int;
+  int        return_int_1;
+  int        return_int_2;
 
   
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
@@ -51,19 +52,27 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       sprintf(cmd_string, "%d R 0\n", s_s->num);
 
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      msleep(200);
+      if(sscanf(ret_string, "%d", &return_int_1) != 1)
+	{
+	  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
+	  return(1);
+	}
+      msleep(500);
+	    
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
-      if(sscanf(ret_string, "%d", &return_int) != 1)
+      if(sscanf(ret_string, "%d", &return_int_2) != 1)
 	{
 	  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
 	  return(1);
 	}
 
-      if (return_int < 0)
+      if (return_int_1 !=return_int_2)
+	return(1);
+
+      if (return_int_1 < 0)
 	return(0);
        
-      *val_out = (double)return_int/10.0;
+      *val_out = (double)return_int_1/10.0;
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 2.3;
