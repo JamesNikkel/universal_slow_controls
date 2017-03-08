@@ -47,7 +47,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       ret_string[64];             
   unsigned long  counts;
 
-  s_s->data_type = COUNTER_DATA;
+  s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
   if (s_s->num == 0)             // For Channel A
     sprintf(cmd_string, "0\n"); 
@@ -71,7 +71,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     
   *val_out = (double)counts;
  
-  if (counts > 0)
+  if (counts >= 0)
     {
       add_val_sensor_struct(s_s, time(NULL), (double)counts);
       
