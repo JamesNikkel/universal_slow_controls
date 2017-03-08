@@ -96,6 +96,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
+  // 02/24/2017,12:28:17,01,0.3,90,0.5,50, 0,                                                                                                                                      
+
+
   if(sscanf(ret_string, "%d", &return_int) != 1)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
