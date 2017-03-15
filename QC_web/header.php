@@ -94,6 +94,16 @@ if (strpos($_SERVER['PHP_SELF'], "edit_pinwheel.php") === false)
     }
 }
 
+if (strpos($_SERVER['PHP_SELF'], "users.php") === false)
+{
+    if (check_access($_SESSION['privileges'], "full", $allowed_host_array))
+    {
+	echo('<TH>');
+	echo('<A HREF="users.php">Edit Users</A>');
+	echo('</TH>'); 
+    }
+}
+
 
 echo('<TH align="right">');
 echo('You are logged in as '.$_SESSION['user_name']);
