@@ -72,6 +72,7 @@ $item_location_array = array(
 			     "WL105",
 			     "WL106",
 			     "WL109",
+			     "WL109A",
 			     "WL110",
 			     "ORNL",
 			     "Other",

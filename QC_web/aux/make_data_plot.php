@@ -4,7 +4,7 @@ include	("jpgraph/jpgraph_line.php");
 include	("jpgraph/jpgraph_scatter.php");
 include ("jpgraph/jpgraph_plotline.php");
 
-function make_data_plot($plot_name, $x_data, $y_data, $title, 
+function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
 		   $y_label, $h_line, $h_line_plus, $h_line_minus)
 {
   
@@ -16,7 +16,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title,
   $y_min = min([$y_min, ($h_line-2*$h_line_minus)]);
   $y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
     
-  $width = 600; $height = 400;
+  $width = 1200; $height = 400;
  
   $graph = new Graph($width,$height);
   $graph->SetScale("intlin", $y_min, $y_max, $x_min, $x_max);
@@ -30,7 +30,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title,
   $graph->yaxis->SetTitleMargin(70);
   $graph->SetFrame(true,$_SESSION['bgcolour'],0);
 
-  if ($title != "")
+  if (!empty($title))
     {
       $graph->title->Set($title);
       $graph->title->SetColor($_SESSION['textcolour']);
@@ -44,8 +44,15 @@ function make_data_plot($plot_name, $x_data, $y_data, $title,
   $graph->xgrid->SetColor("black");
   $graph->ygrid->SetColor("black");
 
-  $graph->xaxis->title->Set('Housing number');
-  $graph->yaxis->title->Set($y_label);
+
+  if (!empty($x_label))
+    {
+      $graph->xaxis->title->Set($x_label);
+    }
+  if (!empty($y_label))
+    {
+      $graph->yaxis->title->Set($y_label);
+    }
   
   $scatterplot = new ScatterPlot($y_data, $x_data);
   $scatterplot->mark->SetType(MARK_FILLEDCIRCLE);
@@ -58,14 +65,19 @@ function make_data_plot($plot_name, $x_data, $y_data, $title,
     {
       $target_line = new PlotLine(HORIZONTAL, $h_line, "green", 2);
       $graph->AddLine($target_line);
-      $target_line_plus = new PlotLine(HORIZONTAL, $h_line+$h_line_plus, "green", 2);
-      $target_line_plus->SetLineStyle('dotted');
-      $graph->AddLine($target_line_plus);
-      $target_line_minus = new PlotLine(HORIZONTAL,$h_line-$h_line_minus, "green", 2);
-      $target_line_minus->SetLineStyle('dotted');
-      $graph->AddLine($target_line_minus);
+      if (!empty($h_line_plus))
+	{
+	  $target_line_plus = new PlotLine(HORIZONTAL, $h_line+$h_line_plus, "green", 2);
+	  $target_line_plus->SetLineStyle('dotted');
+	  $graph->AddLine($target_line_plus);
+	}
+      if (!empty($h_line_minus))
+	{
+	  $target_line_minus = new PlotLine(HORIZONTAL,$h_line-$h_line_minus, "green", 2);
+	  $target_line_minus->SetLineStyle('dotted');
+	  $graph->AddLine($target_line_minus);
+	}
     }
-  
 
   $graph->Stroke($plot_name);
   

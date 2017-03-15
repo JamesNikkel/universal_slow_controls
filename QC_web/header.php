@@ -30,7 +30,18 @@ echo('<input type="image" src="pixmaps/reload.png" alt="Refresh" title="Refresh 
 echo('</TH>');
 echo('</FORM>');
 
-if (strpos($_SERVER['PHP_SELF'], "List_entries.php") === false)
+if (strpos($_SERVER['PHP_SELF'], "plot_entries.php") === false)
+{
+    if (check_access($_SESSION['privileges'], "basic", $allowed_host_array))
+    {
+	echo('<TH>');
+	echo('<A HREF="plot_entries.php">Plots</A>');
+	echo('</TH>'); 
+    }
+}
+
+
+if (strpos($_SERVER['PHP_SELF'], "list_entries.php") === false)
 {
     if (check_access($_SESSION['privileges'], "basic", $allowed_host_array))
     {
@@ -40,12 +51,14 @@ if (strpos($_SERVER['PHP_SELF'], "List_entries.php") === false)
     }
 }
 
+
+
 if (strpos($_SERVER['PHP_SELF'], "edit_housing.php") === false)
 {
     if (check_access($_SESSION['privileges'], "full", $allowed_host_array))
     {
 	echo('<TH>');
-	echo('<A HREF="edit_housing.php">Housings</A>');
+	echo('<A HREF="edit_housing.php">Housing Details</A>');
 	echo('</TH>'); 
     }
 }
@@ -55,7 +68,7 @@ if (strpos($_SERVER['PHP_SELF'], "edit_pmt.php") === false)
     if (check_access($_SESSION['privileges'], "full", $allowed_host_array))
     {
 	echo('<TH>');
-	echo('<A HREF="edit_pmt.php">PMTs</A>');
+	echo('<A HREF="edit_pmt.php">PMT Details</A>');
 	echo('</TH>'); 
     }
 }
@@ -66,7 +79,7 @@ if (strpos($_SERVER['PHP_SELF'], "edit_separator.php") === false)
     if (check_access($_SESSION['privileges'], "full", $allowed_host_array))
     {
 	echo('<TH>');
-	echo('<A HREF="edit_separator.php">Optical Separators</A>');
+	echo('<A HREF="edit_separator.php">Optical Separator Details</A>');
 	echo('</TH>'); 
     }
 }
@@ -76,7 +89,7 @@ if (strpos($_SERVER['PHP_SELF'], "edit_pinwheel.php") === false)
     if (check_access($_SESSION['privileges'], "full", $allowed_host_array))
     {
 	echo('<TH>');
-	echo('<A HREF="edit_pinwheel.php">Pinwheels</A>');
+	echo('<A HREF="edit_pinwheel.php">Pinwheel Details</A>');
 	echo('</TH>'); 
     }
 }
