@@ -124,7 +124,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   
   $graph = new Graph(600,400);
-  $graph->SetScale("intlin");
+  $graph->SetScale("textlin");
 
   //$graph->SetScale('textlin');
  
