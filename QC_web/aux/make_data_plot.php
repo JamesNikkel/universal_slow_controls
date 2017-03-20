@@ -27,15 +27,18 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
  
   $graph = new Graph($width,$height);
   $graph->SetScale("intlin", $y_min, $y_max, $x_min, $x_max);
-  $graph->img->SetMargin(100, 50, 10, 80);  
+  //$graph->img->SetMargin(100, 50, 10, 80);  
+  $graph->SetMargin(40,30,20,40);
 
+  
   $graph->xgrid->Show(true);
   $graph->ygrid->Show(true);
-  $graph->xaxis->Setcolor($_SESSION['textcolour']);
-  $graph->yaxis->Setcolor($_SESSION['textcolour']);
-  $graph->xaxis->SetTitleMargin(50);
-  $graph->yaxis->SetTitleMargin(70);
-  $graph->SetFrame(true,$_SESSION['bgcolour'],0);
+
+  //$graph->xaxis->Setcolor($_SESSION['textcolour']);
+  //$graph->yaxis->Setcolor($_SESSION['textcolour']);
+  //$graph->xaxis->SetTitleMargin(50);
+  //$graph->yaxis->SetTitleMargin(70);
+  //$graph->SetFrame(true,$_SESSION['bgcolour'],0);
 
   if (!empty($title))
     {
@@ -44,12 +47,12 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
       $graph->title->SetFont(FF_FONT1,FS_BOLD);	
     }
 
-  $graph->SetFrame(true,$_SESSION['bgcolour'], 1);
-  $graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
-  $graph->SetColor("darkblue");
-  $graph->SetMarginColor($_SESSION['bgcolour']);
-  $graph->xgrid->SetColor("black");
-  $graph->ygrid->SetColor("black");
+  //$graph->SetFrame(true,$_SESSION['bgcolour'], 1);
+  //$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
+  //$graph->SetColor("darkblue");
+  //$graph->SetMarginColor($_SESSION['bgcolour']);
+  //$graph->xgrid->SetColor("black");
+  //$graph->ygrid->SetColor("black");
 
 
   if (!empty($x_label))
@@ -131,7 +134,10 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
  
   // Adjust the margin a bit to make more room for titles
   $graph->SetMargin(40,30,20,40);
- 
+
+  $graph->xgrid->Show(true);
+  $graph->ygrid->Show(true);
+  
   // Create a bar pot
   $bplot = new BarPlot($vals);
  
