@@ -118,6 +118,15 @@ if ($_SESSION['choose_type'] == "Housings")
  
 	echo ('<img src='.$plot_name.'>'); 
 
+	$plot_name = "jpgraph_cache/housingplot_".$parm_name."_hist.png";
+	make_data_hist($plot_name, $h_id, $value, $plot_title, "PMT ID",
+		       $parm_name." (".$pmt_parameter_units[$parm_name].")", 
+		       $pmt_parameter_targets[$parm_name],
+		       $pmt_parameter_targets_plus[$parm_name],
+		       $pmt_parameter_targets_minus[$parm_name]);
+
+	echo ('<img src='.$plot_name.'>'); 
+
 	echo ('</TD>');
 	echo ('</TR>');   	
       }

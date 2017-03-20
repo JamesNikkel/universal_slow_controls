@@ -3,6 +3,7 @@ include ("jpgraph/jpgraph.php");
 include	("jpgraph/jpgraph_line.php");
 include	("jpgraph/jpgraph_scatter.php");
 include ("jpgraph/jpgraph_plotline.php");
+include ("jpgraph/jpgraph_bar.php");
 
 function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
 		   $y_label, $h_line, $h_line_plus, $h_line_minus)
@@ -18,8 +19,8 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
     {
       if (!empty($h_line_minus))
 	$y_min = min([$y_min, ($h_line-2*$h_line_minus)]);
-            if (!empty($h_line_plus))
-	      $y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
+      if (!empty($h_line_plus))
+	$y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
     }
   
   $width = 1200; $height = 400;
@@ -89,5 +90,69 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   
   return $plot_name;    
 }
+
+
+
+function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
+		   $y_label, $v_line, $v_line_plus, $v_line_minus)
+{
+  
+  $x_min = min($x_data);
+  $x_max = max($x_data);
+  $y_min = min($y_data);
+  $y_max = max($y_data);
+
+  $bins = array();
+  $vals = array();
+
+  $n_data=count($x_data);
+
+  $bin_n = 10;
+  $bin_width = ($y_max-$y_min)/$bin_n;
+  
+  for ($i = 0; $i < bin_n; $i++)
+    {
+      $bins[] = $y_min + $i*$bin_width;
+      $vals[] = 0;
+    }
+
+
+  foreach($y_data as $y)
+    {
+      foreach($bins as $bin)
+	{
+	  if (($y > $bin) && ($y < $bin + $bin_width))
+	    $vals[$i]++;
+	}
+    }
+
+
+  $graph = new Graph(400,400);
+  $graph->SetScale('textlin');
+ 
+ 
+  // Adjust the margin a bit to make more room for titles
+  $graph->SetMargin(40,30,20,40);
+ 
+  // Create a bar pot
+  $bplot = new BarPlot($vals);
+ 
+  // Adjust fill color
+  $bplot->SetFillColor('orange');
+  $graph->Add($bplot);
+ 
+  // Setup the titles
+  $graph->xaxis->title->Set($y_label);
+ 
+  $graph->title->SetFont(FF_FONT1,FS_BOLD);
+  $graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
+  $graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
+ 
+
+  $graph->Stroke($plot_name);
+
+  return $plot_name;
+}
+
 
 ?>
