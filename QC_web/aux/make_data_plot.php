@@ -23,7 +23,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
 	$y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
     }
   
-  $width = 1200; $height = 400;
+  $width = 800; $height = 400;
  
   $graph = new Graph($width,$height);
   $graph->SetScale("intlin", $y_min, $y_max, $x_min, $x_max);
@@ -126,7 +126,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 	}
     }
 
-  echo(vals);
+  echo($vals);
   
   $graph = new Graph(400,400);
   $graph->SetScale('textlin');
