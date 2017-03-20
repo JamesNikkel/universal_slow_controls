@@ -100,7 +100,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 		   $y_label, $v_line, $v_line_plus, $v_line_minus)
 {
   $y_min = min($y_data);
-  $y_max = max($y_data)+1e-6;
+  $y_max = max($y_data);
 
   $bins = array();
   $vals = array();
@@ -121,8 +121,14 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
     {
       for ($i = 0; $i < $bin_n; $i++)
 	{
-	  if (($y >= $bins[$i]) && ($y < $bins[$i] + $bin_width))
-	    $vals[$i] = $vals[$i]+1;
+	  if ($i == $bin_n-1)
+	    {
+	      if (($y >= $bins[$i]) && ($y <= $bins[$i] + $bin_width))
+		$vals[$i] = $vals[$i]+1;
+	    }
+	  else
+	    if (($y >= $bins[$i]) && ($y < $bins[$i] + $bin_width))
+	      $vals[$i] = $vals[$i]+1;
 	}
     }
 
