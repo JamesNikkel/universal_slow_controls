@@ -80,9 +80,9 @@ if ($_SESSION['choose_type'] == "Housings")
 	$plot_name = "jpgraph_cache/housingplot_".$parm_name."_hist.png";
 	make_data_hist($plot_name, $h_id, $value, $plot_title, "Housing ID",
 		       $parm_name." (".$pmt_parameter_units[$parm_name].")", 
-		       $pmt_parameter_targets[$parm_name],
-		       $pmt_parameter_targets_plus[$parm_name],
-		       $pmt_parameter_targets_minus[$parm_name]);
+		       $housing_parameter_targets[$parm_name],
+		       $housing_parameter_targets_plus[$parm_name],
+		       $housing_parameter_targets_minus[$parm_name]);
 
 	echo ('<img src='.$plot_name.'>'); 
 	
