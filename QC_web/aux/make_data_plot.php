@@ -107,7 +107,6 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
       $vals[] = 0;
     }
 
-
   foreach($y_data as $y)
     {
       for ($i = 0; $i < $bin_n; $i++)
@@ -125,6 +124,8 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   
   $graph = new Graph(600,400);
+  $graph->SetScale("intlin");
+
   //$graph->SetScale('textlin');
  
   $graph->xaxis->SetTickLabels($bins);
