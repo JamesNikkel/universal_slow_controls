@@ -66,7 +66,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   
   $scatterplot = new ScatterPlot($y_data, $x_data);
   $scatterplot->mark->SetType(MARK_FILLEDCIRCLE);
-  $scatterplot->mark->SetFillColor("red");
+  $scatterplot->mark->SetFillColor("orange");
   
   $graph->Add($scatterplot);
   
