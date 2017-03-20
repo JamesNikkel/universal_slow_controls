@@ -125,6 +125,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 	    $vals[$i] = $vals[$i]+1;
 	}
     }
+  echo($vals);
   
   $graph = new Graph(400,400);
   $graph->SetScale('textlin');
