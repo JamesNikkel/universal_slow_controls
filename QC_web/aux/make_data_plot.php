@@ -146,7 +146,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   $scatterplot = new ScatterPlot($vals, $bins);
   $scatterplot->mark->SetType(MARK_FILLEDSQUARE);
   $scatterplot->mark->SetFillColor("orange");
-  
+  $scatterplot->SetImpuls();
   $graph->Add($scatterplot);
 
   
