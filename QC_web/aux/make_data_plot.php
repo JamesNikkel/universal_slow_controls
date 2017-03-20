@@ -12,10 +12,16 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   $x_max = max($x_data);
   $y_min = min($y_data);
   $y_max = max($y_data);
+
+   
+  if (!empty($h_line))
+    {
+      if (!empty($h_line_minus))
+	$y_min = min([$y_min, ($h_line-2*$h_line_minus)]);
+            if (!empty($h_line_plus))
+	      $y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
+    }
   
-  $y_min = min([$y_min, ($h_line-2*$h_line_minus)]);
-  $y_max = max([$y_max, ($h_line+2*$h_line_plus)]);
-    
   $width = 1200; $height = 400;
  
   $graph = new Graph($width,$height);
