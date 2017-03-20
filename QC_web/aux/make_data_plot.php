@@ -152,17 +152,17 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   
   if (!empty($v_line))
     {
-      $target_line = new PlotLine(VERTICAL, ($v_line/$bin_width), "green", 2);
+      $target_line = new PlotLine(VERTICAL, ($v_line-$y_min)/$bin_width, "green", 2);
       $graph->AddLine($target_line);
       if (!empty($v_line_plus))
 	{
-	  $target_line_plus = new PlotLine(VERTICAL, (($v_line+$v_line_plus)/$bin_width), "green", 2);
+	  $target_line_plus = new PlotLine(VERTICAL, ($v_line+$v_line_plus-$y_min)/$bin_width, "green", 2);
 	  $target_line_plus->SetLineStyle('dotted');
 	  $graph->AddLine($target_line_plus);
 	}
       if (!empty($v_line_minus))
 	{
-	  $target_line_minus = new PlotLine(VERTICAL, (($v_line-$v_line_minus)/$bin_width), "green", 2);
+	  $target_line_minus = new PlotLine(VERTICAL, ($v_line-$v_line_minus-$y_min)/$bin_width, "green", 2);
 	  $target_line_minus->SetLineStyle('dotted');
 	  $graph->AddLine($target_line_minus);
 	}
