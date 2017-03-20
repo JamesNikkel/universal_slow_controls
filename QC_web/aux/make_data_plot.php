@@ -148,7 +148,10 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   $graph->title->SetFont(FF_FONT1,FS_BOLD);
   $graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
   $graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
- 
+
+  
+  $target_line = new PlotLine(VERTICAL, 3, "green", 2);
+  $graph->AddLine($target_line);
 
   
   if (!empty($v_line))

@@ -18,6 +18,7 @@ $plot_type_array = array(
 			"PMTs",
 			"Pinwheels",
 			"Panels",
+			"Summary",
 			);
 
 
@@ -43,39 +44,45 @@ echo ('</TABLE>');
 
 echo ('<TABLE border="1" cellpadding="2" width=100%>');
 
-if ($_SESSION['choose_type'] == "Housings")
+
+if ($_SESSION['choose_type'] == "Summary")
   {
-    $temp = $_SESSION['choosen_housing'];
+    include("list_entries_summary.php");
+  }
+
+ else if ($_SESSION['choose_type'] == "Housings")
+   {
+     $temp = $_SESSION['choosen_housing'];
    
-    echo ('<TR>');
-    echo ('<TD align="left">');  echo ('Housing ID'); echo ('</TD>');
-    echo ('<TD align="left">');  echo ('PMT ID');     echo ('</TD>');
-    echo ('<TD align="left">');  echo ('Type');       echo ('</TD>');
-    echo ('<TD align="left">');  echo ('Status');     echo ('</TD>');
-    echo ('<TD align="left">');  echo ('Location');   echo ('</TD>');
-    echo ('</TR>');
+     echo ('<TR>');
+     echo ('<TD align="left">');  echo ('Housing ID'); echo ('</TD>');
+     echo ('<TD align="left">');  echo ('PMT ID');     echo ('</TD>');
+     echo ('<TD align="left">');  echo ('Type');       echo ('</TD>');
+     echo ('<TD align="left">');  echo ('Status');     echo ('</TD>');
+     echo ('<TD align="left">');  echo ('Location');   echo ('</TD>');
+     echo ('</TR>');
     
 
-    $table = "Housing";
-    include("aux/get_last_table_id.php");
+     $table = "Housing";
+     include("aux/get_last_table_id.php");
     
-    for ($i=1; $i <= $last_id; $i++)
-      {
-	$_SESSION['choosen_housing'] = $i;
+     for ($i=1; $i <= $last_id; $i++)
+       {
+	 $_SESSION['choosen_housing'] = $i;
 	 /////////////  Get selected housing values:
-	include("aux/get_housing_vals.php");
+	 include("aux/get_housing_vals.php");
 	
-	echo ('<TR>');
-	echo ('<TD align="left">'); echo ($id);	      echo ('</TD>');
-	echo ('<TD align="left">'); echo ($pmt_id);   echo ('</TD>');
-	echo ('<TD align="left">'); echo ($pmt_type); echo ('</TD>');
-	echo ('<TD align="left">'); echo ($status);   echo ('</TD>');
-	echo ('<TD align="left">'); echo ($location); echo ('</TD>');
-	echo ('</TR>');
-      }
+	 echo ('<TR>');
+	 echo ('<TD align="left">'); echo ($id);	      echo ('</TD>');
+	 echo ('<TD align="left">'); echo ($pmt_id);   echo ('</TD>');
+	 echo ('<TD align="left">'); echo ($pmt_type); echo ('</TD>');
+	 echo ('<TD align="left">'); echo ($status);   echo ('</TD>');
+	 echo ('<TD align="left">'); echo ($location); echo ('</TD>');
+	 echo ('</TR>');
+       }
     
-    $_SESSION['choosen_housing'] = $temp;
-  }
+     $_SESSION['choosen_housing'] = $temp;
+   }
 
  else if ($_SESSION['choose_type'] == "PMTs")
    {
