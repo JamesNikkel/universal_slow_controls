@@ -58,11 +58,14 @@ if ($_SESSION['choose_type'] == "Housings")
 	$value = array();
 
 	while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-	  {	
-	    $h_id[]  = (int)$row['ID'];
-	    $value[] = (double)$row[$parm_name];
-	  }  
-  
+	  {
+	    if ($row[$parm_name] != 0)
+	      {
+		$h_id[]  = (int)$row['ID'];
+		$value[] = (double)$row[$parm_name];
+	      }
+	  }
+	
 	$plot_name = "jpgraph_cache/housingplot_".$parm_name.".png";
 	$plot_title = $parm_name;
  
@@ -96,10 +99,13 @@ if ($_SESSION['choose_type'] == "Housings")
 	$value = array();
 
 	while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
-	  {	
-	    $h_id[]  = (int)$row['PMT_ID'];
-	    $value[] = (double)$row[$parm_name];
-	  }  
+	  {
+	    if ($row[$parm_name] != 0)
+	      {
+		$h_id[]  = (int)$row['PMT_ID'];
+		$value[] = (double)$row[$parm_name];
+	      }
+	  }
   
 	$plot_name = "jpgraph_cache/housingplot_".$parm_name.".png";
 	$plot_title = $parm_name;
