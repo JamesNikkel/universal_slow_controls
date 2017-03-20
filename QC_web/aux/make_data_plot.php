@@ -128,7 +128,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   //$graph->SetScale('textlin');
  
-  $graph->xaxis->SetTickLabels($bins);
+  //$graph->xaxis->SetTickLabels($bins);
  
   // Adjust the margin a bit to make more room for titles
   $graph->SetMargin(40,30,20,40);
