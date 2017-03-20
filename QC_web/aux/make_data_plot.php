@@ -119,12 +119,10 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   foreach($y_data as $y)
     {
-      $i=0;
-      foreach($bins as $bin)
+      for ($i = 0; $i < bin_n; $i++)
 	{
-	  if (($y > $bin) && ($y < $bin + $bin_width))
-	    $vals[$i]++;
-	  $i++;
+	  if (($y > $bins[$i]) && ($y < $bins[$i] + $bin_width))
+	    $vals[$i] = $vals[$i]+1;
 	}
     }
   
