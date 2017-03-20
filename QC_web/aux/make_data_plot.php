@@ -153,6 +153,26 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   $graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
  
 
+  
+  if (!empty($v_line))
+    {
+      $target_line = new PlotLine(VERTICAL, $v_line, "green", 2);
+      $graph->AddLine($target_line);
+      if (!empty($h_line_plus))
+	{
+	  $target_line_plus = new PlotLine(VERTICAL, $v_line+$v_line_plus, "green", 2);
+	  $target_line_plus->SetLineStyle('dotted');
+	  $graph->AddLine($target_line_plus);
+	}
+      if (!empty($h_line_minus))
+	{
+	  $target_line_minus = new PlotLine(VERTICAL,$v_line-$v_line_minus, "green", 2);
+	  $target_line_minus->SetLineStyle('dotted');
+	  $graph->AddLine($target_line_minus);
+	}
+    }
+
+  
   $graph->Stroke($plot_name);
 
   return $plot_name;
