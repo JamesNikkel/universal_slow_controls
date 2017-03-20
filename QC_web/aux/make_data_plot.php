@@ -37,7 +37,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   //$graph->xaxis->Setcolor($_SESSION['textcolour']);
   //$graph->yaxis->Setcolor($_SESSION['textcolour']);
   //$graph->xaxis->SetTitleMargin(50);
-  //$graph->yaxis->SetTitleMargin(70);
+  $graph->yaxis->SetTitleMargin(70);
   //$graph->SetFrame(true,$_SESSION['bgcolour'],0);
 
   if (!empty($title))
