@@ -96,9 +96,6 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
 function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 		   $y_label, $v_line, $v_line_plus, $v_line_minus)
 {
-  
-  $x_min = min($x_data);
-  $x_max = max($x_data);
   $y_min = min($y_data);
   $y_max = max($y_data);
 
@@ -110,7 +107,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   $bin_n = 10;
   $bin_width = ($y_max-$y_min)/$bin_n;
   
-  for ($i = 0; $i < bin_n; $i++)
+  for ($i = 0; $i < $bin_n; $i++)
     {
       $bins[] = $y_min + $i*$bin_width;
       $vals[] = 0;
@@ -119,15 +116,14 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   foreach($y_data as $y)
     {
-      for ($i = 0; $i < bin_n; $i++)
+      for ($i = 0; $i < $bin_n; $i++)
 	{
 	  if (($y > $bins[$i]) && ($y < $bins[$i] + $bin_width))
 	    $vals[$i] = $vals[$i]+1;
 	}
     }
-  echo($vals);
 
-  $vals = array(1, 2, 3, 4, 1);
+  //$vals = array();
   
   $graph = new Graph(400,400);
   $graph->SetScale('textlin');
