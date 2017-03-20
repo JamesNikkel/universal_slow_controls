@@ -125,7 +125,7 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   
   $graph = new Graph(600,400);
-  $graph->SetScale('textlin');
+  //$graph->SetScale('textlin');
  
   $graph->xaxis->SetTickLabels($bins);
  
@@ -136,12 +136,19 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
   $graph->ygrid->Show(true);
   
   // Create a bar pot
-  $bplot = new BarPlot($vals);
- 
+  //$bplot = new BarPlot($vals);
+    
   // Adjust fill color
-  $bplot->SetFillColor('orange');
-  $graph->Add($bplot);
- 
+  //$bplot->SetFillColor('orange');
+  //$graph->Add($bplot);
+
+  $scatterplot = new ScatterPlot($vals, $bins);
+  $scatterplot->mark->SetType(MARK_FILLEDSQUARE);
+  $scatterplot->mark->SetFillColor("orange");
+  
+  $graph->Add($scatterplot);
+
+  
   // Setup the titles
   $graph->xaxis->title->Set($y_label);
  
