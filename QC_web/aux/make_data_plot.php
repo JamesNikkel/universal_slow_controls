@@ -28,7 +28,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   $graph = new Graph($width,$height);
   $graph->SetScale("intlin", $y_min, $y_max, $x_min, $x_max);
   //$graph->img->SetMargin(100, 50, 10, 80);  
-  $graph->SetMargin(40,30,20,40);
+  $graph->SetMargin(100,30,20,40);
 
   
   $graph->xgrid->Show(true);
@@ -37,7 +37,7 @@ function make_data_plot($plot_name, $x_data, $y_data, $title, $x_label,
   //$graph->xaxis->Setcolor($_SESSION['textcolour']);
   //$graph->yaxis->Setcolor($_SESSION['textcolour']);
   //$graph->xaxis->SetTitleMargin(50);
-  $graph->yaxis->SetTitleMargin(70);
+  //$graph->yaxis->SetTitleMargin(70);
   //$graph->SetFrame(true,$_SESSION['bgcolour'],0);
 
   if (!empty($title))
