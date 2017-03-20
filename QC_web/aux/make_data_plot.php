@@ -119,14 +119,14 @@ function make_data_hist($plot_name, $x_data, $y_data, $title, $x_label,
 
   foreach($y_data as $y)
     {
+      $i=0;
       foreach($bins as $bin)
 	{
 	  if (($y > $bin) && ($y < $bin + $bin_width))
 	    $vals[$i]++;
+	  $i++;
 	}
     }
-
-  echo($vals);
   
   $graph = new Graph(400,400);
   $graph->SetScale('textlin');
