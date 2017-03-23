@@ -14,11 +14,11 @@ echo ('<TABLE border="1" cellpadding="2" width=100%>');
 
 
 $plot_type_array = array(
+			 "Summary",
 			"Housings",
 			"PMTs",
 			"Pinwheels",
 			"Panels",
-			"Summary",
 			);
 
 
