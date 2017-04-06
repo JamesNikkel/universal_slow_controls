@@ -36,26 +36,26 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
   sprintf(cmd_string, "U12%c", CR);   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Startup:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Startup:\n %s \n", ret_string);
- read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Startup:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Startup:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Startup:\n %s \n", ret_string);
 
   sprintf(cmd_string, "T60%c", CR);   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Set time:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Set time:\n %s \n", ret_string);
- read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Set time:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Set time:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Set time:\n %s \n", ret_string);
 
   sprintf(cmd_string, "A0%c", CR);   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
 
   return(0);
 }
@@ -80,8 +80,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   sprintf(cmd_string, "S");   // start counting
   query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "S Return string:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "S Return string:\n %s \n", ret_string);
   sleep(70);
 
   /* sprintf(cmd_string, "E");   // stop counting */
@@ -92,10 +92,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   sprintf(cmd_string, "L");   // list output
   query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "L Return string:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "L Return string:\n %s \n", ret_string);
-  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "L Return string:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "L Return string:\n %s \n", ret_string);
+  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+  //fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
 
   // 02/24/2017,12:28:17,01,0.3,90,0.5,50, 0,                                                                                                                                      
