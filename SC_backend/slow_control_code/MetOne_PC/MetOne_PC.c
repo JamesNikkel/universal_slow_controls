@@ -41,7 +41,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
  read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Startup:\n %s \n", ret_string);
 
-  sprintf(cmd_string, "T19%c", CR);   // start comms
+  sprintf(cmd_string, "T60%c", CR);   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Set time:\n %s \n", ret_string);
   read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
@@ -82,7 +82,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
   read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
-  sleep(20);
+  sleep(70);
 
   /* sprintf(cmd_string, "E");   // stop counting */
   /* query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char)); */
