@@ -71,7 +71,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 {
   char       cmd_string[64];
   char       ret_string[64];             
-  int        return_int;
+  int        return_int1;
+  int        return_int2;
   int        query_status;
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
@@ -100,7 +101,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   // 02/24/2017,12:28:17,01,0.3,90,0.5,50, 0,                                                                                                                                      
 
 
-  if(sscanf(ret_string, "%d", &return_int) != 1)
+  if(sscanf(ret_string, "%*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) != 2)
     {
       fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
       return(0);
@@ -113,7 +114,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     }
 
        
-  *val_out = (double)return_int;
+  *val_out = (double)return_int1;
 
 
   add_val_sensor_struct(s_s, time(NULL), *val_out);
