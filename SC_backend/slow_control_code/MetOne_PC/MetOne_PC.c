@@ -9,7 +9,7 @@
 #include "SC_aux_fns.h"
 #include "SC_sensor_interface.h"
 
-#include "serial.h"
+#include "ethernet.h"
 
 #define INSTNAME "MetOne_PC"
 
@@ -22,45 +22,28 @@ int comm_type;
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)  
 {
-  struct termios       tbuf;  /* serial line settings */
-   
-  if (strncmp(i_s->dev_type, "serial", 6) == 0) 
+  
+  if ((inst_dev = connect_tcp(i_s)) < 0)
     {
-      comm_type = TYPE_SERIAL;
-      if (( inst_dev = open(i_s->dev_address, (O_RDWR | O_NDELAY), 0)) < 0 ) 
-	{
-	  fprintf(stderr, "Unable to open tty port specified: %s \n", i_s->dev_address);
-	  my_signal = SIGTERM;
-	  return(1);
-	}
-	
-      /* set up the serial line parameters :  */
-      tbuf.c_cflag = CS8|CREAD|B9600|CLOCAL;
-      tbuf.c_iflag = IGNBRK;
-      tbuf.c_oflag = 0;
-      tbuf.c_lflag = 0;
-      tbuf.c_cc[VMIN] = 0;
-      tbuf.c_cc[VTIME]= 0; 
-	
-      if (tcsetattr(inst_dev, TCSANOW, &tbuf) < 0) {
-	fprintf(stderr, "Unable to set device '%s' parameters\n", i_s->dev_address);
-	my_signal = SIGTERM;
-	return(1);
-      }
-    }
-  else
-    {
-      fprintf(stderr, "Device type must be serial or eth. \n");
+      fprintf(stderr, "Connect failed. \n");
       my_signal = SIGTERM;
-      return(1);	
+      return(1);
     }
-
-
+  
   char       cmd_string[64];
   char       ret_string[64];             
- 
+  
   sprintf(cmd_string, "U01\n");   // start comms
-  query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  fprintf(stdout, "Startup:\n %s \n", ret_string);
+
+  sprintf(cmd_string, "T19\n");   // start comms
+  query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  fprintf(stdout, "Set time:\n %s \n", ret_string);
+
+  sprintf(cmd_string, "A0\n");   // start comms
+  query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
 
   return(0);
 }
@@ -81,18 +64,18 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
-  sprintf(cmd_string, "U01\nS\n");   // start counting
-  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  sprintf(cmd_string, "S");   // start counting
+  query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(20);
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
 
-  sprintf(cmd_string, "U01\nE\n");   // stop counting
-  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  sleep(5);
-  fprintf(stdout, "E Return string:\n %s \n", ret_string);
+  /* sprintf(cmd_string, "E");   // stop counting */
+  /* query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char)); */
+  /* sleep(5); */
+  /* fprintf(stdout, "E Return string:\n %s \n", ret_string); */
 
-  sprintf(cmd_string, "U01\nL\n");   // list output
-  query_status = query_serial(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  sprintf(cmd_string, "L");   // list output
+  query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
   fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
