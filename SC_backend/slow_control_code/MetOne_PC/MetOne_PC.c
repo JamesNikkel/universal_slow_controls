@@ -82,7 +82,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
   //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "S Return string:\n %s \n", ret_string);
-  sleep(70);
+  sleep(35);
 
   /* sprintf(cmd_string, "E");   // stop counting */
   /* query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char)); */
