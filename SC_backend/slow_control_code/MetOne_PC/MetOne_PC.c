@@ -74,6 +74,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   int        return_int1;
   int        return_int2;
   int        query_status;
+  int        tries = 0;
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
@@ -83,22 +84,14 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "S Return string:\n %s \n", ret_string);
   sleep(35);
-
-  /* sprintf(cmd_string, "E");   // stop counting */
-  /* query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char)); */
-  /* sleep(5); */
-  /* fprintf(stdout, "E Return string:\n %s \n", ret_string); */
-
-  
-
-  int tries = 0;
   
   while (tries <10)
     {
       sprintf(cmd_string, "L");   // list output
       query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
       fprintf(stdout, "L Return string:\n %s \n", ret_string);
- 
+
       if(sscanf(ret_string, "%*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
 	tries = 20;
       else
