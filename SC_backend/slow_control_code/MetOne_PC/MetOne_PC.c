@@ -89,31 +89,34 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   /* sleep(5); */
   /* fprintf(stdout, "E Return string:\n %s \n", ret_string); */
 
-  sprintf(cmd_string, "L");   // list output
-  query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  fprintf(stdout, "L Return string:\n %s \n", ret_string);
-  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  //fprintf(stdout, "L Return string:\n %s \n", ret_string);
-  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  //fprintf(stdout, "L Return string:\n %s \n", ret_string);
+  
 
-
-  // 02/24/2017,12:28:17,01,0.3,90,0.5,50, 0,                                                                                                                                      
-
-
-  if(sscanf(ret_string, "%*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) != 2)
+  int tries = 0;
+  
+  while (tries <10)
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
-      return(0);
+      sprintf(cmd_string, "L");   // list output
+      query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      fprintf(stdout, "L Return string:\n %s \n", ret_string);
+ 
+      if(sscanf(ret_string, "%*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
+	tries = 20;
+      else
+	tries++;
+      sleep(1);
     }
+  if (tries == 10)
+     {
+      fprintf(stderr, "Continued bad return value in read.\n");
+      return(0);
+    } 
 
   if (query_status != 0)
     {
       fprintf(stderr, "One of the queries failed.\n");
       return(0);
-    }
-
-       
+    } 
+ 
   *val_out = (double)return_int1;
 
 
