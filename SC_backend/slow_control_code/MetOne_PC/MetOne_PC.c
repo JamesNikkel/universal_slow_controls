@@ -37,11 +37,11 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Startup:\n %s \n", ret_string);
 
-  sprintf(cmd_string, "T19\n");   // start comms
+  sprintf(cmd_string, "U01\nT19\n");   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Set time:\n %s \n", ret_string);
 
-  sprintf(cmd_string, "A0\n");   // start comms
+  sprintf(cmd_string, "U01\nA0\n");   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
 
@@ -64,7 +64,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
-  sprintf(cmd_string, "S");   // start counting
+  sprintf(cmd_string, "U01\nS");   // start counting
   query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   sleep(20);
   fprintf(stdout, "S Return string:\n %s \n", ret_string);
@@ -74,7 +74,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   /* sleep(5); */
   /* fprintf(stdout, "E Return string:\n %s \n", ret_string); */
 
-  sprintf(cmd_string, "L");   // list output
+  sprintf(cmd_string, "U01\nL");   // list output
   query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
   fprintf(stdout, "L Return string:\n %s \n", ret_string);
