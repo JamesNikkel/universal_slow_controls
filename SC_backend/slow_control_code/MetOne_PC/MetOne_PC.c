@@ -110,8 +110,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(0);
     } 
  
-  *val_out = (double)return_int1;
-
+  if (s_s->num == 1)
+    *val_out = (double)return_int1;
+  else
+    *val_out = (double)return_int2;
 
   add_val_sensor_struct(s_s, time(NULL), *val_out);
   s_s->rate = 0;
