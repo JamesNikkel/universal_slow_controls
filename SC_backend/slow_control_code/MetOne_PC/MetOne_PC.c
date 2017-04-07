@@ -57,6 +57,8 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
   //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "Turn off auto:\n %s \n", ret_string);
 
+  close(inst_dev);
+
   return(0);
 }
 
@@ -78,6 +80,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
+  inst_dev = connect_tcp(i_s);
+  
+  sprintf(cmd_string, "U12%c", CR);   // start comms
+  query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+  sleep(1);
+
   sprintf(cmd_string, "S");   // start counting
   query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "S Return string:\n %s \n", ret_string);
@@ -98,6 +107,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	tries++;
       sleep(1);
     }
+
+  close(inst_dev);
+  
   if (tries == 10)
      {
       fprintf(stderr, "Continued bad return value in read.\n");
