@@ -89,7 +89,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       sprintf(cmd_string, "L");   // list output
       query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+      //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
       //fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
       if(sscanf(ret_string, " L %*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
