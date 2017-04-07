@@ -73,13 +73,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       ret_string[64];             
   int        return_int1;
   int        return_int2;
-  int        query_status;
+  int        query_status = 0;
   int        tries = 0;
 
   s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 
   sprintf(cmd_string, "S");   // start counting
-  query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "S Return string:\n %s \n", ret_string);
   //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
   //fprintf(stdout, "S Return string:\n %s \n", ret_string);
@@ -88,7 +88,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   while (tries <10)
     {
       sprintf(cmd_string, "L");   // list output
-      query_status = query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
       //fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
@@ -107,7 +107,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   if (query_status != 0)
     {
       fprintf(stderr, "One of the queries failed.\n");
-      return(0);
+      //return(0);
     } 
  
   if (s_s->num == 1)
