@@ -16,9 +16,9 @@ BME280 pthSensor;
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
-  0x90, 0xA2, 0xDA, 0x0F, 0x66, 0xD8
+  0x90, 0xA2, 0xDA, 0x10, 0x74, 0xE3
 };
-IPAddress ip(192, 168, 1, 90);
+IPAddress ip(169, 254, 1, 90);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -29,9 +29,9 @@ int  buff_pos = 0;
 
 void setup()
 {
-  pinMode(53, OUTPUT);
-  pinMode(4, OUTPUT);
-  digitalWrite(4, HIGH);
+  //pinMode(53, OUTPUT);
+  //pinMode(4, OUTPUT);
+  //digitalWrite(4, HIGH);
 
 
   pthSensor.settings.commInterface = I2C_MODE;
@@ -45,7 +45,7 @@ void setup()
   pthSensor.settings.humidOverSample = 1;
 
   delay(10);
-  //pthSensor.begin();
+  pthSensor.begin();
   delay(100);
   
   // start the Ethernet connection and the server:
