@@ -1,5 +1,4 @@
 /* Program for reading the MetOne particle counter */
-/* and putting said readings into a mysql database. */
 /* James Nikkel */
 /* james.nikkel@yale.edu */
 /* Copyright 2017 */
