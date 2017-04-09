@@ -103,7 +103,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
 	  fprintf(stdout, "L Return string:\n%s\n", ret_string);
 
-	  if(sscanf(ret_string, " L %*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
+	  if(sscanf(ret_string, "L %*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
 	    tries = 20;
 	  else
 	    tries++;
