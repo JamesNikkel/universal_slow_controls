@@ -84,17 +84,20 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   sprintf(cmd_string, "U12%c", CR);   // start comms
   query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-  sleep(1);
-
-  sprintf(cmd_string, "S");   // start counting
-  query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  //fprintf(stdout, "S Return string:\n %s \n", ret_string);
-  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-  //fprintf(stdout, "S Return string:\n %s \n", ret_string);
-  sleep(35);
+  sleep(2);
   
-  while (tries <10)
+  while (tries < 5)
     {
+      
+      sprintf(cmd_string, "S");   // start counting
+      query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      //fprintf(stdout, "S Return string:\n %s \n", ret_string);
+      //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+      //fprintf(stdout, "S Return string:\n %s \n", ret_string);
+      sleep(35);
+  
+      //while (tries <10)
+      //{
       sprintf(cmd_string, "L");   // list output
       query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
@@ -109,7 +112,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   close(inst_dev);
   
-  if (tries == 10)
+  if (tries == 5)
      {
       fprintf(stderr, "Continued bad return value in read.\n");
       return(0);
