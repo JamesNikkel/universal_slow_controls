@@ -72,8 +72,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 {
   char       cmd_string[64];
   char       ret_string[64];             
-  int        return_int1;
-  int        return_int2;
+  int        return_int1 = 0;
+  int        return_int2 = 0;
   int        query_status = 0;
   int        tries = 0;
 
@@ -86,7 +86,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   sleep(2);
   
-  while (tries < 5)
+  while (return_int1 == 0)
     {
       
       sprintf(cmd_string, "S");   // start counting
@@ -96,18 +96,19 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       fprintf(stdout, "S Return string:\n %s \n", ret_string);
       sleep(35);
   
-      //while (tries <10)
-      //{
-      sprintf(cmd_string, "L");   // list output
-      query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
-      fprintf(stdout, "L Return string:\n %s \n", ret_string);
+      while (tries < 10)
+	{
+	  sprintf(cmd_string, "L");   // list output
+	  query_status += query_tcp(inst_dev, cmd_string,  strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	  //read_tcp(inst_dev, ret_string, sizeof(ret_string)/sizeof(char));
+	  fprintf(stdout, "L Return string:\n %s \n", ret_string);
 
-      if(sscanf(ret_string, " L %*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
-	tries = 20;
-      else
-	tries++;
-      sleep(1);
+	  if(sscanf(ret_string, " L %*d/%*d/%*d,%*d:%*d:%*d,%*d,%*f,%d,%*f,%d,%*s", &return_int1, &return_int2) == 2)
+	    tries = 20;
+	  else
+	    tries++;
+	  sleep(1);
+	}
     }
 
   close(inst_dev);
