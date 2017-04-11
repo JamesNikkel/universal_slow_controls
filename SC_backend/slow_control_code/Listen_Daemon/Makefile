@@ -3,17 +3,15 @@ CC = gcc -O3
 
 CFLAGS = `mysql_config --cflags` -I../include 
 
-LDFLAGS =  -L../lib 
-
-LIBS = -lslow_control
+LDFLAGS =  -L../lib  -lslow_control
 
 PROGS = Listen_Daemon
 
 all: $(PROGS) 
 
 $(all): $(PROGS).o
-	$(CC) $(CFLAGS) $(PROGS).c $(LDFLAGS) $(LIBS) -o $(PROGS) 
-	rm -f $(PROGS).o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $@.o $(LIBS)
+	rm -f $@.o
 
 clean:
 	rm -f *.o $(PROGS)	

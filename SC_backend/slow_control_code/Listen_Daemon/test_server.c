@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
      
      char       cmd_string[64];
      char       ret_string[64];
+     char       rw_request[8];
      char       val_name[16];
      double     ret_val;
      int        read_status;
@@ -110,14 +111,35 @@ int main(int argc, char *argv[])
 	 if (read_tcp(sockfd, &newsockfd,  ret_string,  sizeof(ret_string)/sizeof(char)) == 0)
 	   {
 	     printf("Read returned:\n%s\n", ret_string);
-	     if (sscanf(ret_string, "%s = %lf", val_name, &ret_val) == 2)
+	     if (sscanf(ret_string, "%s %s = %lf", rw_request, val_name, &ret_val) == 3)
 	       {
-		 write(newsockfd,"OKAY", 4); 
-		 printf("String \"%s\" = %lf\n", val_name, ret_val);
+		 if ((strncmp(rw_request, "write", 2) == 0) ||(strncmp(rw_request, "WRITE", 2) == 0)) 
+		   {
+		     printf("Writing  %lf to \"%s\"\n", ret_val, val_name);
+		     write(newsockfd,"OKAY", 4); 
+		   }
+		 else if ((strncmp(rw_request, "read", 2) == 0) ||(strncmp(rw_request, "READ", 2) == 0))
+		   {
+		     printf("Reading from \"%s\"\n", val_name);
+		     write(newsockfd,"val = ", 4); 
+		   }
+		 else
+		   {
+		     printf("Bad command\n");
+		     write(newsockfd,":(", 2); 
+		   }
+	       }
+	     else if (sscanf(ret_string, "%s %s", rw_request, val_name) == 2)
+	       {
+		 if ((strncmp(rw_request, "read", 2) == 0) ||(strncmp(rw_request, "READ", 2) == 0))
+		   {
+		     printf("Reading from \"%s\"\n", val_name);
+		     write(newsockfd,"val = 2 ", 8); 
+		   }
 	       }
 	     else
 	       write(newsockfd,":(", 2); 
-
+	     
 	     close(newsockfd);
 	     
 	   }
