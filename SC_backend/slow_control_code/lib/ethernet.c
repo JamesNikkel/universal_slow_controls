@@ -66,6 +66,8 @@ int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t
   fd_set  rfds;
   struct timeval tv;
   
+  bzero(ret_string, r_count);
+
   if (send(fd, cmd_string, c_count, 0) < 0)
     {
       fprintf(stderr, "send error in query_tcp\n");
@@ -143,7 +145,9 @@ int read_tcp(int fd, char *ret_string, size_t r_count)
   int     select_ret;
   fd_set  rfds;
   struct timeval tv;
-    
+
+  bzero(ret_string, r_count);
+
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
   tv.tv_sec = global_tcp_timeout;
