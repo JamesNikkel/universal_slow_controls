@@ -52,7 +52,7 @@ int wait_for_connect(int fd, int *newsockfd, char *ret_string, size_t r_count)
 
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
-  tv.tv_sec = 6;
+  tv.tv_sec = 10;
   tv.tv_usec = 0;
   
   select_ret = select(fd+1, &rfds, NULL, NULL, &tv);
@@ -64,15 +64,14 @@ int wait_for_connect(int fd, int *newsockfd, char *ret_string, size_t r_count)
      
   while (select_ret) 
     {
-      *newsockfd = accept(fd, 
-			 (struct sockaddr *) &cli_addr,
-			 &clilen);
+      *newsockfd = accept(fd, (struct sockaddr *) &cli_addr, &clilen);
       if (*newsockfd < 0)
 	{
 	  error("ERROR on accept");
 	  return(-1);
 	}
 
+      msleep(50);
       rdstatus = recv(*newsockfd, ret_string, r_count, MSG_DONTWAIT);
       if (rdstatus == 0) 
 	{
@@ -86,7 +85,9 @@ int wait_for_connect(int fd, int *newsockfd, char *ret_string, size_t r_count)
 	}
       select_ret = 0;
     }
-  
+
+  //fprintf(stdout, "Ret string:\n");
+  //fprintf(stdout, ret_string);
   if (rdstatus > 0)
     return(0);
   
@@ -95,7 +96,6 @@ int wait_for_connect(int fd, int *newsockfd, char *ret_string, size_t r_count)
   
   return(-1);
 }
-
 
 
 int main (int argc, char *argv[])
@@ -114,8 +114,10 @@ int main (int argc, char *argv[])
   char       cmd_string[64];
   char       ret_string[64];
   char       rw_request[8];
-  char       val_name[16];
-  double     ret_val;
+  char       sensor_name[16];
+  double     sensor_value;
+  double     sensor_rate;
+  time_t     sensor_time;
   int        read_status;
 
   // save restart arguments
@@ -176,20 +178,42 @@ int main (int argc, char *argv[])
     {
       if (wait_for_connect(sockfd, &newsockfd,  ret_string,  sizeof(ret_string)/sizeof(char)) == 0)
 	{
-	  printf("Read returned:\n%s\n", ret_string);
-	  if (sscanf(ret_string, "%s %s = %lf", rw_request, val_name, &ret_val) == 3)
+	  if (sscanf(ret_string, "%s %s = %lf", rw_request, sensor_name, &sensor_value) == 3)
 	    {
-	      if (strncasecmp(rw_request, "write", 2) == 0) 
-		write(newsockfd,"OKAY", 4); 
-	      else if (strncasecmp(rw_request, "read", 2) == 0) 
-		write(newsockfd,"val = ", 4); 
+	      if (strncasecmp(rw_request, "write", 2) == 0)
+		{
+		  if (insert_mysql_sensor_data (sensor_name, time(NULL), sensor_value, 0.0) == 0)
+		    write(newsockfd,":)", 2); 
+		  else
+		    write(newsockfd,":(", 2); 
+		}
+	      else if (strncasecmp(rw_request, "read", 2) == 0)
+		{
+		  if (read_mysql_sensor_data(sensor_name, &sensor_time, &sensor_value, &sensor_rate) == 0)
+		    {
+		      sprintf(cmd_string, "val = %lf | t = %d", sensor_value, sensor_time);
+		      write(newsockfd, cmd_string, strlen(cmd_string)); 
+		    }
+		  else
+		    write(newsockfd,":(", 2); 
+		}
 	      else
 		write(newsockfd,":(", 2); 
 	    }
-	  else if (sscanf(ret_string, "%s %s", rw_request, val_name) == 2)
+	  else if (sscanf(ret_string, "%s %s", rw_request, sensor_name) == 2)
 	    {
 	      if (strncasecmp(rw_request, "read", 2) == 0)
-		write(newsockfd,"val = 2 ", 8); 
+		{
+		  if (read_mysql_sensor_data(sensor_name, &sensor_time, &sensor_value, &sensor_rate) == 0)
+		    {
+		      sprintf(cmd_string, "val = %lf | t = %d", sensor_value, sensor_time);
+		      write(newsockfd, cmd_string, strlen(cmd_string)); 
+		    }
+		  else
+		    write(newsockfd,":(", 2);  
+		}
+	      else
+		write(newsockfd,":(", 2);  
 	    }
 	  else
 	    write(newsockfd,":(", 2); 
