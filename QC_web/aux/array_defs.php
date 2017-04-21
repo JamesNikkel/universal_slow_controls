@@ -89,12 +89,12 @@ $housing_parameter_names = array(
 				 "F",
 				 "G",
 				 "H",
+				 "J",
+				 "K",
+				 "L",
+				 "M",
 				 "Cable_Length_BNC",
 				 "Cable_Length_SHV",
-				 /* "J", */
-				 /* "K", */
-				 /* "L", */
-				 /* "M", */
 				 /* "N", */
 				 /* "P", */
 				 /* "Q", */
@@ -119,10 +119,10 @@ $housing_parameter_units = array(
 				 "inches",
 				 "inches",
 				 "inches",
-				 /* "inches", */
-				 /* "inches", */
-				 /* "inches", */
-				 /* "inches", */
+				 "inches",
+				 "inches",
+				 "inches",
+				 "inches",
 				 /* "inches", */
 				 /* "inches", */
 				 /* "inches", */
@@ -145,10 +145,14 @@ $housing_parameter_targets = array("A" => 5.72,
 				   "D" => 5.43,
 				   "E" => 5.43,
 				   "F" => 5.43,
-				   "G" => 5.67,
-				   "H" => 5.67,
-				   "Cable_Length_BNC"=> 216.0,
-				   "Cable_Length_SHV"=> 216.0,
+				   "G" => 5.63,
+				   "H" => 5.63,
+				   "J" => 13.75,
+				   "K" => 13.75,
+				   "L" => 13.75,
+				   "M" => 13.75,
+				   "Cable_Length_BNC"=> 192.0,
+				   "Cable_Length_SHV"=> 192.0,
 				   );
 
 $housing_parameter_targets_plus = array("A" => 0.01,
@@ -157,8 +161,12 @@ $housing_parameter_targets_plus = array("A" => 0.01,
 					"D" => 0.005,
 					"E" => 0.005,
 					"F" => 0.005,
-					"G" => 0.0,
-					"H" => 0.0,
+					"G" => 0.01,
+					"H" => 0.01,
+					"J" => 0.0,
+					"K" => 0.0,
+					"L" => 0.0,
+					"M" => 0.0,
 					"Cable_Length_BNC"=> 3.0,
 					"Cable_Length_SHV"=> 3.0,
 					);
@@ -169,8 +177,12 @@ $housing_parameter_targets_minus = array("A" => 0.01,
 					 "D" => 0.00,
 					 "E" => 0.00,
 					 "F" => 0.00,
-					 "G" => 0.02,
-					 "H" => 0.02,
+					 "G" => 0.01,
+					 "H" => 0.01,
+					 "J" => 0.0,
+					 "K" => 0.0,
+					 "L" => 0.0,
+					 "M" => 0.0,
 					 "Cable_Length_BNC"=> 3.0,
 					 "Cable_Length_SHV"=> 3.0,
 					 );
