@@ -64,7 +64,35 @@ $id = (int)$_SESSION['choosen_housing'];
 if (isset($_POST['id']))
   {
   
-    $_POST['id'] = (int)$_POST['id'];
+    $h_id = (int)$_POST['id'];
+    $new_pmt_id = (int)$_POST['pmt_id'];
+    
+    if ($new_pmt_id > 0)
+      {	
+	$query = "SELECT COUNT(*) FROM `PMT` WHERE `PMT_ID`=".$new_pmt_id." AND `Housing_ID`!=".$h_id." AND `Housing_ID`!=-1";
+	$result = mysql_query($query);
+	if (!$result)
+	  die ("Could not query the database <br />" . mysql_error());
+	$row = mysql_fetch_row($result);
+	if ($row[0] > 0)
+	  {
+	    $query = "SELECT `Housing_ID` FROM `PMT` WHERE `PMT_ID`=".$new_pmt_id;
+	    $result = mysql_query($query); 
+	    if (!$result)
+	      die ("Could not query the database <br />" . mysql_error());
+	    $row = mysql_fetch_row($result);
+	    echo ("That PMT is already associated with housing ".$row[0].". <br>");
+	    die ("Try a different PMT.");
+	  }
+	else
+	  {
+	    $query = "UPDATE `PMT` SET `Housing_ID`=".$h_id.", `Last_update`=".time()." WHERE `PMT_ID`=".$new_pmt_id;
+	    $result = mysql_query($query);
+	    if (!$result)
+	      die ("Could not query the database <br />" . mysql_error());
+	  }
+      }
+    
 
     // clean up strings:
     $_POST['pmt_type'] = trim($_POST['pmt_type']);
@@ -81,13 +109,11 @@ if (isset($_POST['id']))
     
     $_POST['note'] = trim($_POST['note']);
     if (!get_magic_quotes_gpc())
-      $_POST['note'] = addslashes($_POST['note']);
-  
-    $_POST['pmt_id'] = (int)$_POST['pmt_id'];
+      $_POST['note'] = addslashes($_POST['note']);  
 
-    $query = "UPDATE `Housing` SET `PMT_Type`=\"".$_POST['pmt_type']."\",  `Status`=\"".$_POST['status']."\",  `Location`=\"".$_POST['location']."\", `PMT_ID`=".$_POST['pmt_id'].", 
+    $query = "UPDATE `Housing` SET `PMT_Type`=\"".$_POST['pmt_type']."\",  `Status`=\"".$_POST['status']."\",  `Location`=\"".$_POST['location']."\", `PMT_ID`=".$new_pmt_id.", 
             `Note`=\"".$_POST['note']."\", `Last_update`=".time()."  
-            WHERE `ID` = ".$_POST['id'];
+            WHERE `ID` = ".$h_id;
 
     $result = mysql_query($query);
     if (!$result)
@@ -98,13 +124,12 @@ if (isset($_POST['id']))
       {
 	$update_val = (float)$_POST[$parm_name];
 	
-	$query = "UPDATE `Housing` SET `".$parm_name."`=\"".$update_val."\" WHERE `ID` = ".$_POST['id'];	
+	$query = "UPDATE `Housing` SET `".$parm_name."`=\"".$update_val."\" WHERE `ID` = ".$h_id;	
 
 	$result = mysql_query($query);
 	if (!$result)
 	  die ("Could not query the database <br />" . mysql_error());
       }
-
   }
 
 
@@ -201,7 +226,7 @@ echo ('<TR>');
 echo ('<TD align="left"  colspan = 2>');
 echo ('Status: ');
 echo ('<SELECT name="status">');
-foreach ($qc_status_array as $index)
+foreach ($housing_qc_status_array as $index)
 {
   echo('<option ');
   if (strcmp($index, $status)==0)

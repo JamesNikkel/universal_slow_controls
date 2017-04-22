@@ -47,27 +47,27 @@ echo ('</TR>');
 
 echo ('<TR>');	
 
-$query = "SELECT COUNT(*) FROM PMT WHERE PMT_Type='Hamamatsu' AND Status!='Failed QC' ";
+$query = "SELECT COUNT(*) FROM PMT WHERE PMT_Type='Hamamatsu' AND Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 
-$query = "SELECT COUNT(*) FROM PMT WHERE PMT_Type='ETL' AND Status!='Failed QC'";
+$query = "SELECT COUNT(*) FROM PMT WHERE PMT_Type='ETL' AND Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 
-$query = "SELECT COUNT(*) FROM Housing WHERE Status!='Failed QC'";
+$query = "SELECT COUNT(*) FROM Housing WHERE Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 
-$query = "SELECT COUNT(*) FROM Optical_Separator WHERE Status!='Failed QC'";
+$query = "SELECT COUNT(*) FROM Optical_Separator WHERE Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 
-$query = "SELECT COUNT(*) FROM Spacer_Pinwheel WHERE Status!='Failed QC'";
+$query = "SELECT COUNT(*) FROM Spacer_Pinwheel WHERE Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');

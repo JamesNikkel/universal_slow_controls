@@ -55,10 +55,31 @@ $privilege_array = make_unique($privilege_array);
 $qc_status_array = array(
 			 "Unchecked", 
 			 "In QC",  
-			 "Failed QC", 
-			 "Waiting", 
 			 "Complete",
+			 "Failed",
 			 );
+
+$housing_qc_status_array = array(
+			 "Unchecked", 
+			 "First clean",
+			 "Measured",  
+			 "Base soldered",
+			 "Stuffed",
+			 "Leak checked",
+			 "Burn in",
+			 "Oil filled",
+			 "Complete",
+			 "Failed",
+			 );
+
+
+$pmt_qc_status_array = array(
+			 "Unchecked", 
+			 "In QC",
+			 "Complete",
+			 "Failed",
+			 );
+
 
 $pmt_type_array = array(
 			"Hamamatsu",

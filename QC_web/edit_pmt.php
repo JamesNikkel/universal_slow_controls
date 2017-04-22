@@ -215,7 +215,7 @@ echo ('<TR>');
 echo ('<TD align="left"  colspan = 2>');
 echo ('Status: ');
 echo ('<SELECT name="pmt_status">');
-foreach ($qc_status_array as $index)
+foreach ($pmt_qc_status_array as $index)
 {
   echo('<option ');
   if (strcmp($index, $pmt_status)==0)
