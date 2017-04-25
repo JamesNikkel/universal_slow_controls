@@ -55,11 +55,11 @@ if ($_SESSION['choose_type'] == "Summary")
      $temp = $_SESSION['choosen_housing'];
    
      echo ('<TR>');
-     echo ('<TD align="left">');  echo ('Housing ID'); echo ('</TD>');
-     echo ('<TD align="left">');  echo ('PMT ID');     echo ('</TD>');
-     echo ('<TD align="left">');  echo ('Type');       echo ('</TD>');
-     echo ('<TD align="left">');  echo ('Status');     echo ('</TD>');
-     echo ('<TD align="left">');  echo ('Location');   echo ('</TD>');
+     echo ('<TH align="left">');  echo ('Housing ID'); echo ('</TH>');
+     echo ('<TH align="left">');  echo ('PMT ID');     echo ('</TH>');
+     echo ('<TH align="left">');  echo ('Type');       echo ('</TH>');
+     echo ('<TH align="left">');  echo ('Status');     echo ('</TH>');
+     echo ('<TH align="left">');  echo ('Location');   echo ('</TH>');
      echo ('</TR>');
     
 
@@ -90,12 +90,12 @@ if ($_SESSION['choose_type'] == "Summary")
        $temp = $_SESSION['choosen_pmt'];
    
        echo ('<TR>');
-       echo ('<TD align="left">');  echo ('PMT ID');         echo ('</TD>');
-       echo ('<TD align="left">');  echo ('Type');           echo ('</TD>');
-       echo ('<TD align="left">');  echo ('Serial Number');  echo ('</TD>');
-       echo ('<TD align="left">');  echo ('Housing ID');     echo ('</TD>');
-       echo ('<TD align="left">');  echo ('Status');         echo ('</TD>');
-       echo ('<TD align="left">');  echo ('Location');       echo ('</TD>');
+       echo ('<TH align="left">');  echo ('PMT ID');         echo ('</TH>');
+       echo ('<TH align="left">');  echo ('Type');           echo ('</TH>');
+       echo ('<TH align="left">');  echo ('Serial Number');  echo ('</TH>');
+       echo ('<TH align="left">');  echo ('Housing ID');     echo ('</TH>');
+       echo ('<TH align="left">');  echo ('Status');         echo ('</TH>');
+       echo ('<TH align="left">');  echo ('Location');       echo ('</TH>');
        echo ('</TR>');
     
 
