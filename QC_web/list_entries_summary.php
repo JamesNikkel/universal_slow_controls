@@ -38,11 +38,11 @@ echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 echo ('</TR>');
 
 echo ('<TR>');
-echo ('<TH align="left">');  echo ('Number of Passed Hamamatsu PMTs'); echo ('</TH>');
-echo ('<TH align="left">');  echo ('Number of Passed ET PMTs');     echo ('</TH>');
-echo ('<TH align="left">');  echo ('Number of Passed Housings');       echo ('</TH>');
-echo ('<TH align="left">');  echo ('Number of Passed Panels');     echo ('</TH>');
-echo ('<TH align="left">');  echo ('Number of Passed Pinwheels');   echo ('</TH>');
+echo ('<TH align="left">');  echo ('Number of Non-Failed Hamamatsu PMTs'); echo ('</TH>');
+echo ('<TH align="left">');  echo ('Number of Non-Failed ET PMTs');     echo ('</TH>');
+echo ('<TH align="left">');  echo ('Number of Non-Failed Housings');       echo ('</TH>');
+echo ('<TH align="left">');  echo ('Number of Non-Failed Panels');     echo ('</TH>');
+echo ('<TH align="left">');  echo ('Number of Non-Failed Pinwheels');   echo ('</TH>');
 echo ('</TR>');
 
 echo ('<TR>');	
@@ -71,5 +71,17 @@ $query = "SELECT COUNT(*) FROM Spacer_Pinwheel WHERE Status!='Failed'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
- 
+
+echo ('</TR>');
+
+
+
+$query = "SELECT COUNT(*) FROM Housing WHERE Status=='Complete'";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('Number of Housings Complete'); 
+echo ($row[0]);	      echo ('<BR>');
+
+
+
 ?>

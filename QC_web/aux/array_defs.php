@@ -69,6 +69,7 @@ $housing_qc_status_array = array(
 			 "Burn in",
 			 "Oil filled",
 			 "Complete",
+			 "Fix Me!",
 			 "Failed",
 			 );
 
