@@ -66,7 +66,7 @@ $housing_qc_status_array = array(
 			 "Base soldered",
 			 "Stuffed",
 			 "Leak checked",
-			 "Burn in",
+			 "Burned in",
 			 "Oil filled",
 			 "Complete",
 			 "Fix Me!",

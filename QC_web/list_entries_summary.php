@@ -74,14 +74,91 @@ echo ('<TD align="left">');  echo ($row[0]);	      echo ('</TD>');
 
 echo ('</TR>');
 
+echo ('<TR>');	
+echo ('<TD colspan=5 align="center">'); echo ('---'); echo ('</TD>'); 
+echo ('</TR>');
 
-
-$query = "SELECT COUNT(*) FROM Housing WHERE Status=='Complete'";
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Complete'";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
-echo ('Number of Housings Complete'); 
-echo ($row[0]);	      echo ('<BR>');
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Complete = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
 
+
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Leak checked' OR Status='Burn in' OR Status='Oil filled' OR Status='Complete'";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Leak checked = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
+
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Stuffed' OR Status='Leak checked' OR Status='Burn in' OR Status='Oil filled' OR Status='Complete'";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Stuffed = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
+
+echo ('<TR>');
+echo ('<TD colspan=5 align="center">'); echo ('---'); echo ('</TD>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Unchecked' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be cleaned = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='First clean' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be measured = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Measured' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be soldered = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Base soldered' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be stuffed = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Stuffed' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be leak checked = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Leak checked' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be burned in = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Burned in' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting to be filled with oil = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Oil filled' ";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting for final check = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
 
 
 ?>
