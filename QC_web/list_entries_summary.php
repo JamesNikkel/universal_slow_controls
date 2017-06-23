@@ -78,23 +78,44 @@ echo ('<TR>');
 echo ('<TD colspan=5 align="center">'); echo ('---'); echo ('</TD>'); 
 echo ('</TR>');
 
+
 echo ('<TR>');	
-$query = "SELECT COUNT(*) FROM Housing WHERE Status='Complete'";
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Final clean done' AND ID >= 20 ";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
-echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Complete = '); echo ($row[0]); echo ('</TH>'); 
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings with final clean done = '); echo ($row[0]); echo ('</TH>'); 
 echo ('</TR>');
 
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE ( Status='Oil topped up' OR Status='Final clean done' ) AND ID >= 20";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings topped up with oil = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
 
 echo ('<TR>');	
-$query = "SELECT COUNT(*) FROM Housing WHERE Status='Leak checked' OR Status='Burn in' OR Status='Oil filled' OR Status='Complete'";
+$query = "SELECT COUNT(*) FROM Housing WHERE ( Status='Complete' OR Status='Oil topped up' OR Status='Final clean done' ) AND ID >= 20";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings with final PMT check = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
+
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE ( Status='Burn in' OR Status='Oil filled' OR Status='Complete' OR Status='Oil topped up' OR Status='Final clean done' ) AND ID >= 20";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Burned in = '); echo ($row[0]); echo ('</TH>'); 
+echo ('</TR>');
+
+echo ('<TR>');	
+$query = "SELECT COUNT(*) FROM Housing WHERE ( Status='Leak checked' OR Status='Burned in' OR Status='Oil filled' OR Status='Complete' OR Status='Oil topped up' OR Status='Final clean done' ) AND ID >= 20";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Leak checked = '); echo ($row[0]); echo ('</TH>'); 
 echo ('</TR>');
 
 echo ('<TR>');	
-$query = "SELECT COUNT(*) FROM Housing WHERE Status='Stuffed' OR Status='Leak checked' OR Status='Burn in' OR Status='Oil filled' OR Status='Complete'";
+$query = "SELECT COUNT(*) FROM Housing WHERE ( Status='Stuffed' OR Status='Leak checked' OR Status='Burned in' OR Status='Oil filled' OR Status='Complete' OR Status='Oil topped up' OR Status='Final clean done' ) AND ID >= 20";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
 echo ('<TH colspan=5 align="left">'); echo ('Number of Housings Stuffed = '); echo ($row[0]); echo ('</TH>'); 
@@ -157,7 +178,21 @@ echo ('<TR>');
 $query = "SELECT COUNT(*) FROM Housing WHERE Status='Oil filled' AND ID >= 20";
 $result = mysql_query($query);
 $row = mysql_fetch_row($result);
-echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting for final check = '); echo ($row[0]); echo ('</TH>');
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting for final PMT check = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Complete' AND ID >= 20";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting for oil top-up = '); echo ($row[0]); echo ('</TH>');
+echo ('</TR>');
+
+echo ('<TR>');
+$query = "SELECT COUNT(*) FROM Housing WHERE Status='Oil topped up' AND ID >= 20";
+$result = mysql_query($query);
+$row = mysql_fetch_row($result);
+echo ('<TH colspan=5 align="left">'); echo ('Number of housings waiting for final clean = '); echo ($row[0]); echo ('</TH>');
 echo ('</TR>');
 
 echo ('<TR>');

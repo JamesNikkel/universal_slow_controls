@@ -60,26 +60,28 @@ $qc_status_array = array(
 			 );
 
 $housing_qc_status_array = array(
-			 "Unchecked", 
-			 "First clean",
-			 "Measured",  
-			 "Base soldered",
-			 "Stuffed",
-			 "Leak checked",
-			 "Burned in",
-			 "Oil filled",
-			 "Complete",
-			 "Fix Me!",
-			 "Failed",
-			 );
+				 "Unchecked", 
+				 "First clean",
+				 "Measured",  
+				 "Base soldered",
+				 "Stuffed",
+				 "Leak checked",
+				 "Burned in",
+				 "Oil filled",
+				 "Complete",
+				 "Oil topped up",
+				 "Final clean done",
+				 "Fix Me!",
+				 "Failed",
+				 );
 
 
 $pmt_qc_status_array = array(
-			 "Unchecked", 
-			 "In QC",
-			 "Complete",
-			 "Failed",
-			 );
+			     "Unchecked", 
+			     "In QC",
+			     "Complete",
+			     "Failed",
+			     );
 
 
 $pmt_type_array = array(
