@@ -52,6 +52,8 @@ if ($_SESSION['choose_type'] == "Summary")
 
  else if ($_SESSION['choose_type'] == "Housings")
    {
+     $ave_vol = 0;
+     $ave_vol_count = 0;
      $temp = $_SESSION['choosen_housing'];
    
      echo ('<TR>');
@@ -68,11 +70,17 @@ if ($_SESSION['choose_type'] == "Summary")
      include("aux/get_last_table_id.php");
     
      for ($i=1; $i <= $last_id; $i++)
-       {
+       { 
 	 $_SESSION['choosen_housing'] = $i;
 	 /////////////  Get selected housing values:
 	 include("aux/get_housing_vals.php");
-	
+
+	 if ($i > 19)
+	   {
+	     $ave_vol += $volume;
+	     $ave_vol_count++;
+	   }
+	 
 	 echo ('<TR>');
 	 echo ('<TD align="left">'); echo ($id);	      echo ('</TD>');
 	 echo ('<TD align="left">'); echo ($pmt_id);   echo ('</TD>');
@@ -127,6 +135,8 @@ if ($_SESSION['choose_type'] == "Summary")
    }
 
 echo ('</TABLE>');
+
+echo("Average Volume = ".$ave_vol/$ave_vol_count." litres");
 
 mysql_close($connection);
 echo(' </body>');
