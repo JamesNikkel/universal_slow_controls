@@ -72,15 +72,16 @@ while ($row = mysql_fetch_array($result, MYSQL_ASSOC))
       $last_update = 0;    
   }
 
-$parm_values = array_combine($housing_parameter_names, $parm_values);
 
 $length = ($parm_values["J"] + $parm_values["K"] + $parm_values["L"] + $parm_values["M"])/4.0;
 
 $volume = $parm_values["A"]*$parm_values["B"]*0.5 + 0.75*5.67*5.67 +  $parm_values["G"]*$parm_values["H"]*0.625 +
   ($length - 0.5 - 0.75 - 0.625)*($parm_values["C"] + $parm_values["D"])*($parm_values["E"] + $parm_values["F"])/4.0;
 
-$volume = $volume*2.54*2.54*2.54;
+$volume = $volume*2.54*2.54*2.54/1000.0;
 
-$parm_values = array_merge($parm_values, array("Volume" => $volume);
+$parm_values["Volume"] = $volume;
+
+$parm_values = array_combine($housing_parameter_names, $parm_values);
 
 ?>
