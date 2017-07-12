@@ -75,7 +75,7 @@ if ($_SESSION['choose_type'] == "Summary")
 	 /////////////  Get selected housing values:
 	 include("aux/get_housing_vals.php");
 
-	 if ($i > 19)
+	 if (($i > 19) && ($status!='Failed'))
 	   {
 	     $ave_vol += $volume;
 	     $ave_vol_count++;
