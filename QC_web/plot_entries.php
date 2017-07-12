@@ -48,7 +48,7 @@ if ($_SESSION['choose_type'] == "Housings")
 	echo ('<TR>');               
 	echo ('<TD align="left">');
     
-	$query = "SELECT ID, ".$parm_name." FROM Housing ORDER BY ID WHERE Status != 'Failed'";
+	$query = "SELECT ID, ".$parm_name." FROM Housing WHERE Status!='Failed' ORDER BY ID";
 
 	$result = mysql_query($query);
 	if (!$result)
