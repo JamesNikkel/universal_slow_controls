@@ -119,7 +119,6 @@ $housing_parameter_names = array(
 				 "M",
 				 "Cable_Length_BNC",
 				 "Cable_Length_SHV",
-				 "Volume",
 				 /* "N", */
 				 /* "P", */
 				 /* "Q", */
@@ -148,7 +147,6 @@ $housing_parameter_units = array(
 				 "inches",
 				 "inches",
 				 "inches",
-				 "litres",
 				 /* "inches", */
 				 /* "inches", */
 				 /* "inches", */
