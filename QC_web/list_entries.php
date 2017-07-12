@@ -60,6 +60,7 @@ if ($_SESSION['choose_type'] == "Summary")
      echo ('<TH align="left">');  echo ('Type');       echo ('</TH>');
      echo ('<TH align="left">');  echo ('Status');     echo ('</TH>');
      echo ('<TH align="left">');  echo ('Location');   echo ('</TH>');
+     echo ('<TH align="left">');  echo ('Volume');   echo ('</TH>');
      echo ('</TR>');
     
 
@@ -78,6 +79,7 @@ if ($_SESSION['choose_type'] == "Summary")
 	 echo ('<TD align="left">'); echo ($pmt_type); echo ('</TD>');
 	 echo ('<TD align="left">'); echo ($status);   echo ('</TD>');
 	 echo ('<TD align="left">'); echo ($location); echo ('</TD>');
+	 echo ('<TD align="left">'); echo ($volume); echo ('</TD>');
 	 echo ('</TR>');
        }
     
