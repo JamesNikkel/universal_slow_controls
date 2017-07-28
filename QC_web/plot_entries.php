@@ -34,10 +34,10 @@ foreach ($plot_type_array as $index)
   echo ('<input type="submit" name="choose_type" value="'.$index.'" 
                title="'.$index.'" style="font-size: 10pt">');
   echo ('</TH>');
+echo ('</FORM>');
 }
 
 echo ('</TABLE>');
-
 
 echo ('<TABLE border="1" cellpadding="2" width=100%>');
 
@@ -53,7 +53,8 @@ if ($_SESSION['choose_type'] == "Housings")
 	$result = mysql_query($query);
 	if (!$result)
 	  die ("Could not query the database <br />" . mysql_error());
-		
+	
+	$text_version = "";
 	$h_id  = array();
 	$value = array();
 
@@ -63,6 +64,7 @@ if ($_SESSION['choose_type'] == "Housings")
 	      {
 		$h_id[]  = (int)$row['ID'];
 		$value[] = (double)$row[$parm_name];
+		$text_version .= (int)$row['ID'].", ".(double)$row[$parm_name]."\n";
 	      }
 	  }
 	
@@ -87,6 +89,14 @@ if ($_SESSION['choose_type'] == "Housings")
 	echo ('<img src='.$plot_name.'>'); 
 	
 	echo ('</TD>');
+
+	echo ('<TD>');
+	echo ('<FORM action="export_XY_data.php" method="post">');
+	echo ('Export data to text file: <input type="submit" src="pixmaps/export.png" name="export" value='.$parm_name.' title="Export data">');
+	echo ('<input type="hidden" name="text" value="'.$text_version.'">');
+	echo ('</FORM>');
+	echo ('</TD>');
+       
 	echo ('</TR>');   	
       }
   }
@@ -103,7 +113,8 @@ if ($_SESSION['choose_type'] == "Housings")
 	$result = mysql_query($query);
 	if (!$result)
 	  die ("Could not query the database <br />" . mysql_error());
-		
+
+	$text_version = "";
 	$h_id  = array();
 	$value = array();
 
@@ -113,6 +124,7 @@ if ($_SESSION['choose_type'] == "Housings")
 	      {
 		$h_id[]  = (int)$row['PMT_ID'];
 		$value[] = (double)$row[$parm_name];
+		$text_version .= (int)$row['PMT_ID'].", ".(double)$row[$parm_name]."\n";
 	      }
 	  }
   
@@ -137,6 +149,14 @@ if ($_SESSION['choose_type'] == "Housings")
 	echo ('<img src='.$plot_name.'>'); 
 
 	echo ('</TD>');
+	
+	echo ('<TD>');
+	echo ('<FORM action="export_XY_data.php" method="post">');
+	echo ('Export data to text file: <input type="submit" src="pixmaps/export.png" name="export" value='.$parm_name.' title="Export data">');
+	echo ('<input type="hidden" name="text" value="'.$text_version.'">');
+	echo ('</FORM>');
+	echo ('</TD>');
+
 	echo ('</TR>');   	
       }
    }

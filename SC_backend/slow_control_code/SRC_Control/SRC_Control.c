@@ -98,6 +98,16 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
 	}
     }
+  else if (strncmp(s_s->subtype, "X", 1) == 0)  // Stop!
+    {  
+      if (s_s->new_set_val > 0.5) 
+	{  
+	  sprintf(cmd_string, "%d X 0\n", s_s->num); 	   
+	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
+	}
+    }
+  
   else if (strncmp(s_s->subtype, "G", 1) == 0)  // Goto specified position
     {
       if (s_s->new_set_val > 0) 
