@@ -16,6 +16,7 @@
 #define INSTNAME "SRC_Control"
 
 int inst_dev;
+double pos_offset;
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
@@ -26,6 +27,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       my_signal = SIGTERM;
       return(1);
     }
+  pos_offset = abs(i_s->parm1);
   
   return(0);
 }
@@ -72,7 +74,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       if (return_int_1 < 0)
 	return(0);
        
-      *val_out = (double)return_int_1/10.0;
+      *val_out = (double)return_int_1/10.0 - pos_offset;
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 2.3;
@@ -112,7 +114,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if (s_s->new_set_val > 0) 
 	{     
-	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*s_s->new_set_val));
+	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val-pos_offset)));
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
