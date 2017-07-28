@@ -74,7 +74,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       if (return_int_1 < 0)
 	return(0);
        
-      *val_out = (double)return_int_1/10.0 - pos_offset;
+      *val_out = (double)return_int_1/10.0 - pos_offset;   ///  pos_offset sets zero to that value
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 2.3;
@@ -114,7 +114,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if (s_s->new_set_val > 0) 
 	{     
-	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val-pos_offset)));
+	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val-pos_offset)));     ///  pos_offset sets zero to that value
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
