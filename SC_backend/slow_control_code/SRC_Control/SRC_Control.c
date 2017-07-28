@@ -114,7 +114,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if (s_s->new_set_val+pos_offset > 0) 
 	{     
-	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val-pos_offset)));     ///  pos_offset sets zero to that value
+	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val+pos_offset)));     ///  pos_offset sets zero to that value
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
