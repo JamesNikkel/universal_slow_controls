@@ -18,9 +18,9 @@ BME280 pthSensor_B;
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
-  0x90, 0xA2, 0xDA, 0x10, 0xD4, 0x18
+  0x90, 0xA2, 0xDA, 0x0D, 0xDA, 0xD4
 };
-IPAddress ip(169, 254, 1, 97);
+IPAddress ip(192, 168, 1, 92);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -123,15 +123,15 @@ void loop()
       
       else if (strncmp(ret_string, "RDT_B", 5) == 0)
       {
-        client.println(pthSensor.readTempC());
+        client.println(pthSensor_B.readTempC());
       }
       else if (strncmp(ret_string, "RDP_B", 5) == 0)
       {
-        client.println(pthSensor.readFloatPressure());
+        client.println(pthSensor_B.readFloatPressure());
       }
       else if (strncmp(ret_string, "RDH_B", 5) == 0)
       {
-        client.println(pthSensor.readFloatHumidity());
+        client.println(pthSensor_B.readFloatHumidity());
       }
       else if (strncmp(ret_string, "RDT", 3) == 0)
       {

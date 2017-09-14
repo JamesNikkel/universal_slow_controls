@@ -146,7 +146,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
       *val_out = pthVal;
     }
-   else if  (strncmp(s_s->subtype, "Humidity", 3) == 0)
+   else if  (strncmp(s_s->subtype, "Humidity", 4) == 0)
     {
       sprintf(cmd_string, "RDH\n");
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
