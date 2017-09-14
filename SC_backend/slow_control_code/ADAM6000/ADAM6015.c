@@ -32,7 +32,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   ret = read_ADC_raw(s_s, RTD_start_address,  num_RTD, val_out);    
 
-  *val_out = (double)(*val_out) * 400.0/65535.0 - 200 + 273.15; // convert to K
+  *val_out = (double)(*val_out)* 400.0/65535.0;// - 200 + 273.15; // convert to K
   //*val_out = *val_out * 20 + 273.15; // convert to K
   *val_out = s_s->parm1 + (s_s->parm2 * (*val_out)) + (s_s->parm3 * (*val_out)  * (*val_out));
 

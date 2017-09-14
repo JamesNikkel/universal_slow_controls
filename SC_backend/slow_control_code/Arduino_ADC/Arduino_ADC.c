@@ -174,7 +174,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
       *val_out = pthVal;
     }
-  else if  (strncmp(s_s->subtype, "T_B", 4) == 0)
+  else if  (strncmp(s_s->subtype, "T_B", 3) == 0)
     {
       sprintf(cmd_string, "RDT_B\n");
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
@@ -202,7 +202,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
       *val_out = pthVal;
     }
-   else if  (strncmp(s_s->subtype, "P_B", 4) == 0)
+   else if  (strncmp(s_s->subtype, "P_B", 3) == 0)
     {
       sprintf(cmd_string, "RDP_B\n");
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
