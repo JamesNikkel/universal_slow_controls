@@ -12,13 +12,15 @@
 
 
 BME280 pthSensor;
+BME280 pthSensor_B;
+
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
-  0x90, 0xA2, 0xDA, 0x10, 0x74, 0xE3
+  0x90, 0xA2, 0xDA, 0x10, 0xD4, 0x18
 };
-IPAddress ip(169, 254, 1, 90);
+IPAddress ip(169, 254, 1, 97);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -47,6 +49,22 @@ void setup()
   delay(10);
   pthSensor.begin();
   delay(100);
+
+  
+  pthSensor_B.settings.commInterface = I2C_MODE;
+  pthSensor_B.settings.I2CAddress = 0x76;
+  pthSensor_B.settings.runMode = 3;
+  pthSensor_B.settings.tStandby = 0;
+
+  pthSensor_B.settings.filter = 0;
+  pthSensor_B.settings.tempOverSample = 1;
+  pthSensor_B.settings.pressOverSample = 1;
+  pthSensor_B.settings.humidOverSample = 1;
+
+  delay(10);
+  pthSensor_B.begin();
+  delay(100);
+
   
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -83,7 +101,7 @@ void loop()
     {
       if (sscanf(ret_string, "RA %d", &channel) == 1)
       {
-        if (channel < 0 || channel > 15)
+        if (channel < 0 || channel > 6)
           client.println(-1);
         else
         {
@@ -93,7 +111,7 @@ void loop()
       }
       else if (sscanf(ret_string, "RD %d", &channel) == 1)
       {
-        if (channel < 22 || channel > 53)
+        if (channel < 2 || channel > 9)
           client.println(-1);
         else
         {
@@ -101,6 +119,19 @@ void loop()
           value = digitalRead(channel);
           client.println(value);
         }
+      }
+      
+      else if (strncmp(ret_string, "RDT_B", 5) == 0)
+      {
+        client.println(pthSensor.readTempC());
+      }
+      else if (strncmp(ret_string, "RDP_B", 5) == 0)
+      {
+        client.println(pthSensor.readFloatPressure());
+      }
+      else if (strncmp(ret_string, "RDH_B", 5) == 0)
+      {
+        client.println(pthSensor.readFloatHumidity());
       }
       else if (strncmp(ret_string, "RDT", 3) == 0)
       {
@@ -116,7 +147,7 @@ void loop()
       }
       else if (sscanf(ret_string, "WD %d %d", &channel, &value) == 2)
       {
-        if (channel < 22 || channel > 53)
+        if (channel < 2 || channel > 9)
           client.println(-1);
         else
         {
