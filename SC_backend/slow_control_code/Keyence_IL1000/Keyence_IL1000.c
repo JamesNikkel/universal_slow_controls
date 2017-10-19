@@ -41,7 +41,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 {
   char       cmd_string[64];
   char       ret_string[64];             
-  long       return_int;
+  int        return_int;
 
   
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
