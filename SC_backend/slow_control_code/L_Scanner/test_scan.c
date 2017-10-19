@@ -249,7 +249,7 @@ void scan(double X1, double X2, double dX)
       msleep(100);
     }
   
-  for (i=0; i<int((X2-X1)/dX); i++)
+  for (i = 0; i < (int)((X2-X1)/dX); i++)
     {
       target_x += dX;
 
