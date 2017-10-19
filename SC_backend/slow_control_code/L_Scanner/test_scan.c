@@ -237,6 +237,8 @@ void scan(double X1, double X2, double dX)
 {
   double current_x = -1;
   double target_x;
+  int i;
+  
   target_x = X1;
   
   goto_x(target_x);
@@ -247,9 +249,9 @@ void scan(double X1, double X2, double dX)
       msleep(100);
     }
   
-  while (abs(current_x - X2) > dX)
+  for (i=0; i<int((X2-X1)/dX); i++)
     {
-      target_x+=dX;
+      target_x += dX;
 
       goto_x(target_x);
 
