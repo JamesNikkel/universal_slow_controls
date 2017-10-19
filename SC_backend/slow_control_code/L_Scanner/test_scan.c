@@ -11,6 +11,9 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
+#include <errno.h>
+
+#include <string.h>
 #include <strings.h>
 
 int inst_dev_1;
@@ -78,7 +81,7 @@ int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t
   
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
-  tv.tv_sec = global_tcp_timeout;
+  tv.tv_sec = 5;
   tv.tv_usec = 0;
   
   select_ret = 0;
@@ -202,7 +205,7 @@ void home_x(void)
 }
 
 
-void goto_x(double target_x);
+void goto_x(double target_x)
 {
   char       cmd_string[64]; 
   sprintf(cmd_string, "%d G %d\n", 2, (int)(10*target_x));
@@ -214,7 +217,7 @@ void scan(double X1, double X2, double dX)
 {
   double current_x;
   double target_x;
-  target_x = x1;
+  target_x = X1;
   
   goto_x(target_x);
 
