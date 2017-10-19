@@ -206,17 +206,17 @@ double read_x(void)
   sprintf(cmd_string, "%d R 0\n", 2);
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  //if (ret_string[0] == '-')
-  // return(-1);
+  if (ret_string[0] == '-')
+   return(-1);
 
   if (sscanf(ret_string, "%d", &return_int) != 1)
     {
-      fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
+      //fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
       return(-1);
     }
 
-  //  if ((return_int == 1) || (return_int == -1))
-  //return(-1);
+  if ((return_int == 1) || (return_int == -1))
+    return(-1);
   
   return((double)return_int/1000.0);
 }
