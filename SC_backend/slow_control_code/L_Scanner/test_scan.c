@@ -212,7 +212,7 @@ double read_x(void)
   if (sscanf(ret_string, "%d", &return_int) != 1)
     {
       fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
-      return(-2);
+      return(-1);
     }
   return((double)return_int/10.0);
 }
@@ -235,18 +235,17 @@ void goto_x(double target_x)
 
 void scan(double X1, double X2, double dX)
 {
-  double current_x;
+  double current_x = -1;
   double target_x;
   target_x = X1;
   
   goto_x(target_x);
 
-  while (read_x() == -1)
+  while (current_x == -1)
     {
+      current_x=read_x();
       msleep(100);
     }
-
-  current_x=read_x();
   
   while (abs(current_x - X2) > dX)
     {
@@ -254,15 +253,16 @@ void scan(double X1, double X2, double dX)
 
       goto_x(target_x);
 
-      do
+      current_x=read_x();
+      
+      while (current_x == -1)
 	{
 	  current_x=read_x();
-	  msleep(10);
-	} while ( current_x == -1);
+	  msleep(100);
+	}
       
       fprintf(stdout, "%lf, %lf \n", current_x, read_z());
     }
-  
 }
 
 int main (int argc, char *argv[])
