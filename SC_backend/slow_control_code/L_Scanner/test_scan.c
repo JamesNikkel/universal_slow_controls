@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include <stdio.h>
 
 #include <sys/select.h>
@@ -53,7 +54,6 @@ int connect_tcp_raw(char *IP_address, int port)
   if (connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0 )
     {
       fprintf(stderr, "Could not make connection to: %s:%d \n", IP_address, port);
-      my_signal = SIGTERM;
       close(fd);
       exit(1);
     }
@@ -263,7 +263,7 @@ int main (int argc, char *argv[])
 	  exit(1);
 	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
-	if (sscanf(argv[2], &XXX) == 1)
+	if (sscanf(argv[2], "%lf", &XXX) == 1)
 	  {
 	    if (set_up())
 	      exit(1);
@@ -278,7 +278,7 @@ int main (int argc, char *argv[])
 	    exit(1);
 	  }
       else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 5))
-	if ((sscanf(argv[2], &X1) == 1) && (sscanf(argv[2], &X2) == 1) && (sscanf(argv[2], &dX) == 1))
+	if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1) && (sscanf(argv[4], "%lf", &dX) == 1))
 	  {
 	    if (set_up())
 	      exit(1);
