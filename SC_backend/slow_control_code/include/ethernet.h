@@ -36,6 +36,7 @@ static char ETX  __attribute__ ((unused)) = 0x03;
 
 ////// Establishes a TCP connection, and return socket file descriptor
 int connect_tcp(struct inst_struct *i_s);
+int connect_tcp_raw(char *IP_address, int port);
 
 int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count);
 int write_tcp(int fd, char *cmd_string, size_t c_count);

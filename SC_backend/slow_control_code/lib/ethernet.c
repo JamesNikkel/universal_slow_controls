@@ -7,18 +7,17 @@
 #include "ethernet.h"
 
 ////// Establishes a TCP connection
-int connect_tcp(struct inst_struct *i_s)
+int connect_tcp_raw(char *IP_address, int port)
 {
   int fd;
   int option;
   struct sockaddr_in addr;
-  int port;
   
   sscanf(i_s->user1, "%d", &port);
   
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
-  addr.sin_addr.s_addr = inet_addr(i_s->dev_address);
+  addr.sin_addr.s_addr = inet_addr(IP_address);
   
   if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -50,7 +49,7 @@ int connect_tcp(struct inst_struct *i_s)
   
   if (connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0 )
     {
-      fprintf(stderr, "Could not make connection to: %s:%d \n", i_s->dev_address, port);
+      fprintf(stderr, "Could not make connection to: %s:%d \n", IP_address, port);
       my_signal = SIGTERM;
       close(fd);
       return(-1);
@@ -58,6 +57,16 @@ int connect_tcp(struct inst_struct *i_s)
   return(fd);
 }
 
+////// Establishes a TCP connection
+int connect_tcp(struct inst_struct *i_s)
+{
+  int port;
+
+  sscanf(i_s->user1, "%d", &port);
+  
+  return(connect_tcp_raw(i_s->dev_address, port));
+}
+ 
 
 int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count)
 {
