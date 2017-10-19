@@ -171,6 +171,7 @@ void set_up(void)
     }
 }
 
+
 void clean_up(void)
 {
    close(inst_dev_1);
@@ -179,7 +180,7 @@ void clean_up(void)
 }
 
 
-double read_z(void)
+int read_z(double *z_val)
 {
   char       cmd_string[64];
   char       ret_string[64];             
@@ -191,13 +192,14 @@ double read_z(void)
   if(sscanf(ret_string, "M0,%d", &return_int) != 1)
     {
       fprintf(stdout, "Bad return string: \"%s\" in read_z!\n", ret_string);
-      return(-2);
+      return(-1);
     }
-      
-  return((double)return_int/1000.0);
+
+  *z_val = (double)return_int/1000.0;
+  return(0);
 }
 
-double read_x(void)
+int read_x(double *x_val)
 {
   char       cmd_string[64];
   char       ret_string[64];             
@@ -207,24 +209,29 @@ double read_x(void)
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if (ret_string[0] == '-')
-   return(-1);
+    return(-1);
 
   if (sscanf(ret_string, "%d", &return_int) != 1)
     {
-      //fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
+      fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
       return(-1);
     }
 
-  if ((return_int == 1) || (return_int == -1))
-    return(-1);
-  
-  return((double)return_int/1000.0);
+  *x_val = (double)return_int/100.0;
+  return(0);
 }
 
 void home_x(void)
 {
   char       cmd_string[64];
   sprintf(cmd_string, "%d H 0\n", 2);
+  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
+}
+
+void halt_x(void)
+{
+  char       cmd_string[64];
+  sprintf(cmd_string, "%d X 0\n", 2);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
@@ -236,50 +243,67 @@ void goto_x(double target_x)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
+unsigned long read_counter(void)
+{
+  unsigned long  counts;
+  char       cmd_string[64]; 
+
+  sprintf(cmd_string, "%d C 0\n", 2);
+  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
+  
+  if (sscanf(ret_string, "%lu", &counts) !=1) 
+    {
+      fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+      return(1);
+    }
+  return(counts);
+}
+
+void reset_counter(void)
+{
+  char       cmd_string[64];
+  sprintf(cmd_string, "%d I 0\n", 2);
+  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
+}
 
 void scan(double X1, double X2, double dX)
 {
+  double x_val, z_val;
   double current_x = -1;
   double target_x;
   int i;
   
-  target_x = X1;
-  
-  goto_x(target_x);
+  goto_x(X1);
 
-  while (current_x == -1)
+  while (read_x(&x_val) == -1)
     {
-      current_x=read_x();
-      msleep(10);
+      msleep(100);
     }
   
-  for (i = 0; i < (int)((X2-X1)/dX); i++)
+  reset_counter();
+
+  goto_x(X2);
+  while (read_x(&x_val) == -1)
     {
-      target_x += dX;
-
-      goto_x(target_x);
-
-      current_x=read_x();
-      
-      while (current_x == -1)
-	{
-	  current_x=read_x();
-	  msleep(10);
-	}
-      
-      fprintf(stdout, "%lf, %lf \n", current_x, read_z());
+      read_z(&z_val);
+      current_x = read_counter()*0.000625 + X1;
+      fprintf(stdout, "%lf, %lf \n", current_x, z_val);
+      msleep(100);
     }
 }
 
 int main (int argc, char *argv[])
 {
   double XXX, X1, X2, dX;
+  double x_val, z_val;
   
   if (argc > 1)
     {
       if ((strncasecmp(argv[1], "help", 4) == 0) || (strncasecmp(argv[1], "-h", 2) == 0) || (strncasecmp(argv[1], "--h", 3) == 0))
 	{
 	  fprintf(stdout, "Usage: %s home            to 'home' the drive.\n", argv[0]);
+	  fprintf(stdout, "   or: %s halt            to halt motion. \n", argv[0]);
+	  fprintf(stdout, "   or: %s read            to read out the x and z values. \n", argv[0]);
 	  fprintf(stdout, "   or: %s goto XXX        to move the sensor to XXX(cm) \n", argv[0]);
 	  fprintf(stdout, "   or: %s scan X1 X2 dX   to scan from X1 to X2 in steps of dX (cm) \n", argv[0]);
 	  exit(1);
@@ -290,11 +314,20 @@ int main (int argc, char *argv[])
 	  home_x();
 	  clean_up();
 	}
+       else if (strncasecmp(argv[1], "halt", 4) == 0)
+	{
+	  set_up();
+	  halt_x();
+	  clean_up();
+	}
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
-	  fprintf(stdout, "Current X position: %f (cm).\n", read_x());
-	  fprintf(stdout, "Current Z position: %f (mm).\n", read_z());
+	  read_x(&x_val);
+	  read_z(&z_val);
+
+	  fprintf(stdout, "Current X position: %f (cm).\n", x_val);
+	  fprintf(stdout, "Current Z position: %f (mm).\n", z_val);
 
 	  clean_up();
 	}
