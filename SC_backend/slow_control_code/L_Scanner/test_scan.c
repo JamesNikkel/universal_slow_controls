@@ -290,7 +290,7 @@ void scan(double X1, double X2, double dX)
   while (read_x(&x_val) == -1)
     {
       read_z(&z_val);
-      current_x = read_counter()*0.000625 + X1;
+      current_x = (double)read_counter() * 0.000625 + X1;
       fprintf(stdout, "%lf, %lf \n", current_x, z_val);
       msleep(100);
     }
@@ -332,7 +332,8 @@ int main (int argc, char *argv[])
 
 	  fprintf(stdout, "Current X position: %f (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %f (mm).\n", z_val);
-
+	  fprintf(stdour, "Current counts:     %lu  .\n", read_counter());
+	  
 	  clean_up();
 	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
