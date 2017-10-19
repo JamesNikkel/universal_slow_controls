@@ -46,12 +46,12 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
     {
-      sprintf(cmd_string, "MS%c%c", CR, LF);
+      sprintf(cmd_string, "M0%c%c", CR, LF);
 	    
       //s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
       
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      if(sscanf(ret_string, "MS,%d", &return_int) != 1)
+      if(sscanf(ret_string, "M0,%d", &return_int) != 1)
 	{
 	  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
 	  return(1);
