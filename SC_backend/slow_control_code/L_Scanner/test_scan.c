@@ -241,22 +241,27 @@ void scan(double X1, double X2, double dX)
   
   goto_x(target_x);
 
-  while(abs(read_x() - X1) > dX)
+  while (read_x() == -1)
     {
       msleep(100);
     }
-  do
+
+  current_x=read_x();
+  
+  while (abs(current_x - X2) > dX)
     {
       target_x+=dX;
 
       goto_x(target_x);
 
-      while( (current_x=read_x()) < 0)
+      do
 	{
+	  current_x=read_x();
 	  msleep(10);
-	}
-      fprintf(stdout, "%lf, %lf \n", current_x, read_z);
-    } while (abs(current_x-X2) > dX);
+	} while ( current_x == -1);
+      
+      fprintf(stdout, "%lf, %lf \n", current_x, read_z());
+    }
   
 }
 
