@@ -247,6 +247,7 @@ unsigned long read_counter(void)
 {
   unsigned long  counts;
   char       cmd_string[64]; 
+  char       ret_string[64];             
 
   sprintf(cmd_string, "%d C 0\n", 2);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
