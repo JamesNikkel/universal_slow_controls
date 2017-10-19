@@ -303,7 +303,7 @@ int main (int argc, char *argv[])
 	}
       else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 4))
 	{
-	  if ((sscanf(argv[2], "%f", &X1) == 1) && (sscanf(argv[3], "%f", &X2) == 1) && (sscanf(argv[4], "%f", &dX) == 1))
+	  if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1) && (sscanf(argv[4], "%lf", &dX) == 1))
 	    {
 	      set_up();
 	      scan(X1, X2, dX);
