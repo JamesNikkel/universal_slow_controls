@@ -12,9 +12,7 @@ int connect_tcp_raw(char *IP_address, int port)
   int fd;
   int option;
   struct sockaddr_in addr;
-  
-  sscanf(i_s->user1, "%d", &port);
-  
+    
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
   addr.sin_addr.s_addr = inet_addr(IP_address);
