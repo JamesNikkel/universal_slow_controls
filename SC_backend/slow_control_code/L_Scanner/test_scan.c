@@ -152,7 +152,6 @@ int set_up(void)
     {
       printf("Connect 1 failed. \n");
       return(1);
-
     }     
   
   if ((inst_dev_2 = connect_tcp_raw("192.168.1.97", 5000)) < 0)
@@ -162,7 +161,7 @@ int set_up(void)
     }
 }
 
-double read_z(void);
+double read_z(void)
 {
   char       cmd_string[64];
   char       ret_string[64];             
@@ -180,7 +179,7 @@ double read_z(void);
   return((double)return_int/1000.0);
 }
 
-double read_x(void);
+double read_x(void)
 {
   char       cmd_string[64];
   char       ret_string[64];             
