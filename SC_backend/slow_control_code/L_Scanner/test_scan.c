@@ -296,7 +296,7 @@ int main (int argc, char *argv[])
 	      exit(1);
 	    }
 	}
-      else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 5))
+      else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 4))
 	{
 	  if ((sscanf(argv[2], "%f", &X1) == 1) && (sscanf(argv[3], "%f", &X2) == 1) && (sscanf(argv[4], "%f", &dX) == 1))
 	    {
