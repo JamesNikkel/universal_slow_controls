@@ -214,6 +214,10 @@ double read_x(void)
       fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
       return(-1);
     }
+
+  if (return_int == 1)
+    return(-1);
+  
   return((double)return_int/10.0);
 }
 
