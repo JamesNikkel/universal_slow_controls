@@ -10,6 +10,7 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 
+#include <strings.h>
 
 int inst_dev_1;
 int inst_dev_2;
@@ -27,8 +28,7 @@ int connect_tcp_raw(char *IP_address, int port)
   if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
       fprintf(stderr, "Could not make socket: %d \n", fd);
-      my_signal = SIGTERM;
-      return(-1);
+      exit(1);
     }
   
     // Set the TCP no delay flag
@@ -38,8 +38,7 @@ int connect_tcp_raw(char *IP_address, int port)
     {
       fprintf(stderr, "Could not set option: %d \n", option);
       close(fd);
-      my_signal = SIGTERM;
-	return(-1);
+      exit(1);
     }
   
   // Set the IP low delay option
@@ -48,8 +47,7 @@ int connect_tcp_raw(char *IP_address, int port)
     {
       fprintf(stderr, "Could not set option: %d \n", option);
       close(fd);
-      my_signal = SIGTERM;
-      return(-1);
+      exit(1);
     }
   
   if (connect(fd, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0 )
@@ -57,7 +55,7 @@ int connect_tcp_raw(char *IP_address, int port)
       fprintf(stderr, "Could not make connection to: %s:%d \n", IP_address, port);
       my_signal = SIGTERM;
       close(fd);
-      return(-1);
+      exit(1);
     }
   return(fd);
 }
