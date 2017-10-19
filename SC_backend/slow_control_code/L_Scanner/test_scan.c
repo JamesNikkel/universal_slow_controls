@@ -19,6 +19,9 @@
 int inst_dev_1;
 int inst_dev_2;
 
+static char CR   __attribute__ ((unused)) = 0x0D;
+static char LF   __attribute__ ((unused)) = 0x0A;
+
 int connect_tcp_raw(char *IP_address, int port)
 {
   int fd;
