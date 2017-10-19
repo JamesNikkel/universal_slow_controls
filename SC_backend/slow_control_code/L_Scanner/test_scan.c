@@ -276,34 +276,44 @@ int main (int argc, char *argv[])
 	  home_x();
 	  clean_up();
 	}
+      else if (strncasecmp(argv[1], "read", 4) == 0)
+	{
+	  set_up();
+	  fprintf(stdout, "Current position: %f (cm).\n", read_x());
+	  clean_up();
+	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
-	if (sscanf(argv[2], "%lf", &XXX) == 1)
-	  {
-	    set_up();
-	    goto_x(XXX);
-	    clean_up();
-	  }
-	else
-	  {
-	    fprintf(stdout, "Bad target value in 'goto'. \n");
-	    exit(1);
-	  }
+	{
+	  if (sscanf(argv[2], "%lf", &XXX) == 1)
+	    {
+	      set_up();
+	      goto_x(XXX);
+	      clean_up();
+	    }
+	  else
+	    {
+	      fprintf(stdout, "Bad target value in 'goto'. \n");
+	      exit(1);
+	    }
+	}
       else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 5))
-	if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1) && (sscanf(argv[4], "%lf", &dX) == 1))
-	  {
-	    set_up();
-	    scan(X1, X2, dX);
-	    clean_up();
-	  }
-	else
-	  {
-	    fprintf(stdout, "Bad values in 'scan'. \n");
-	    exit(1);
-	  }
+	{
+	  if ((sscanf(argv[2], "%f", &X1) == 1) && (sscanf(argv[3], "%f", &X2) == 1) && (sscanf(argv[4], "%f", &dX) == 1))
+	    {
+	      set_up();
+	      scan(X1, X2, dX);
+	      clean_up();
+	    }
+	  else
+	    {
+	      fprintf(stdout, "Bad values in 'scan'. \n");
+	      exit(1);
+	    }
+	}
       else
 	{
-	    fprintf(stdout, "Bad command.  Try --help \n");
-	    exit(1);
+	  fprintf(stdout, "Bad command.  Try --help \n");
+	  exit(1);
 	}
     }
 }
