@@ -218,7 +218,7 @@ double read_x(void)
   if ((return_int == 1) || (return_int == -1))
     return(-1);
   
-  return((double)return_int/10.0);
+  return((double)return_int/10000.0);
 }
 
 void home_x(void)
