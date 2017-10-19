@@ -156,20 +156,28 @@ int write_tcp(int fd, char *cmd_string, size_t c_count)
 
 
 
-int set_up(void)
+void set_up(void)
 {
   if ((inst_dev_1 = connect_tcp_raw("192.168.1.5", 64000)) < 0)
     {
       printf("Connect 1 failed. \n");
-      return(1);
+      exit(1);
     }     
   
   if ((inst_dev_2 = connect_tcp_raw("192.168.1.97", 5000)) < 0)
     {
       printf("Connect 2 failed. \n");
-      return(1);
+      exit(1);
     }
 }
+
+void clean_up(void)
+{
+   close(inst_dev_1);
+   close(inst_dev_2);
+   exit(1);
+}
+
 
 double read_z(void)
 {
@@ -253,9 +261,6 @@ int main (int argc, char *argv[])
 {
   double XXX, X1, X2, dX;
   
-  if (set_up())
-    exit(1);
-  
   if (argc > 1)
     {
       if ((strncasecmp(argv[1], "help", 4) == 0) || (strncasecmp(argv[1], "-h", 2) == 0) || (strncasecmp(argv[1], "--h", 3) == 0))
@@ -267,22 +272,16 @@ int main (int argc, char *argv[])
 	}
       else if (strncasecmp(argv[1], "home", 4) == 0)
 	{
-	  if (set_up())
-	    exit(1);
+	  set_up();
 	  home_x();
-	  close(inst_dev_1);
-	  close(inst_dev_2);
-	  exit(1);
+	  clean_up();
 	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
 	if (sscanf(argv[2], "%lf", &XXX) == 1)
 	  {
-	    if (set_up())
-	      exit(1);
+	    set_up();
 	    goto_x(XXX);
-	    close(inst_dev_1);
-	    close(inst_dev_2);
-	    exit(1);
+	    clean_up();
 	  }
 	else
 	  {
@@ -292,12 +291,9 @@ int main (int argc, char *argv[])
       else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 5))
 	if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1) && (sscanf(argv[4], "%lf", &dX) == 1))
 	  {
-	    if (set_up())
-	      exit(1);
+	    set_up();
 	    scan(X1, X2, dX);
-	    close(inst_dev_1);
-	    close(inst_dev_2);
-	    exit(1);
+	    clean_up();
 	  }
 	else
 	  {
