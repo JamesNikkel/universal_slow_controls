@@ -198,33 +198,19 @@ double read_x(void);
 
 void home_x(void)
 {
-  sprintf(cmd_string, "%d H 0\n", 2, (int)(10*dx));
+  char       cmd_string[64];
+  sprintf(cmd_string, "%d H 0\n", 2);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
 
 void goto_x(double target_x);
 {
-  char       cmd_string[64];
-  char       ret_string[64];             
-  int        return_int;
-  
+  char       cmd_string[64]; 
   sprintf(cmd_string, "%d G %d\n", 2, (int)(10*target_x));
-
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
-
-void extend_x(double dx);
-{
-  char       cmd_string[64];
-  char       ret_string[64];             
-  int        return_int;
-  
-  sprintf(cmd_string, "%d E %d\n", 2, (int)(10*dx));
-
-  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
-}
 
 void scan(double X1, double X2, double dX)
 {
