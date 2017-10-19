@@ -216,8 +216,11 @@ int read_x(double *x_val)
       fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
       return(-1);
     }
-
+  if ((return_int == 1) ||  (return_int == -1))
+    return(-1);
+  
   *x_val = (double)return_int/100.0;
+  
   return(0);
 }
 
