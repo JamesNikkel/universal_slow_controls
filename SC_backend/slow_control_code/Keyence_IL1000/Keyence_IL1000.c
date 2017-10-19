@@ -48,11 +48,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       sprintf(cmd_string, "MO%c%c", CR, LF);
 	    
-
       //s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
       
-      sprintf(cmd_string, "%d R 0\n", s_s->num);
-
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       if(sscanf(ret_string, "MO,%d", &return_int) != 1)
 	{
@@ -60,7 +57,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  return(1);
 	}
       
-      *val_out = (double)return_int_1/1000.0;
+      *val_out = (double)return_int/1000.0;
       msleep(500);
     }
   return(0);
