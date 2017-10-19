@@ -248,7 +248,7 @@ int main (int argc, char *argv[])
   double XXX, X1, X2, dX;
   
   if (set_up())
-    exit();
+    exit(1);
   
   if (argc > 1)
     {
@@ -257,51 +257,51 @@ int main (int argc, char *argv[])
 	  fprintf(stdout, "Usage: %s home            to 'home' the drive.\n", argv[0]);
 	  fprintf(stdout, "   or: %s goto XXX        to move the sensor to XXX(cm) \n", argv[0]);
 	  fprintf(stdout, "   or: %s scan X1 X2 dX   to scan from X1 to X2 in steps of dX (cm) \n", argv[0]);
-	  exit();
+	  exit(1);
 	}
       else if (strncasecmp(argv[1], "home", 4) == 0)
 	{
 	  if (set_up())
-	    exit();
+	    exit(1);
 	  home_x();
 	  close(inst_dev_1);
 	  close(inst_dev_2);
-	  exit();
+	  exit(1);
 	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
 	if (sscanf(argv[2], &XXX) == 1)
 	  {
 	    if (set_up())
-	      exit();
+	      exit(1);
 	    goto_x(XXX);
 	    close(inst_dev_1);
 	    close(inst_dev_2);
-	    exit();
+	    exit(1);
 	  }
 	else
 	  {
 	    fprintf(stdout, "Bad target value in 'goto'. \n");
-	    exit();
+	    exit(1);
 	  }
       else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 5))
 	if ((sscanf(argv[2], &X1) == 1) && (sscanf(argv[2], &X2) == 1) && (sscanf(argv[2], &dX) == 1))
 	  {
 	    if (set_up())
-	      exit();
+	      exit(1);
 	    scan(X1, X2, dX);
 	    close(inst_dev_1);
 	    close(inst_dev_2);
-	    exit();
+	    exit(1);
 	  }
 	else
 	  {
 	    fprintf(stdout, "Bad values in 'scan'. \n");
-	    exit();
+	    exit(1);
 	  }
       else
 	{
 	    fprintf(stdout, "Bad command.  Try --help \n");
-	    exit();
+	    exit(1);
 	}
     }
 }
