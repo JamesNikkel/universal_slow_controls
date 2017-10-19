@@ -250,7 +250,7 @@ void scan(double X1, double X2, double dX)
   while (current_x == -1)
     {
       current_x=read_x();
-      msleep(100);
+      msleep(10);
     }
   
   for (i = 0; i < (int)((X2-X1)/dX); i++)
@@ -264,7 +264,7 @@ void scan(double X1, double X2, double dX)
       while (current_x == -1)
 	{
 	  current_x=read_x();
-	  msleep(100);
+	  msleep(10);
 	}
       
       fprintf(stdout, "%lf, %lf \n", current_x, read_z());
