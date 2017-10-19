@@ -238,7 +238,7 @@ void scan(double X1, double X2, double dX)
   
   goto_x(target_x);
 
-  while((abs(read_x() - X1)) > dX)
+  while(abs(read_x() - X1) > dX)
     {
       msleep(100);
     }
@@ -248,7 +248,7 @@ void scan(double X1, double X2, double dX)
 
       goto_x(target_x);
 
-      while ((current_x=read_x()) < 0)
+      while( (current_x=read_x()) < 0)
 	{
 	  msleep(10);
 	}
@@ -279,7 +279,9 @@ int main (int argc, char *argv[])
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
-	  fprintf(stdout, "Current position: %f (cm).\n", read_x());
+	  fprintf(stdout, "Current X position: %f (cm).\n", read_x());
+	  fprintf(stdout, "Current Z position: %f (mm).\n", read_z());
+
 	  clean_up();
 	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
