@@ -342,13 +342,13 @@ int main (int argc, char *argv[])
 	{
 	  set_up();
 	  i = 0;
-	  while ((read_x(&x_val) == -1) || (i > max_tries))
+	  while ((read_x(&x_val) == -1) && (i < max_tries))
 	    {
 	      msleep(20);
 	      i++;
 	    }
 	  i = 0;
-	  while ((read_z(&z_val) == -1)|| (i > max_tries))
+	  while ((read_z(&z_val) == -1) && (i < max_tries))
 	    {
 	      msleep(20);
 	      i++;
