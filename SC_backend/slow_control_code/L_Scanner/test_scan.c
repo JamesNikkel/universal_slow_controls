@@ -318,7 +318,7 @@ void scan(double X1, double X2, double dX)
   goto_x(X2);
   msleep(10);
   
-  while (read_x(&x_val) != 0)
+  for (i = 1; i<100; i++)
     {
       while (read_counter(&counts) != -1)
 	{
