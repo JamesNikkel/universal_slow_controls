@@ -253,8 +253,9 @@ unsigned long read_counter(void)
   char       ret_string[64];             
 
   sprintf(cmd_string, "%d C 0\n", 2);
-  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
-  
+
+  query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
   if (sscanf(ret_string, "%lu", &counts) !=1) 
     {
       fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
