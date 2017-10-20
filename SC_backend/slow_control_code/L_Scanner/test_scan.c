@@ -203,21 +203,30 @@ int read_x(double *x_val)
 {
   char       cmd_string[64];
   char       ret_string[64];             
-  int        return_int;
+  int        return_int_1;
+  int        return_int_2;
   
   sprintf(cmd_string, "%d R 0\n", 2);
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-  if (ret_string[0] == '-')
-    return(-1);
-
-  if (sscanf(ret_string, "%d", &return_int) != 1)
+  if(sscanf(ret_string, "%d", &return_int_1) != 1)
     {
-      fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
+      fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
       return(-1);
     }
-  
-  if ((return_int == 1) ||  (return_int == -1))
+  msleep(500);
+	    
+  query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  if(sscanf(ret_string, "%d", &return_int_2) != 1)
+    {
+      fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
+      return(-1);
+    }
+
+  if (return_int_1 !=return_int_2)
+    return(-1);
+
+  if (return_int_1 < 0)
     return(-1);
   
   *x_val = (double)return_int/100.0;
