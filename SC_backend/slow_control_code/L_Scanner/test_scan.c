@@ -347,7 +347,7 @@ int main (int argc, char *argv[])
 	  
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
-	  fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
+	  //fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
 	  
 	  clean_up();
 	}
