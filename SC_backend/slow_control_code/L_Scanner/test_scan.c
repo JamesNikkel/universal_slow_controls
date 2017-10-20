@@ -281,13 +281,13 @@ int read_counter(long *counts)
       return(-1);
     }
 
-  if (counts_1 != counts_2)
+  //if (counts_1 != counts_2)
+  // return(-1);
+
+  if (counts_2 < 0)
     return(-1);
 
-  if (counts_1 < 0)
-    return(-1);
-
-  *counts = counts_1;
+  *counts = counts_2;
   return(0);
 }
 
@@ -316,6 +316,7 @@ void scan(double X1, double X2, double dX)
   reset_counter();
 
   goto_x(X2);
+  msleep(10);
   
   while (read_x(&x_val) != 0)
     {
@@ -364,14 +365,12 @@ int main (int argc, char *argv[])
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
-	  /*
 	  i = 0;
 	  while ((read_x(&x_val) == -1) && (i < max_tries))
 	    {
 	      msleep(20);
 	      i++;
 	    }
-	  */
 	  i = 0;
 	  while ((read_z(&z_val) == -1) && (i < max_tries))
 	    {
