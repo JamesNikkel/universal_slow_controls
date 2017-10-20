@@ -364,12 +364,14 @@ int main (int argc, char *argv[])
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
+	  /*
 	  i = 0;
 	  while ((read_x(&x_val) == -1) && (i < max_tries))
 	    {
 	      msleep(20);
 	      i++;
 	    }
+	  */
 	  i = 0;
 	  while ((read_z(&z_val) == -1) && (i < max_tries))
 	    {
