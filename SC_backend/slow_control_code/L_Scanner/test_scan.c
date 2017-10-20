@@ -339,9 +339,11 @@ int main (int argc, char *argv[])
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
+	  msleep(50);
 	  read_x(&x_val);
+	  msleep(50);
 	  read_z(&z_val);
-
+	  msleep(50);
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
 	  fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
