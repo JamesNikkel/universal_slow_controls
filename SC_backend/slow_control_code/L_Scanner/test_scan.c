@@ -216,6 +216,7 @@ int read_x(double *x_val)
       fprintf(stdout, "Bad return string: \"%s\" in read_x!\n", ret_string);
       return(-1);
     }
+  
   if ((return_int == 1) ||  (return_int == -1))
     return(-1);
   
@@ -258,7 +259,7 @@ unsigned long read_counter(void)
 
   if (sscanf(ret_string, "%lu", &counts) !=1) 
     {
-      fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+      fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
       return(1);
     }
   return(counts);
@@ -280,7 +281,7 @@ void scan(double X1, double X2, double dX)
   
   goto_x(X1);
 
-  while (read_x(&x_val) == -1)
+  while (read_x(&x_val) != 0)
     {
       msleep(100);
     }
@@ -288,7 +289,8 @@ void scan(double X1, double X2, double dX)
   reset_counter();
 
   goto_x(X2);
-  while (read_x(&x_val) == -1)
+  
+  while (read_x(&x_val) != 0)
     {
       read_z(&z_val);
       current_x = (double)read_counter() * 0.000625 + X1;
