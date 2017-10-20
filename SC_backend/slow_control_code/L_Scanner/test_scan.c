@@ -312,6 +312,8 @@ int main (int argc, char *argv[])
 {
   double XXX, X1, X2, dX;
   double x_val, z_val;
+  int max_tries = 10;
+  int i = 0;
   
   if (argc > 1)
     {
@@ -339,13 +341,17 @@ int main (int argc, char *argv[])
       else if (strncasecmp(argv[1], "read", 4) == 0)
 	{
 	  set_up();
-	  while (read_x(&x_val) == -1)
+	  i = 0;
+	  while ((read_x(&x_val) == -1) || (i > max_tries))
 	    {
 	      msleep(20);
+	      i++;
 	    }
-	  while (read_z(&z_val) == -1)
+	  i = 0;
+	  while ((read_z(&z_val) == -1)|| (i > max_tries))
 	    {
 	      msleep(20);
+	      i++;
 	    }
 	  
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
