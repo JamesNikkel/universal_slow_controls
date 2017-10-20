@@ -229,7 +229,7 @@ int read_x(double *x_val)
   if (return_int_1 < 0)
     return(-1);
   
-  *x_val = (double)return_int/100.0;
+  *x_val = (double)return_int_1/100.0;
   
   return(0);
 }
