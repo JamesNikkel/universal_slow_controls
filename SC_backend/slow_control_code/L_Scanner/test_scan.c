@@ -214,7 +214,7 @@ int read_x(double *x_val)
       fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
       return(-1);
     }
-  msleep(500);
+  msleep(50);
 	    
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if(sscanf(ret_string, "%d", &return_int_2) != 1)
