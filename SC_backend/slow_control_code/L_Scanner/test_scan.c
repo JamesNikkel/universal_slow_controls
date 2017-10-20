@@ -320,14 +320,13 @@ void scan(double X1, double X2, double dX)
   
   for (i = 1; i<100; i++)
     {
-      while (read_counter(&counts) != -1)
+      if (read_counter(&counts) == 0)
 	{
-	  msleep(10);
+	  read_z(&z_val);
+	  current_x = (double)counts * 0.000625 + X1;
+	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
+	  msleep(100);
 	}
-      read_z(&z_val);
-      current_x = (double)counts * 0.000625 + X1;
-      fprintf(stdout, "%lf, %lf \n", current_x, z_val);
-      msleep(100);
     }
 }
 
