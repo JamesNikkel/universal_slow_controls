@@ -263,7 +263,7 @@ int read_counter(long *counts)
   char       cmd_string[16]; 
   char       ret_string[16];             
 
-  sprintf(cmd_string, "%d C 0\n", 2);
+  sprintf(cmd_string, "%d C 0\n", 0);
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if (sscanf(ret_string, "%ld", &counts_1) !=1) 
