@@ -268,7 +268,7 @@ int read_counter(long *counts)
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if (sscanf(ret_string, "%ld", &counts_1) !=1) 
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
+      //fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
       return(-1);
     }
 
@@ -277,7 +277,7 @@ int read_counter(long *counts)
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if (sscanf(ret_string, "%ld", &counts_2) !=1) 
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
+      //fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
       return(-1);
     }
 
@@ -320,7 +320,7 @@ void scan(double X1, double X2, double dX)
   
   while (read_x(&x_val) != 0)
     {
-      while (read_counter(&counts) == -1)
+      while (read_counter(&counts) != -1)
 	{
 	  msleep(10);
 	}
