@@ -314,18 +314,18 @@ void scan(double X1, double X2, double dX)
     }
   
   reset_counter();
-
+  
   goto_x(X2);
   msleep(10);
   
-  for (i = 1; i<100; i++)
+  while (current_x + 1 < X2)
     {
       if (read_counter(&counts) == 0)
 	{
 	  read_z(&z_val);
 	  current_x = (double)counts * 0.000625 + X1;
 	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
-	  msleep(100);
+	  msleep(500);
 	}
     }
 }
