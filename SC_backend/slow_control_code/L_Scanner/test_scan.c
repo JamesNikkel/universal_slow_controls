@@ -211,7 +211,7 @@ int read_x(double *x_val)
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if(sscanf(ret_string, "%d", &return_int_1) != 1)
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
+      //fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
       return(-1);
     }
   msleep(50);
@@ -219,7 +219,7 @@ int read_x(double *x_val)
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if(sscanf(ret_string, "%d", &return_int_2) != 1)
     {
-      fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
+      //fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
       return(-1);
     }
 
@@ -256,22 +256,39 @@ void goto_x(double target_x)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
-long read_counter(void)
+int read_counter(long *counts)
 {
-  long       counts;
+  long       counts_1;
+  long       counts_2;
   char       cmd_string[16]; 
   char       ret_string[16];             
 
   sprintf(cmd_string, "%d C 0\n", 2);
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
-  if (sscanf(ret_string, "%ld", &counts) !=1) 
+  if (sscanf(ret_string, "%ld", &counts_1) !=1) 
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
       return(-1);
     }
-  return(counts);
+
+  msleep(5);
+  
+  query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+  if (sscanf(ret_string, "%ld", &counts_2) !=1) 
+    {
+      fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
+      return(-1);
+    }
+
+  if (counts_1 != counts_2)
+    return(-1);
+
+  if (counts_1 < 0)
+    return(-1);
+
+  *counts = counts_1;
+  return(0);
 }
 
 void reset_counter(void)
@@ -286,6 +303,7 @@ void scan(double X1, double X2, double dX)
   double x_val, z_val;
   double current_x = -1;
   double target_x;
+  long   counts;
   int i;
   
   goto_x(X1);
@@ -301,8 +319,12 @@ void scan(double X1, double X2, double dX)
   
   while (read_x(&x_val) != 0)
     {
+      while (read_counter(&counts) == -1)
+	{
+	  msleep(10);
+	}
       read_z(&z_val);
-      current_x = (double)read_counter() * 0.000625 + X1;
+      current_x = (double)counts * 0.000625 + X1;
       fprintf(stdout, "%lf, %lf \n", current_x, z_val);
       msleep(100);
     }
@@ -312,6 +334,7 @@ int main (int argc, char *argv[])
 {
   double XXX, X1, X2, dX;
   double x_val, z_val;
+  long   counts;
   int max_tries = 10;
   int i = 0;
   
@@ -353,10 +376,15 @@ int main (int argc, char *argv[])
 	      msleep(20);
 	      i++;
 	    }
-	  
+	   i = 0;
+	  while ((read_counter(&counts) == -1) && (i < max_tries))
+	    {
+	      msleep(20);
+	      i++;
+	    }
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
-	  fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
+	  fprintf(stdout, "Current counts:     %ld  .\n",    counts);
 	  
 	  clean_up();
 	}
