@@ -247,7 +247,7 @@ void goto_x(double target_x)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
-unsigned long read_counter(void)
+long read_counter(void)
 {
   unsigned long  counts;
   char       cmd_string[64]; 
@@ -257,10 +257,10 @@ unsigned long read_counter(void)
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-  if (sscanf(ret_string, "%lu", &counts) !=1) 
+  if (sscanf(ret_string, "%ld", &counts) !=1) 
     {
       fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
-      return(1);
+      return(-1);
     }
   return(counts);
 }
@@ -335,7 +335,7 @@ int main (int argc, char *argv[])
 
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
-	  fprintf(stdout, "Current counts:     %lu  .\n", read_counter());
+	  fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
 	  
 	  clean_up();
 	}
