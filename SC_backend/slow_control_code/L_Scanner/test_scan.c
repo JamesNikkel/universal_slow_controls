@@ -201,8 +201,8 @@ int read_z(double *z_val)
 
 int read_x(double *x_val)
 {
-  char       cmd_string[64];
-  char       ret_string[64];             
+  char       cmd_string[16];
+  char       ret_string[16];             
   int        return_int_1;
   int        return_int_2;
   
@@ -258,9 +258,9 @@ void goto_x(double target_x)
 
 long read_counter(void)
 {
-  unsigned long  counts;
-  char       cmd_string[64]; 
-  char       ret_string[64];             
+  long       counts;
+  char       cmd_string[16]; 
+  char       ret_string[16];             
 
   sprintf(cmd_string, "%d C 0\n", 2);
 
@@ -344,6 +344,7 @@ int main (int argc, char *argv[])
 	  msleep(50);
 	  read_z(&z_val);
 	  msleep(50);
+	  
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
 	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
 	  fprintf(stdout, "Current counts:     %ld  .\n", read_counter());
