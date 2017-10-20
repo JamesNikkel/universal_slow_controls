@@ -256,7 +256,7 @@ unsigned long read_counter(void)
 
   query_tcp(inst_dev_2, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-  if (sscanf(ret_string, "%l", &counts) !=1) 
+  if (sscanf(ret_string, "%lu", &counts) !=1) 
     {
       fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
       return(1);
@@ -331,9 +331,9 @@ int main (int argc, char *argv[])
 	  read_x(&x_val);
 	  read_z(&z_val);
 
-	  fprintf(stdout, "Current X position: %f (cm).\n", x_val);
-	  fprintf(stdout, "Current Z position: %f (mm).\n", z_val);
-	  fprintf(stdout, "Current counts:     %l  .\n", read_counter());
+	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
+	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
+	  fprintf(stdout, "Current counts:     %lu  .\n", read_counter());
 	  
 	  clean_up();
 	}
