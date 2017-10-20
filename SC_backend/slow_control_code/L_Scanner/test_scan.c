@@ -325,7 +325,7 @@ void scan(double X1, double X2, double dX)
 	  read_z(&z_val);
 	  current_x = (double)counts * 0.000625 + X1;
 	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
-	  msleep(500);
+	  msleep(50);
 	}
     }
 }
