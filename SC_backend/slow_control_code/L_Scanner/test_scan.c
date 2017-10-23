@@ -20,6 +20,7 @@
 
 int inst_dev_1;
 int inst_dev_2;
+double x_scan_rate = -1; // cm/sec;
 
 static char CR   __attribute__ ((unused)) = 0x0D;
 static char LF   __attribute__ ((unused)) = 0x0A;
@@ -179,7 +180,6 @@ void clean_up(void)
    exit(1);
 }
 
-
 int read_z(double *z_val)
 {
   char       cmd_string[64];
@@ -194,8 +194,11 @@ int read_z(double *z_val)
       fprintf(stdout, "Bad return string: \"%s\" in read_z!\n", ret_string);
       return(-1);
     }
-
+ 
   *z_val = (double)return_int/1000.0;
+
+  if (return_int < 0)
+    return(-1);
   return(0);
 }
 
@@ -298,16 +301,53 @@ void reset_counter(void)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
+void calibrate_x(void)
+{
+  double x_val;
+  double x_vals[100];
+  
+  int i;
+  
+  
+  while (read_x(&x_val) != 0)
+    {
+      msleep(100);
+    }
+
+  goto_x(x_val+5);  // extend 5 cm
+
+  for (i=0; i<100; i++)
+    {
+      if (read_counter(&counts) == 0)
+	{
+	  current_x = (double)counts * 0.000625 + X1;
+	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
+	  msleep(50);
+	}
+    }
+
+  
+}
+
 void scan(double X1, double X2, double dX)
 {
   double x_val, z_val;
   double current_x = -1;
   double target_x;
   long   counts;
-  int i;
   
-  goto_x(X1);
+  if (X2<X1)
+    {
+      fprintf(stdout, "X2 must be greater than X1.\n");
+      exit(1);
+    }
+  
+  //goto_x(X1);
 
+  //calibrate_x();
+
+  goto_x(X1);
+  
   while (read_x(&x_val) != 0)
     {
       msleep(100);
