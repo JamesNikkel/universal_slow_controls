@@ -20,7 +20,6 @@
 
 int inst_dev_1;
 int inst_dev_2;
-double x_scan_rate = -1; // cm/sec;
 
 static char CR   __attribute__ ((unused)) = 0x0D;
 static char LF   __attribute__ ((unused)) = 0x0A;
@@ -77,7 +76,7 @@ int connect_tcp_raw(char *IP_address, int port)
 
 int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count)
 {
-  ssize_t rdstatus;   
+  size_t rdstatus;   
   int     select_ret;
   fd_set  rfds;
   struct timeval tv;
@@ -180,7 +179,8 @@ void clean_up(void)
    exit(1);
 }
 
-int read_z(double *z_val)
+
+int read_y(double *y_val)
 {
   char       cmd_string[64];
   char       ret_string[64];             
@@ -191,14 +191,11 @@ int read_z(double *z_val)
   query_tcp(inst_dev_1, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   if(sscanf(ret_string, "M0,%d", &return_int) != 1)
     {
-      fprintf(stdout, "Bad return string: \"%s\" in read_z!\n", ret_string);
+      fprintf(stdout, "Bad return string: \"%s\" in read_y!\n", ret_string);
       return(-1);
     }
- 
-  *z_val = (double)return_int/1000.0;
 
-  if (return_int < 0)
-    return(-1);
+  *y_val = (double)return_int/1000.0;
   return(0);
 }
 
@@ -301,53 +298,17 @@ void reset_counter(void)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
-void calibrate_x(void)
-{
-  double x_val;
-  double x_vals[100];
-  
-  int i;
-  
-  
-  while (read_x(&x_val) != 0)
-    {
-      msleep(100);
-    }
-
-  goto_x(x_val+5);  // extend 5 cm
-
-  for (i=0; i<100; i++)
-    {
-      if (read_counter(&counts) == 0)
-	{
-	  current_x = (double)counts * 0.000625 + X1;
-	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
-	  msleep(50);
-	}
-    }
-
-  
-}
-
 void scan(double X1, double X2, double dX)
 {
-  double x_val, z_val;
+  double x_val, y_val;
   double current_x = -1;
   double target_x;
-  long   counts;
-  
-  if (X2<X1)
-    {
-      fprintf(stdout, "X2 must be greater than X1.\n");
-      exit(1);
-    }
-  
-  //goto_x(X1);
-
-  //calibrate_x();
+  long   counts = 0;
+  long   prev_counts = -1;
+  int i;
 
   goto_x(X1);
-  
+
   while (read_x(&x_val) != 0)
     {
       msleep(100);
@@ -358,13 +319,17 @@ void scan(double X1, double X2, double dX)
   goto_x(X2);
   msleep(10);
   
-  while (current_x + 1 < X2)
+  i = 0;
+  while (i<10)
     {
       if (read_counter(&counts) == 0)
 	{
-	  read_z(&z_val);
+	  if (counts == prev_counts)
+	    i++;
+	  prev_counts = counts; 
+	  read_y(&y_val);
 	  current_x = (double)counts * 0.000625 + X1;
-	  fprintf(stdout, "%lf, %lf \n", current_x, z_val);
+	  fprintf(stdout, "%lf, %lf \n", current_x, y_val);
 	  msleep(50);
 	}
     }
@@ -373,7 +338,7 @@ void scan(double X1, double X2, double dX)
 int main (int argc, char *argv[])
 {
   double XXX, X1, X2, dX;
-  double x_val, z_val;
+  double x_val, y_val;
   long   counts;
   int max_tries = 10;
   int i = 0;
@@ -384,7 +349,7 @@ int main (int argc, char *argv[])
 	{
 	  fprintf(stdout, "Usage: %s home            to 'home' the drive.\n", argv[0]);
 	  fprintf(stdout, "   or: %s halt            to halt motion. \n", argv[0]);
-	  fprintf(stdout, "   or: %s read            to read out the x and z values. \n", argv[0]);
+	  fprintf(stdout, "   or: %s read            to read out the x and y values. \n", argv[0]);
 	  fprintf(stdout, "   or: %s goto XXX        to move the sensor to XXX(cm) \n", argv[0]);
 	  fprintf(stdout, "   or: %s scan X1 X2 dX   to scan from X1 to X2 in steps of dX (cm) \n", argv[0]);
 	  exit(1);
@@ -411,7 +376,7 @@ int main (int argc, char *argv[])
 	      i++;
 	    }
 	  i = 0;
-	  while ((read_z(&z_val) == -1) && (i < max_tries))
+	  while ((read_y(&y_val) == -1) && (i < max_tries))
 	    {
 	      msleep(20);
 	      i++;
@@ -423,7 +388,7 @@ int main (int argc, char *argv[])
 	      i++;
 	    }
 	  fprintf(stdout, "Current X position: %lf (cm).\n", x_val);
-	  fprintf(stdout, "Current Z position: %lf (mm).\n", z_val);
+	  fprintf(stdout, "Current Y position: %lf (mm).\n", y_val);
 	  fprintf(stdout, "Current counts:     %ld  .\n",    counts);
 	  
 	  clean_up();

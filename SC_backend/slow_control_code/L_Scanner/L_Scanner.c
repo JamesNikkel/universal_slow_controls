@@ -29,7 +29,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
     }
   
   
-  if ((inst_dev_2 = connect_tcp_raw()) < 0)
+  if ((inst_dev_2 = connect_tcp_raw(i_s->user2, (int)i_s->parm2)) < 0)
     {
       fprintf(stderr, "Connect failed. \n");
       my_signal = SIGTERM;
@@ -43,8 +43,12 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 #define _def_clean_up_inst
 void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 {
-  close(inst_dev);
+   close(inst_dev_1);
+   close(inst_dev_2);
 }
+
+
+
 
 #define _def_read_sensor
 int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_out)
@@ -60,7 +64,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	    
       //s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
       
-      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+      query_tcp(inst_dev_1, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       if(sscanf(ret_string, "M0,%d", &return_int) != 1)
 	{
 	  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
