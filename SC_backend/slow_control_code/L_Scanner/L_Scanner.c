@@ -97,7 +97,9 @@ int read_y(double *y_val)
       fprintf(stdout, "Bad return string: \"%s\" in read_y!\n", ret_string);
       return(-1);
     }
-
+  if (return_int < 0)
+    return(-1);
+  
   *y_val = (double)return_int/1000.0;
   return(0);
 }
@@ -232,12 +234,14 @@ int tries;
 	  if (counts == prev_counts)
 	    tries++;
 	  prev_counts = counts; 
-	  read_y(&y_val);
-	  current_x = (double)counts * 0.000625 + X1;
-	  x_array[i] = current_x;
-	  y_array[i] = y_val;
-	  i++;
-	  //fprintf(stdout, "%lf, %lf \n", current_x, y_val);
+	  if ( read_y(&y_val)  == 0 )
+	    {
+	      current_x = (double)counts * 0.000625 + X1;
+	      x_array[i] = current_x;
+	      y_array[i] = y_val;
+	      i++;
+	      //fprintf(stdout, "%lf, %lf \n", current_x, y_val);
+	    }
 	  msleep(50);
 	}
     }
