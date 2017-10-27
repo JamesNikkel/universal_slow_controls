@@ -63,7 +63,7 @@ int insert_mysql_xy_data(char *sensor_name, time_t t_in, double v_in, double r_i
   int ret_val = 0;
   char *query_strng;  
   
-  query_strng = malloc((strlen(sensor_name)+strlen(x)+strlen(x)+1024) * sizeof(char));
+  query_strng = malloc((strlen(sensor_name)+strlen(x_text)+strlen(y_text)+1024) * sizeof(char));
   
   if (query_strng == NULL)
     {
@@ -73,7 +73,7 @@ int insert_mysql_xy_data(char *sensor_name, time_t t_in, double v_in, double r_i
   
   sprintf(query_strng, 
 	  "INSERT INTO `sc_sens_%s` ( `time`, `value`, `rate`, `x_data`, `y_data`) VALUES ( %d, %f, %f, \"%s\", \"%s\")",
-	  sensor_name, t_in, v_in, r_in, x, y, 
+	  sensor_name, t_in, v_in, r_in, x_text, y_text, 
 	  );
   ret_val += write_to_mysql(query_strng);
   
@@ -257,7 +257,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       s_s->data_type = DONT_AVERAGE_DATA;
 
-      if ( read_x(*val_out) )
+      if ( read_x(val_out) )
 	return(1);
       
       return(0);
@@ -268,7 +268,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       s_s->data_type = DONT_AVERAGE_DATA;
       
-      if ( read_y(*val_out) )
+      if ( read_y(val_out) )
 	return(1);
       
       return(0);
@@ -282,7 +282,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 	  scan();
 	  do_scan = 0;
-	  insert_mysql_xy_data(s_s->name, time(), 0, 0, x_text, y_text);
+	  insert_mysql_xy_data(s_s->name, time(NULL), 0, 0, x_text, y_text);
 	}
     }
   else
