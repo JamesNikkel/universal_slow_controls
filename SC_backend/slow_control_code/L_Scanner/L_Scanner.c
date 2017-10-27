@@ -23,10 +23,8 @@ double X2 = 20;
 
 double x_array[6000];
 double y_array[6000];
-char   x_text[4200];
-char   y_text[4200];
-
-int    data_length = 0;
+char   x_text[42000];
+char   y_text[42000];
 
 int    do_scan = 0;
 
@@ -210,8 +208,7 @@ void scan(void)
   long   counts = 0;
   long   prev_counts = -1;
   int i;
-int tries;
-  int data_length;
+  int tries;
 
   goto_x(X1);
 
@@ -282,10 +279,10 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   else if (strncmp(s_s->subtype, "Scan", 2) == 0)  // do the scan and dump to the DB
     {
       if (do_scan == 1)
-	{
+	{ 
+	  do_scan = 0;
 	  s_s->data_type = DONT_AVERAGE_DATA_OR_INSERT;
 	  scan();
-	  do_scan = 0;
 	  insert_mysql_xy_data(s_s->name, time(NULL), 0, 0, x_text, y_text);
 	}
     }
