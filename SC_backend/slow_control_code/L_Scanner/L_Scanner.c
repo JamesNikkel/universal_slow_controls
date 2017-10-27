@@ -93,10 +93,10 @@ int read_y(double *y_val)
   if(sscanf(ret_string, "M0,%d", &return_int) != 1)
     {
       fprintf(stdout, "Bad return string: \"%s\" in read_y!\n", ret_string);
-      return(-1);
+      return(1);
     }
   if (return_int < 0)
-    return(-1);
+    return(1);
   
   *y_val = (double)return_int/1000.0;
   return(0);
@@ -116,7 +116,7 @@ int read_x(double *x_val)
   if(sscanf(ret_string, "%d", &return_int_1) != 1)
     {
       //fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
-      return(-1);
+      return(1);
     }
   msleep(50);
 	    
@@ -124,14 +124,14 @@ int read_x(double *x_val)
   if(sscanf(ret_string, "%d", &return_int_2) != 1)
     {
       //fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
-      return(-1);
+      return(1);
     }
 
   if (return_int_1 !=return_int_2)
-    return(-1);
+    return(1);
 
   if (return_int_1 < 0)
-    return(-1);
+    return(1);
   
   *x_val = (double)return_int_1/100.0;
   
@@ -173,7 +173,7 @@ int read_counter(long *counts)
   if (sscanf(ret_string, "%ld", &counts_1) !=1) 
     {
       //fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
-      return(-1);
+      return(1);
     }
 
   msleep(5);
@@ -182,11 +182,11 @@ int read_counter(long *counts)
   if (sscanf(ret_string, "%ld", &counts_2) !=1) 
     {
       //fprintf(stderr, "Bad return string: \"%s\" in read_counter.\n", ret_string);
-      return(-1);
+      return(1);
     }
 
   if (counts_2 < 0)
-    return(-1);
+    return(1);
 
   *counts = counts_2;
   return(0);
@@ -237,7 +237,6 @@ void scan(void)
 	      x_array[i] = current_x;
 	      y_array[i] = y_val;
 	      i++;
-	      //fprintf(stdout, "%lf, %lf \n", current_x, y_val);
 	    }
 	  msleep(50);
 	}
@@ -258,23 +257,29 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       s_s->data_type = DONT_AVERAGE_DATA;
 
-      if ( read_x(val_out) )
-	return(1);
-      
+      if ( read_x(val_out) == 0)
+	{
+	  add_val_sensor_struct(s_s, time(NULL), *val_out);
+	  s_s->rate = 0.0;
+	  write_temporary_sensor_data(s_s);
+	  return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
+	}      
       return(0);
       
-      msleep(50);
     }
   else if (strncmp(s_s->subtype, "RY", 2) == 0)  // Read out current y position
     {
       s_s->data_type = DONT_AVERAGE_DATA;
       
-      if ( read_y(val_out) )
-	return(1);
+      if ( read_y(val_out) == 0)
+	{
+	  add_val_sensor_struct(s_s, time(NULL), *val_out);
+	  s_s->rate = 0.0;
+	  write_temporary_sensor_data(s_s);
+	  return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
+	}  
       
       return(0);
-      
-      msleep(50);
     }
   else if (strncmp(s_s->subtype, "Scan", 2) == 0)  // do the scan and dump to the DB
     {
