@@ -28,7 +28,7 @@ char   y_text[4200];
 
 int    data_length = 0;
 
-int do_scan = 0;
+int    do_scan = 0;
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
@@ -72,7 +72,7 @@ int insert_mysql_xy_data(char *sensor_name, time_t t_in, double v_in, double r_i
     }
   
   sprintf(query_strng, 
-	  "INSERT INTO `sc_sens_%s` ( `time`, `value`, `rate`, `x_data`, `y_data`) VALUES ( %d, %f, %f, \"%s\", \"%s\")",
+	  "INSERT INTO `sc_sens_%s` ( `time`, `value`, `rate`, `x_array`, `y_array`) VALUES ( %d, %f, %f, \"%s\", \"%s\")",
 	  sensor_name, t_in, v_in, r_in, x_text, y_text
 	  );
   ret_val += write_to_mysql(query_strng);
