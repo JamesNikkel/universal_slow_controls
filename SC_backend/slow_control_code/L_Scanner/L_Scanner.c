@@ -73,7 +73,7 @@ int insert_mysql_xy_data(char *sensor_name, time_t t_in, double v_in, double r_i
   
   sprintf(query_strng, 
 	  "INSERT INTO `sc_sens_%s` ( `time`, `value`, `rate`, `x_data`, `y_data`) VALUES ( %d, %f, %f, \"%s\", \"%s\")",
-	  sensor_name, t_in, v_in, r_in, x_text, y_text, 
+	  sensor_name, t_in, v_in, r_in, x_text, y_text
 	  );
   ret_val += write_to_mysql(query_strng);
   
