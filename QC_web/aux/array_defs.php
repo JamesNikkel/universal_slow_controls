@@ -71,6 +71,7 @@ $housing_qc_status_array = array(
 				 "Complete",
 				 "Oil topped up",
 				 "Final clean done",
+				 "In detector",
 				 "Fix Me!",
 				 "Failed",
 				 );
@@ -98,6 +99,7 @@ $item_location_array = array(
 			     "WL109",
 			     "WL109A",
 			     "WL110",
+			     "WL111",
 			     "ORNL",
 			     "Other",
 			     );
