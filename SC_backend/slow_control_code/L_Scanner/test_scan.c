@@ -444,7 +444,6 @@ int main (int argc, char *argv[])
 	  if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1))
 	    {
 	      set_up();
-	      set_speed(1);
 	      scan(X1, X2);
 	      clean_up();
 	    }
