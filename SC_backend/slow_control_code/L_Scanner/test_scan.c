@@ -314,7 +314,7 @@ void reset_counter(void)
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
-void scan(double X1, double X2, double dX)
+void scan(double X1, double X2)
 {
   double x_val, y_val;
   double current_x = -1;
