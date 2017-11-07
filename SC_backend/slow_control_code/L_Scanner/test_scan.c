@@ -236,14 +236,14 @@ int read_x(double *x_val)
 
 void home_x(void)
 {
-  char       cmd_string[64];
+  char cmd_string[64];
   sprintf(cmd_string, "%d H 0\n", 2);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
 void halt_x(void)
 {
-  char       cmd_string[64];
+  char cmd_string[64];
   sprintf(cmd_string, "%d X 0\n", 2);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
@@ -251,8 +251,24 @@ void halt_x(void)
 
 void goto_x(double target_x)
 {
-  char       cmd_string[64]; 
+  char cmd_string[64]; 
   sprintf(cmd_string, "%d G %d\n", 2, (int)(10*target_x));
+  write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
+}
+
+void set_speed_x(int speed)
+{
+  int sleep_time;
+  char cmd_string[64];
+ 
+  if (speed <1)
+    speed = 1;
+  if (speed > 10)
+    speed = 10;
+  
+  sleep_time = (int)1000/speed;
+  
+  sprintf(cmd_string, "%d S %d\n", 2, sleep_time);
   write_tcp(inst_dev_2, cmd_string, strlen(cmd_string));
 }
 
@@ -337,11 +353,12 @@ void scan(double X1, double X2, double dX)
 
 int main (int argc, char *argv[])
 {
-  double XXX, X1, X2, dX;
+  double XXX, X1, X2;
   double x_val, y_val;
+  int    speed;
   long   counts;
-  int max_tries = 10;
-  int i = 0;
+  int    max_tries = 10;
+  int    i = 0;
   
   if (argc > 1)
     {
@@ -350,8 +367,9 @@ int main (int argc, char *argv[])
 	  fprintf(stdout, "Usage: %s home            to 'home' the drive.\n", argv[0]);
 	  fprintf(stdout, "   or: %s halt            to halt motion. \n", argv[0]);
 	  fprintf(stdout, "   or: %s read            to read out the x and y values. \n", argv[0]);
-	  fprintf(stdout, "   or: %s goto XXX        to move the sensor to XXX(cm) \n", argv[0]);
-	  fprintf(stdout, "   or: %s scan X1 X2 dX   to scan from X1 to X2 in steps of dX (cm) \n", argv[0]);
+	  fprintf(stdout, "   or: %s speed XX        to set the speed to between 1 (slow) and 10 (fast). \n", argv[0]);
+	  fprintf(stdout, "   or: %s goto  XXX       to move the sensor to XXX(cm) \n", argv[0]);
+	  fprintf(stdout, "   or: %s scan  X1 X2     to scan from X1 to X2 (cm) \n", argv[0]);
 	  exit(1);
 	}
       else if (strncasecmp(argv[1], "home", 4) == 0)
@@ -393,6 +411,20 @@ int main (int argc, char *argv[])
 	  
 	  clean_up();
 	}
+       else if ((strncasecmp(argv[1], "speed", 4) == 0) && (argc > 2))
+	{
+	  if (sscanf(argv[2], "%d", &speed) == 1)
+	    {
+	      set_up();
+	      set_speed_x(speed);
+	      clean_up();
+	    }
+	  else
+	    {
+	      fprintf(stdout, "Bad target value in 'goto'. \n");
+	      exit(1);
+	    }
+	}
       else if ((strncasecmp(argv[1], "goto", 4) == 0) && (argc > 2))
 	{
 	  if (sscanf(argv[2], "%lf", &XXX) == 1)
@@ -407,12 +439,13 @@ int main (int argc, char *argv[])
 	      exit(1);
 	    }
 	}
-      else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 4))
+      else if  ((strncasecmp(argv[1], "scan", 4) == 0) && (argc > 3))
 	{
-	  if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1) && (sscanf(argv[4], "%lf", &dX) == 1))
+	  if ((sscanf(argv[2], "%lf", &X1) == 1) && (sscanf(argv[3], "%lf", &X2) == 1))
 	    {
 	      set_up();
-	      scan(X1, X2, dX);
+	      set_speed(1);
+	      scan(X1, X2);
 	      clean_up();
 	    }
 	  else
