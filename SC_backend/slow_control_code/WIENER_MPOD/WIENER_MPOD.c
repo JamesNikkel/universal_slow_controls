@@ -3,13 +3,15 @@
 /* Tim Classen */
 /* classen2@llnl.gov */
 
-#include "SC_db_interface.h"
-#include "SC_aux_fns.h"
-#include "SC_sensor_interface.h"
-
-#include "ethernet.h"
+#include <string>
+#include <iostream>
+#include <sstream> 
+#include <cstdio>
+#include <cstdlib>
 
 #include "SC_db_interface_raw.h"
+#include "SC_aux_fns.h"
+#include "SC_sensor_interface.h"
 
 #define INSTNAME "WIENER_MPOD"
 
