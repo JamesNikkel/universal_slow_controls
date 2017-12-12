@@ -16,7 +16,6 @@
 #define INSTNAME "SRC_Control"
 
 int inst_dev;
-double pos_offset;
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
@@ -27,7 +26,6 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       my_signal = SIGTERM;
       return(1);
     }
-  pos_offset = abs(i_s->parm1);
   
   return(0);
 }
@@ -45,7 +43,6 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       ret_string[64];             
   int        return_int_1;
   int        return_int_2;
-
   
   if (strncmp(s_s->subtype, "R", 1) == 0)  // Read out current source position
     {
@@ -73,8 +70,8 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
       if (return_int_1 < 0)
 	return(0);
-       
-      *val_out = (double)return_int_1/10.0 - pos_offset;   ///  pos_offset sets zero to that value
+      
+      *val_out = (double)return_int_1/10.0 - s_s->parm1;   ///  sets zero to that value
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 2.3;
@@ -112,9 +109,9 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
   
   else if (strncmp(s_s->subtype, "G", 1) == 0)  // Goto specified position
     {
-      if (s_s->new_set_val+pos_offset > 0) 
+      if (s_s->new_set_val + s_s->parm1 > 0) 
 	{     
-	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val+pos_offset)));     ///  pos_offset sets zero to that value
+	  sprintf(cmd_string, "%d G %d\n", s_s->num, (int)(10*(s_s->new_set_val + s_s->parm1)));     ///  parm1 sets zero to that value
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
