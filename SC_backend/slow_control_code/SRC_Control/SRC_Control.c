@@ -71,7 +71,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       if (return_int_1 < 0)
 	return(0);
       
-      *val_out = (double)return_int_1/10.0 - s_s->parm1;   ///  sets zero to that value
+      *val_out = (double)return_int_1/100.0 - s_s->parm1;   ///  sets zero to that value
 
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 2.3;
