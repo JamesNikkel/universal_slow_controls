@@ -203,19 +203,34 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       *val_out = pthVal;
     }
    else if  (strncmp(s_s->subtype, "P_B", 3) == 0)
-    {
-      sprintf(cmd_string, "RDP_B\n");
-      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-      msleep(200);
-      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+     {
+       sprintf(cmd_string, "RDP_B\n");
+       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+       msleep(200);
+       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 
-      if (sscanf(ret_string, "%f", &pthVal) !=1)
-	{
-	  fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
-	  return(1);
-	}
-      *val_out = pthVal;
-    }
+       if (sscanf(ret_string, "%f", &pthVal) !=1)
+	 {
+	   fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+	   return(1);
+	 }
+       *val_out = pthVal;
+     }
+   else if (strncmp(s_s->subtype, "O2", 2) == 0)
+     {
+       sprintf(cmd_string, "O2 %d\n", s_s->num);
+       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+       msleep(200);
+       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+
+       if (sscanf(ret_string, "%f", &pthVal) !=1)
+	 {
+	   fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+	   return(1);
+	 }
+       *val_out = pthVal;  
+     }
+
   else       // Print an error if invalid subtype is entered
     {
       fprintf(stderr, "Wrong type for %s \n", s_s->name);
