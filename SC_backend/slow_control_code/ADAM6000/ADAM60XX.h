@@ -155,6 +155,9 @@ int write_DAC_i(struct sensor_struct *s_s, uint16_t start_address, uint16_t num,
 
     set_dbl = s_s->parm1 +  s_s->parm2 * s_s->new_set_val + s_s->parm3 * s_s->new_set_val * s_s->new_set_val;
 
+    if ((s_s->parm4 > 0) && (set_dbl > parm4))
+      set_dbl = parm3;
+    
     set_val = (int)(4095.0 * set_dbl / 10.0);  
 
     channel_address = start_address + s_s->num;
