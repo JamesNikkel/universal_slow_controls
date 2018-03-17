@@ -467,6 +467,7 @@ if (isset($_POST['new_sens_name']))
 }
 
 
+
 /////////////   get all the sensor table entries here:
 include("aux/get_sensor_info.php"); 
 

@@ -262,7 +262,7 @@ int send_mail_message(char *address, char *message)
     fprintf(stderr, "Trouble writing message file in send_mail_message, w_status=%d\n", (int)w_status);
     
 
-  sprintf(sys_command, "/bin/mail %s -s \"Slow control alarm\" < %s > /dev/null ", address,  message_file_name);
+  sprintf(sys_command, "/bin/mail -s \"Slow control alarm\" %s < %s > /dev/null ", address,  message_file_name);
   if (system(sys_command) == -1)
     {
       fprintf(stderr, "Trouble sending with /bin/mail in send_mail_message\n");

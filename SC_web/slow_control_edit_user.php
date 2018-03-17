@@ -30,6 +30,7 @@ if (isset($_POST['new_user_name']) && (strpos($_SESSION['privileges'], "admin") 
     include("master_db_login.php");
     if (!get_magic_quotes_gpc())
 	$_POST['new_user_name'] = addslashes($_POST['new_user_name']);
+    $_POST['new_user_name'] = preg_replace('/\s+/', '', $_POST['new_user_name']);
     
     $edit_user = $_POST['new_user_name'];
     $query = "INSERT into `users` (`user_name`) VALUES ('".$_POST['new_user_name']."')"; 
