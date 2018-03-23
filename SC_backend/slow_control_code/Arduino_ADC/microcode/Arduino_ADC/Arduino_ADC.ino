@@ -18,9 +18,9 @@ BME280 pthSensor_B;   // 0x76
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
-  0x90, 0xA2, 0xDA, 0x11, 0x0A, 0x93
+  0x90, 0xA2, 0xDA, 0x10, 0xD6, 0x42
 };
-IPAddress ip(172, 16, 14, 4);
+IPAddress ip(192, 168, 1, 2);
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use

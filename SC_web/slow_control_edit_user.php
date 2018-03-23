@@ -253,7 +253,7 @@ if ((strcmp($_SESSION['user_name'], $edit_user) == 0) || (strpos($_SESSION['priv
 {
     echo ('<TR>');
     echo ('<TD align=left>');
-    echo ('<input type="text" name="realname" value="'.$users_full_name[$edit_user].'" size="16">');
+    echo ('<input type="text" name="realname" value="'.$users_full_name[$edit_user].'" size="16" autocomplete="off">');
     echo ('</TD>');
 }
 else
@@ -267,35 +267,35 @@ else
 if ((strcmp($_SESSION['user_name'], $edit_user) == 0) || (strpos($_SESSION['privileges'], "admin") !== false))
 {
     echo ('<TD align=left>');
-    echo ('<input type="text" name="affiliation" value="'.$users_affiliation[$edit_user].'" size="16">');
+    echo ('<input type="text" name="affiliation" value="'.$users_affiliation[$edit_user].'" size="16" autocomplete="off">');
     echo ('</TD>');
     
     
     if (strcmp($edit_user, $_SESSION['user_name']) == 0)
     {
 	echo ('<TH align=left>');
-	echo ('Old: <input type="password" name="old_password" size="12"> <br>');
-	echo ('New: <input type="password" name="new_password1" size="12"> <br>');
-	echo ('New: <input type="password" name="new_password2" size="12">');
+	echo ('Old: <input type="password" name="old_password" size="12" autocomplete="off"> <br>');
+	echo ('New: <input type="password" name="new_password1" size="12" autocomplete="off"> <br>');
+	echo ('New: <input type="password" name="new_password2" size="12" autocomplete="off">');
 	echo ('</TH>');
     }
     else
     {
 	echo ('<TH align=left>');
-	echo ('<input type="password" name="password" size="12">');
+	echo ('<input type="password" name="password" size="12" autocomplete="off">');
 	echo ('</TH>');
     }
     
     echo ('<TD align=left>');
-    echo ('<input type="text" name="email" value="'.$users_email[$edit_user].'"  size="16">');
+    echo ('<input type="text" name="email" value="'.$users_email[$edit_user].'"  size="16" autocomplete="off">');
     echo ('</TD>');
     
     echo ('<TD align=left>');
-    echo ('<input type="text" name="sms" value="'.$users_sms[$edit_user].'"  size="16">');
+    echo ('<input type="text" name="sms" value="'.$users_sms[$edit_user].'"  size="16" autocomplete="off">');
     echo ('</TD>');
     
     echo ('<TD align=left>');
-    echo ('<input type="text" name="phone" value="'.$users_phone[$edit_user].'" size="14">');
+    echo ('<input type="text" name="phone" value="'.$users_phone[$edit_user].'" size="14" autocomplete="off">');
     echo ('</TD>');
 }
 

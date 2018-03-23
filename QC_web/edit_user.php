@@ -181,7 +181,7 @@ if ((strcmp($_SESSION['user_name'], $edit_user) == 0) || (strpos($_SESSION['priv
 {
     echo ('<TR>');
     echo ('<TD align=left>');
-    echo ('<input type="text" name="realname" value="'.$users_full_name[$edit_user].'" size="16">');
+    echo ('<input type="text" name="realname" value="'.$users_full_name[$edit_user].'" size="16" autocomplete="off">');
     echo ('</TD>');
 }
 else
@@ -195,27 +195,27 @@ else
 if ((strcmp($_SESSION['user_name'], $edit_user) == 0) || (strpos($_SESSION['privileges'], "admin") !== false))
 {
     echo ('<TD align=left>');
-    echo ('<input type="text" name="affiliation" value="'.$users_affiliation[$edit_user].'" size="16">');
+    echo ('<input type="text" name="affiliation" value="'.$users_affiliation[$edit_user].'" size="16" autocomplete="off">');
     echo ('</TD>');
     
     
     if (strcmp($edit_user, $_SESSION['user_name']) == 0)
     {
 	echo ('<TH align=left>');
-	echo ('Old: <input type="password" name="old_password" size="12"> <br>');
-	echo ('New: <input type="password" name="new_password1" size="12"> <br>');
-	echo ('New: <input type="password" name="new_password2" size="12">');
+	echo ('Old: <input type="password" name="old_password" size="12" autocomplete="off"> <br>');
+	echo ('New: <input type="password" name="new_password1" size="12" autocomplete="off"> <br>');
+	echo ('New: <input type="password" name="new_password2" size="12" autocomplete="off">');
 	echo ('</TH>');
     }
     else
     {
 	echo ('<TH align=left>');
-	echo ('<input type="password" name="password" size="12">');
+	echo ('<input type="password" name="password" size="12" autocomplete="off">');
 	echo ('</TH>');
     }
     
     echo ('<TD align=left>');
-    echo ('<input type="text" name="email" value="'.$users_email[$edit_user].'"  size="16">');
+    echo ('<input type="text" name="email" value="'.$users_email[$edit_user].'"  size="16" autocomplete="off">');
     echo ('</TD>');
  
 }
@@ -223,7 +223,7 @@ if ((strcmp($_SESSION['user_name'], $edit_user) == 0) || (strpos($_SESSION['priv
 if (strpos($_SESSION['privileges'], "admin") !== false)
 {
     echo ('<TD align=left>');
-    echo ('<SELECT name="privileges[]" style="font-size: 12pt" multiple=true size=4 >');
+    echo ('<SELECT name="privileges[]" style="font-size: 12pt" multiple=true size=4>');
     foreach ($privilege_array as $pa)
     {
 	echo('<option ');
