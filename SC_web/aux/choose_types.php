@@ -7,7 +7,7 @@
 
 
 if (empty($_SESSION['choose_type']))
-    $_SESSION['choose_type'] = $sens_type_array_index[0];
+  $_SESSION['choose_type'] = array($sens_type_array_index[0]);
 
 if (!(empty($_POST['s_all'])))             // is the select all button has been pressed do this:
   $_SESSION['choose_type']=  $sens_type_array_index;
