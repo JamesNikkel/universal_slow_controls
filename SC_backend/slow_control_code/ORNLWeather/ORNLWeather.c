@@ -30,7 +30,7 @@ int get_html_data(void)
   FILE *fp;
   char data_line[256];
  
-  sprintf(sys_command, "wget -q https://towers.ornl.gov/meteorology/LSS/orrm/data/LEDTOWAa.dat");
+  sprintf(sys_command, "cd /tmp; wget -q https://towers.ornl.gov/meteorology/LSS/orrm/data/LEDTOWAa.dat");
   if (system(sys_command) == -1)
     {
       fprintf(stderr, "Trouble getting Weather info from towers.ornl.gov\n");
@@ -39,7 +39,7 @@ int get_html_data(void)
     }
    
    
-  if ((fp = fopen("LEDTOWAa.dat", "r")) == NULL)
+  if ((fp = fopen("/tmp/LEDTOWAa.dat", "r")) == NULL)
     {
       fprintf(stderr, "Can't open data file.\n");
       sleep(2);
@@ -52,7 +52,7 @@ int get_html_data(void)
   fclose(fp);
   
   sleep(2);
-  sprintf(sys_command, "rm LEDTOWAa.dat");
+  sprintf(sys_command, "rm /tmp/LEDTOWAa.dat");
   if (system(sys_command) == -1)
     {
       fprintf(stderr, "Trouble deleting weather file.\n");
