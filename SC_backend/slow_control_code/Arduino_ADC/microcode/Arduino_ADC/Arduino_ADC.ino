@@ -18,7 +18,7 @@ BME280 pthSensor_B;   // 0x76
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
-  0x90, 0xA2, 0xDA, 0x10, 0xD6, 0x42
+  0x90, 0xA2, 0xDA, 0x10, 0xD6, 0x67
 };
 IPAddress ip(192, 168, 1, 2);
 
