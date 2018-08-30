@@ -51,7 +51,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
 
-  sprintf(cmd_string, "field%d", s_s->num);
+  sprintf(cmd_string, "field%d\n", s_s->num);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
   msleep(200);
   query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
