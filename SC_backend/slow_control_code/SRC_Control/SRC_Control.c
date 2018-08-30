@@ -87,39 +87,15 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 {
   char       cmd_string[64];
   char       ret_string[64];
-  int        return_int_1;
-
+ 
   if (strncmp(s_s->subtype, "H", 1) == 0)  // Go home
     {  
       if (s_s->new_set_val > 0.5) 
 	{
-	  
-	  sprintf(cmd_string, "%d S %d\n", s_s->num, 1200);
+          sprintf(cmd_string, "%d S %d\n", s_s->num, 1200);
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	  msleep(100);
-
-	  sprintf(cmd_string, "%d G %d\n", s_s->num, 50);     ///   move source to +5 cm
-	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-
-	  msleep(2000);
-	  return_int_1 = -1;
-	  
-	  while (return_int_1 < 0)
-	    {
-	      sprintf(cmd_string, "%d R 0\n", s_s->num);
-
-	      query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
-	      if(sscanf(ret_string, "%d", &return_int_1) != 1)
-		{
-		  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
-		  return(1);
-		}
-	      msleep(500);
-	    }
-	  
-
-
-	  
+  
 	  sprintf(cmd_string, "%d H 0\n", s_s->num); 	   
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
