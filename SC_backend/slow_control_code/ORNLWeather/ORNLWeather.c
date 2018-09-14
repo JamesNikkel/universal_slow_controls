@@ -47,7 +47,7 @@ int get_html_data(void)
     }
 
   // 07/05/18 1122 hr TOWA 15Temp  84F  29C  Soil 25CWFr  45 NE  EPZ-ABKX    WSp  2.5 MPH   PkWD  4.2BP 29.36 in  Stability ARH  66%  24h Prc 0.00 in
-  fscanf(fp, "%*d/%*d/%*d %*d hr TOWA 15Temp %*dF %dC Soil %*dCWFr %*d %*s %*s WSp %f MPH PkWD %*fBP %f in Stability %*s %d 24h Prc %f in", 
+  fscanf(fp, "%*d/%*d/%*d %*d hr TOWA 15Temp %*dF %dC Soil %*dCWFr %*d %*s %*s WSp %f MPH PkWD %*fBP %f in Stability %*s %d%% 24h Prc %f in", 
 	 &temperature, &windspeed, &pressure, &humidity, &precipitation);
   fclose(fp);
   
