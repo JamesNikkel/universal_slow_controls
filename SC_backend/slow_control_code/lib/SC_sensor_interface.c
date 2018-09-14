@@ -360,7 +360,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 		      sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 			      this_sensor_struc->name);
 		      sprintf(this_sys_message_struc.type, "Error");
-		      this_sys_message_struc.is_error = 1;
+		      this_sys_message_struc.is_error = 0;
 		      insert_mysql_system_message(&this_sys_message_struc);	
 		      break;
 		    }
@@ -398,7 +398,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);
 			  sprintf(this_sys_message_struc.type, "Error");
-			  this_sys_message_struc.is_error = 1;
+			  this_sys_message_struc.is_error = 0;
 			  insert_mysql_system_message(&this_sys_message_struc);	
 			  break;
 			}
@@ -433,7 +433,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);
 			  sprintf(this_sys_message_struc.type, "Error");
-			  this_sys_message_struc.is_error = 1;
+			  this_sys_message_struc.is_error = 0;
 			  insert_mysql_system_message(&this_sys_message_struc);	
 			  break;
 			}
@@ -468,7 +468,7 @@ void sensor_loop(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 			  sprintf(this_sys_message_struc.msgs, "Sensor %s could not be read.", 
 				  this_sensor_struc->name);
 			  sprintf(this_sys_message_struc.type, "Error");
-			  this_sys_message_struc.is_error = 1;
+			  this_sys_message_struc.is_error = 0;
 			  insert_mysql_system_message(&this_sys_message_struc);	
 			  break;
 			}
