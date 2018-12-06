@@ -18,6 +18,9 @@
 
 int inst_dev;
 
+int num_tries;
+
+
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
 {
@@ -27,7 +30,9 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
       my_signal = SIGTERM;
       return(1);
     }
-  
+
+  num_tries = 0;
+ 
   return(0);
 }
 
@@ -43,7 +48,14 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   char       cmd_string[64];
   char       ret_string[64];             
   float      field_val;
-
+  
+  if ( num_tries > 20)
+    {
+      clean_up_inst(i_s, s_s);
+      msleep(2000);
+      set_up_inst(i_s, s_s);
+      msleep(2000);
+    }
 
   if (s_s->num < 0 || s_s->num > 7)
     {
@@ -53,12 +65,13 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 
   sprintf(cmd_string, "field%d", s_s->num);
   query_tcp(inst_dev, cmd_string, 6, ret_string, sizeof(ret_string)/sizeof(char));
-  msleep(200);
+  msleep(2000);
   query_tcp(inst_dev, cmd_string, 6, ret_string, sizeof(ret_string)/sizeof(char));
    
   if (sscanf(ret_string, "%f", &field_val) !=1)
     {
       fprintf(stderr, "Bad return string: \"%s\" \n", ret_string);
+      num_tries++;
       return(1);
     }
   *val_out = field_val;
