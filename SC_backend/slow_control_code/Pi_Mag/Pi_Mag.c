@@ -75,6 +75,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       return(1);
     }
   *val_out = field_val;
+  msleep(2000);
   return(0);
 }
 
