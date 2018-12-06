@@ -51,10 +51,17 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   
   if ( num_tries > 20)
     {
-      clean_up_inst(i_s, s_s);
+      close(inst_dev);
       msleep(2000);
-      set_up_inst(i_s, s_s);
-      msleep(2000);
+       if ((inst_dev = connect_tcp(i_s)) < 0)
+	 {
+	   fprintf(stderr, "Connect failed. \n");
+	   my_signal = SIGTERM;
+	   return(1);
+	 }
+       
+       num_tries = 0;
+       msleep(2000);
     }
 
   if (s_s->num < 0 || s_s->num > 7)
