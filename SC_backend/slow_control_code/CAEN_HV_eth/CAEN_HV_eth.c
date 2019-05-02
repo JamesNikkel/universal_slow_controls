@@ -33,7 +33,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 #define _def_clean_up_inst
 void clean_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
 {
-close(inst_dev);
+  close(inst_dev);
 }
 
 #define _def_set_sensor
@@ -132,7 +132,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     }
   else
     {
-      fprintf(stderr, "No such subtype %s in %s. \n", s_s->subtype, i_s->name);	
+      fprintf(stderr, "No such subtype %s in read_sensor,  %s. \n", s_s->subtype, i_s->name);	
       return(1);
     }
   
