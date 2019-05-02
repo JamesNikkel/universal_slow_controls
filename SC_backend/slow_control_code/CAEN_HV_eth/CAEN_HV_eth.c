@@ -101,7 +101,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   int        module_address;
 
   module_address = (int)i_s->parm1;
-
+  
   if (strncmp(s_s->subtype, "VMon", 4) == 0)  // Get voltage monitor value
     {
       sprintf(cmd_string, "$BD:%d,CMD:MON,CH:%d,PAR:VMON%c%c", module_address, s_s->num, CR, LF);   // Turn channel on
@@ -116,7 +116,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	} 
       
     }
-   if (strncmp(s_s->subtype, "IMon", 4) == 0)  //  Get current monitor value
+  else if (strncmp(s_s->subtype, "IMon", 4) == 0)  //  Get current monitor value
     {
       sprintf(cmd_string, "$BD:%d,CMD:MON,CH:%d,PAR:IMON%c%c", module_address, s_s->num, CR, LF);   // Turn channel on
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
