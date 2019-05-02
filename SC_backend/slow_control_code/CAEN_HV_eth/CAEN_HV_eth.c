@@ -50,14 +50,14 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 
   if (strncmp(s_s->subtype, "VSet", 4) == 0)  // set the HV voltage
     {
-      sprintf(cmd_string, "$BD:%d,CMD:SET,CH:%d,PAR:VSET,VAL%f%c%c", module_address, s_s->num, s_s->new_set_val, CR, LF);   // Set voltage
+      sprintf(cmd_string, "$BD:%d,CMD:SET,CH:%d,PAR:VSET,VAL:%f%c%c", module_address, s_s->num, s_s->new_set_val, CR, LF);   // Set voltage
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
        
-      if(sscanf(ret_string, "#BD:%*d,CMD:OK,VAL:%lf", val_out) != 1)
-	{
-	  fprintf(stderr, "Bad return string: \"%s\" in set VSet!\n", ret_string);
-	  return(1);
-	} 
+      /* if(sscanf(ret_string, "#BD:%*d,CMD:OK,VAL:%lf", val_out) != 1) */
+      /* 	{ */
+      /* 	  fprintf(stderr, "Bad return string: \"%s\" in set VSet!\n", ret_string); */
+      /* 	  return(1); */
+      /* 	}  */
 
     }
   else if (strncmp(s_s->subtype, "OnOff", 3) == 0)
@@ -70,12 +70,12 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
       query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
      
       
-      if(sscanf(ret_string, "%lf", val_out) != 1)
-	{
-	  fprintf(stderr, "Bad return string: \"%s\" in read temperature!\n", ret_string);
-	  return(1);
-	}
-      sleep(1);
+      /* if(sscanf(ret_string, "%lf", val_out) != 1) */
+      /* 	{ */
+      /* 	  fprintf(stderr, "Bad return string: \"%s\" in read temperature!\n", ret_string); */
+      /* 	  return(1); */
+      /* 	} */
+      /* sleep(1); */
     }
   else
     {
