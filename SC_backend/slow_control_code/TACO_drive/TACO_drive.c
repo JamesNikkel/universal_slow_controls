@@ -55,7 +55,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
       msleep(500);
       
-      *val_out = (double)return_int_1/10.0;   ///  micro-controller returns val in degrees*10
+      *val_out = (double)return_int/10.0;   ///  micro-controller returns val in degrees*10
     }
   return(0);
 }
