@@ -55,7 +55,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	}
       msleep(500);
       
-      *val_out = (double)return_int/10.0;   ///  micro-controller returns val in degrees*10
+      *val_out = (double)return_int/100.0;   ///  micro-controller returns val in degrees*10
     }
   return(0);
 }
@@ -71,7 +71,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if ((s_s->new_set_val > -180)  && (s_s->new_set_val < 180))
 	{     
-	  sprintf(cmd_string, "S %d\n", s_s->num, (int)(10*(s_s->new_set_val)));     /// mult by 10 for comms
+	  sprintf(cmd_string, "S %d\n", s_s->num, (int)(100*(s_s->new_set_val)));     /// mult by 10 for comms
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
