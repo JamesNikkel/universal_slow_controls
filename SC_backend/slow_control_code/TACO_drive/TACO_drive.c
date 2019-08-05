@@ -52,11 +52,12 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	{
 	  fprintf(stderr, "Bad return string: \"%s\" in read sensor!\n", ret_string);
 	  return(1);
-	}
-      msleep(500);
-      
+	}      
       *val_out = (double)return_int/100.0;   ///  micro-controller returns val in degrees*10
     }
+  
+  msleep(500);
+
   return(0);
 }
 
