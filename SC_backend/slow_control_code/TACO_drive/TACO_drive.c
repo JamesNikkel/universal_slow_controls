@@ -71,7 +71,7 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
     {
       if ((s_s->new_set_val > -180)  && (s_s->new_set_val < 180))
 	{     
-	  sprintf(cmd_string, "S %d\n", s_s->num, (int)(100*(s_s->new_set_val)));     /// mult by 10 for comms
+	  sprintf(cmd_string, "S %d\n", (int)(100*(s_s->new_set_val)));     /// mult by 10 for comms
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	}
     }
