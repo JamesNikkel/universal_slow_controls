@@ -6,7 +6,7 @@ CFLAGS = `mysql_config --cflags` -I../include
 LDFLAGS =  -L../lib -lslow_control
 
 
-PROGS = SRC_Control SRC_Control_test
+PROGS = TACO_drive
 
 all: $(PROGS) 
 
