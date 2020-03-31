@@ -125,7 +125,7 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
       
       if(sscanf(ret_string, "#BD:%*d,CMD:OK,VAL:%lf", val_out) != 1)
 	{
-	  fprintf(stderr, "Bad return string: \"%s\" in read Vmon!\n", ret_string);
+	  fprintf(stderr, "Bad return string: \"%s\" in read Imon!\n", ret_string);
 	  return(1);
 	} 
       
