@@ -148,6 +148,8 @@ else
     unset($y_reg);
 
 $graph = new Graph($_SESSION['single_view_x_size'], $_SESSION['single_view_y_size'], "auto");	
+$graph->clearTheme();
+
 $graph->SetScale("linlin", min($y)-0.05*(max($y)-min($y)), max($y)+0.05*(max($y)-min($y)), min($x)-0.05*(max($x)-min($x)), max($x)+0.05*(max($x)-min($x)));
 //$graph->SetScale("linlin", 0, 0,min($x)-0.05*(max($x)-min($x)), max($x)+0.05*(max($x)-min($x)));
 $graph->title->SetFont(FF_FONT1,FS_BOLD);	

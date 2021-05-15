@@ -29,7 +29,8 @@ function make_plot($plot_name, $x_data, $y_data, $logxy, $title,
     }
 
     $graph = new Graph($x_size, $y_size, "auto", 60);
-    
+    $graph->clearTheme();
+
     $graph->SetScale($logxy, $y_min, $y_max, $x_min, $x_max);
     $graph->img->SetMargin(100, 5, 10, 80);  
     $graph->xgrid->Show(true);
@@ -51,30 +52,11 @@ function make_plot($plot_name, $x_data, $y_data, $logxy, $title,
 	$graph->title->SetFont(FF_FONT1,FS_BOLD);	
       }
 
-    if ($alarm_trip)   
-    {  
-	$graph->SetColor("lightred");
-	$graph->SetMarginColor("red");
-	$graph->xaxis->Setcolor("black");
-	$graph->yaxis->Setcolor("black");
-	$graph->title->SetColor("black");
-	$graph->subtitle->Set("Alarm Tripped!");
-	$graph->subtitle->SetColor("white");
-    }
-    else
-    {
-	$graph->SetFrame(true,$_SESSION['bgcolour'], 1);
-	$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
-	$graph->SetColor("darkblue");
-	$graph->SetMarginColor($_SESSION['bgcolour']);
-	$graph->xgrid->SetColor("black");
-	$graph->ygrid->SetColor("black");
-    }
     $graph->xaxis->SetPos("min");
 
     $lineplot = new LinePlot($y_data, $x_data);
     if (count($x_data) < 70)                    ////   if there are less than 70 points, add markers to plot.
-    {
+      {
 	$lineplot->mark->SetType(MARK_UTRIANGLE);
 	$lineplot->mark->SetFillColor("red");
 	
@@ -119,11 +101,30 @@ function make_plot($plot_name, $x_data, $y_data, $logxy, $title,
     }
 
     if (!empty($v_line))
-    {
+      {
 	$line_mesg = new PlotLine(VERTICAL, $v_line, "green", 2);
 	$graph->AddLine($line_mesg);
-    }
+      }
     
+    if ($alarm_trip)   
+      {  
+	$graph->SetColor("lightred");
+	$graph->SetMarginColor("red");
+	$graph->xaxis->Setcolor("black");
+	$graph->yaxis->Setcolor("black");
+	$graph->title->SetColor("black");
+	$graph->subtitle->Set("Alarm Tripped!");
+	$graph->subtitle->SetColor("white");
+      }
+    else
+      {
+	$graph->SetFrame(true,$_SESSION['bgcolour'], 1);
+	$graph->SetBackgroundGradient('darkblue','lightblue', GRAD_MIDHOR, BGRAD_PLOT);
+	$graph->SetMarginColor($_SESSION['bgcolour']);
+	$graph->xgrid->SetColor("black");
+	$graph->ygrid->SetColor("black");
+      }
+
     $graph->Stroke($plot_name);
     return $plot_name;
 }
@@ -153,7 +154,8 @@ function make_point_plot($plot_name, $x_data, $y_data, $logxy, $title,
     }
 
     $graph = new Graph($x_size, $y_size, "auto", 60);
-    
+    $graph->clearTheme();
+
     $graph->SetScale($logxy, $y_min, $y_max, $x_min, $x_max);
     $graph->img->SetMargin(100, 5, 10, 80);  
     $graph->xgrid->Show(true);
@@ -273,7 +275,8 @@ function make_phase_plot($plot_name, $x_data, $y_data, $title,
     $n=count($x_data);
 
     $graph = new Graph($x_size, $y_size, "auto", 60);
-    
+    $graph->clearTheme();
+
     $graph->SetScale('linlin', $y_min, $y_max, $x_min, $x_max);
     $graph->img->SetMargin(100,5,30,80);  
     $graph ->xgrid->Show(true);
@@ -287,22 +290,6 @@ function make_phase_plot($plot_name, $x_data, $y_data, $title,
     $graph->title->Set($title);
     $graph->title->SetFont(FF_FONT1,FS_BOLD);	
     
-    if ($alarm_trip)   
-    {  
-	$graph->SetColor("lightred");
-	$graph->SetMarginColor("red");
-	$graph->subtitle->Set("Alarm Tripped!");
-	$graph->subtitle->SetColor("white");
-    }
-    else
-    {
-	$graph->SetFrame(true,$_SESSION['bgcolour'], 1);
-	$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
-	$graph->SetColor("darkblue");
-	$graph->SetMarginColor($_SESSION['bgcolour']);
-	$graph ->xgrid->SetColor("black");
-	$graph ->ygrid->SetColor("black");
-    }
     $graph->xaxis->SetPos("min");
 
     $lineplot = new LinePlot($y_data, $x_data);
@@ -339,19 +326,35 @@ function make_phase_plot($plot_name, $x_data, $y_data, $title,
     }
 
     if (!empty($y_reg))
-    {
+      {
 	$x_reg=array(min($x_data), max($x_data)); 
 	$linereg = new LinePlot(array($y_reg[0], $y_reg[1]), $x_reg);	
 	$linereg->SetColor("green");
 	$graph->AddLine($linereg);
-    }
+      }
 
     if (!empty($v_line))
-    {
+      {
 	$line_mesg = new PlotLine(VERTICAL, $v_line, "green", 2);
 	$graph->AddLine($line_mesg);
-    }
+      }
     
+    if ($alarm_trip)   
+      {  
+	$graph->SetColor("lightred");
+	$graph->SetMarginColor("red");
+	$graph->subtitle->Set("Alarm Tripped!");
+	$graph->subtitle->SetColor("white");
+      }
+    else
+      {
+	$graph->SetFrame(true,$_SESSION['bgcolour'], 1);
+	$graph->SetBackgroundGradient('darkblue','blue', GRAD_MIDHOR, BGRAD_PLOT);
+	$graph->SetMarginColor($_SESSION['bgcolour']);
+	$graph ->xgrid->SetColor("black");
+	$graph ->ygrid->SetColor("black");
+      }
+
     $graph->Stroke($plot_name);
     return $plot_name;
 }
