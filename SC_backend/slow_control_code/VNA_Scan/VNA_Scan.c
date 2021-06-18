@@ -1,4 +1,4 @@
-/* Program for reading  */
+/* Program for reading the Agilent VNA */
 /* using ethernet */
 /* and putting said readings in to a mysql database. */
 /* James Nikkel */

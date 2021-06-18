@@ -1,4 +1,4 @@
-/* Program for reading  */
+/* Program for reading the Agilent VNA  */
 /* using ethernet */
 /* and putting said readings in to a mysql database. */
 /* James Nikkel */
@@ -15,32 +15,9 @@
 // This is the default instrument entry, but can be changed on the command line when run manually.
 // When called with the watchdog, a specific instrument is always given even if it is the same
 // as the default. 
-#define INSTNAME "P8VNA"
+#define INSTNAME "VNA_Marker_Mon"
 
 int inst_dev;
-
-struct VNA_scan_setup_struct {
-  double start_freq;
-  double stop_freq;
-  int    num_points;
-  double source_power;
-  int    avg_state;
-  char   avg_mode[8];
-  int    avg_factor;
-  char   sweep_type[8];
-  char   sweep_mode[8];
-  int    point_sweep;
-  int    gate_state;
-  double gate_start;
-  double gate_stop;
-  char   gate_mode;
-  char   cal_set_name[128];
-  
-
-
-}
-
-
 
 #define _def_set_up_inst
 int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)    
