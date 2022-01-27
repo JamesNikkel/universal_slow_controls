@@ -46,9 +46,9 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
   
   if (strncmp(s_s->subtype, "DIO", 3) == 0)  // Do DIO reads
     {
-       if (s_s->num < 22 || s_s->num > 53)
+       if (s_s->num < 1 || s_s->num > 53)
 	{
-	  fprintf(stderr, "Channel must be between 22 and 53 (inclusive), not %d.\n", s_s->num);
+	  fprintf(stderr, "Channel must be between 1 and 53 (inclusive), not %d.\n", s_s->num);
 	  return(1);
 	}
        
@@ -82,9 +82,9 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
   
   if (strncmp(s_s->subtype, "DIO", 3) == 0)  // Do DIO reads
     {
-       if (s_s->num < 22 || s_s->num > 53)
+       if (s_s->num < 1 || s_s->num > 53)
 	{
-	  fprintf(stderr, "Channel must be between 22 and 53 (inclusive), not %d.\n", s_s->num);
+	  fprintf(stderr, "Channel must be between 1 and 53 (inclusive), not %d.\n", s_s->num);
 	  return(1);
 	}
 
