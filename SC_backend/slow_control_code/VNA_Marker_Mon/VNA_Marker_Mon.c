@@ -35,12 +35,7 @@ int set_up_inst(struct inst_struct *i_s, struct sensor_struct *s_s_a)
   msleep(2000);
   sprintf(cmd_string, "*CLS\n");
   write_tcp(inst_dev, cmd_string, strlen(cmd_string));
-        
-  msleep(100);
- 
-  sprintf(cmd_string, "sens:swe:mode cont\n");                 // set trigger to continous mode
-  write_tcp(inst_dev, cmd_string, strlen(cmd_string));
-  
+     
   msleep(100);
 
   return(0);
@@ -65,7 +60,6 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
     {
       
       sprintf(cmd_string, "CALC:PAR:SEL %s\n", s_s->user1);
-      //query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
       write_tcp(inst_dev, cmd_string, strlen(cmd_string));
 
       msleep(100);

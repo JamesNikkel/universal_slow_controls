@@ -22,6 +22,7 @@
 
 #define TYPE_ETH 793
 #define MAX_ETH_RETRIES 10
+#define CHUNK_SIZE 1024
 
 #ifndef _IO_CHARS
 #define _IO_CHARS
@@ -41,6 +42,7 @@ int connect_tcp_raw(char *IP_address, int port);
 int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t r_count);
 int write_tcp(int fd, char *cmd_string, size_t c_count);
 int read_tcp(int fd, char *ret_string, size_t r_count);
+int read_long_tcp(int fd, char *ret_string, size_t r_count, int timeout);
 
 int global_tcp_timeout = 5;   // seconds
 #endif  //_SC_ETHERNET_H_
