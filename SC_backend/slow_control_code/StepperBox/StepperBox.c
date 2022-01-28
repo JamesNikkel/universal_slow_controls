@@ -83,20 +83,26 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	    }
 	  return(1);
 	}
-      msleep(500);
 
       if (return_int_1 != return_int_2)
         return(1);
       
       if (return_int_2 == -1)
-	return(1);
+	{
+	  insert_mysql_sensor_data(s_s->user1, time(NULL), 1, 0);  // insert 1 into the status sensor since it's moving
+	  msleep(1000);
+	  return(0);
+	}
 
-      *val_out = (double)return_int_2/s_s->parm1;   ///  micro-controller returns steps, convert to mm.
-
+      *val_out = (double)return_int_2/s_s->parm1;   ///  micro-controller returns steps, convert to mm.      
       add_val_sensor_struct(s_s, time(NULL), *val_out);
       s_s->rate = 0.0;
       write_temporary_sensor_data(s_s);
-      return(insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate));
+      if (insert_mysql_sensor_data(s_s->name, s_s->times[s_s->index], s_s->vals[s_s->index], s_s->rate))
+	return(1);
+      msleep(500);
+      if (insert_mysql_sensor_data(s_s->user1, time(NULL), 0, 0))     // insert 0 into the status sensor
+	return(1);
     }
   return(0);
 }
@@ -119,6 +125,9 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	  sprintf(cmd_string, "%d H 0\n", s_s->num); 	   
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
 	  insert_mysql_sensor_data(s_s->name, time(NULL), 0.0, 0.0);
+
+	  insert_mysql_sensor_data(s_s->user1, time(NULL), 1, 0);  // insert 1 into the status sensor
+	  msleep(1000);
 	}
     }
   else if (strncmp(s_s->subtype, "X", 1) == 0)  // Stop!
@@ -137,6 +146,9 @@ int set_sensor(struct inst_struct *i_s, struct sensor_struct *s_s)
 	{     
 	  sprintf(cmd_string, "%d G %ld\n", s_s->num, (long)(s_s->new_set_val * s_s->parm1));     /// convert from mm to steps
 	  query_tcp(inst_dev, cmd_string, strlen(cmd_string), ret_string, sizeof(ret_string)/sizeof(char));
+	  
+	  insert_mysql_sensor_data(s_s->user1, time(NULL), 1, 0);  // insert 1 into the status sensor
+	  msleep(1000);
 	}
     }
   else if (strncmp(s_s->subtype, "S", 1) == 0)  // Set speed

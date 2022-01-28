@@ -73,7 +73,7 @@ int query_tcp(int fd, char *cmd_string, size_t c_count, char *ret_string, size_t
   fd_set  rfds;
   struct timeval tv;
   
-  bzero(ret_string, r_count);
+  memset(ret_string, 0, r_count);
 
   if (send(fd, cmd_string, c_count, 0) < 0)
     {
@@ -153,7 +153,7 @@ int read_tcp(int fd, char *ret_string, size_t r_count)
   fd_set  rfds;
   struct timeval tv;
 
-  bzero(ret_string, r_count);
+  memset(ret_string, 0, r_count);
 
   FD_ZERO(&rfds);
   FD_SET(fd, &rfds);
@@ -202,6 +202,104 @@ int read_tcp(int fd, char *ret_string, size_t r_count)
     return(0);
   
   if (rdstatus == 0) 
+    fprintf(stderr, "Connection closed\n");
+  
+  return(1);
+}
+
+char* mystrcat (char* dest, char* src)
+{
+  while (*dest) dest++;
+  while (*dest++ = *src++);
+  return (--dest);
+}
+
+int read_long_tcp(int fd, char *ret_string, size_t r_count, int timeout)
+{
+  ssize_t rdstatus;   
+  int     select_ret;
+  fd_set  rfds;
+  struct timeval tv;
+  char chunk[CHUNK_SIZE];
+  int size_recv = 0;
+  int total_size = 0;
+  time_t begin, now;
+
+  char *p = ret_string;
+
+  memset(ret_string, 0, r_count);
+  ret_string[0] = '\0';         // initialize the char array to be zero length string
+
+
+  FD_ZERO(&rfds);
+  FD_SET(fd, &rfds);
+  tv.tv_sec = timeout;
+  tv.tv_usec = 0;
+  
+  select_ret = 0;
+  while ((select_ret = select(fd+1, &rfds, NULL, NULL, &tv)) == -1)
+    { 
+      if (errno == EINTR) 
+	{					
+	  fprintf(stderr, "A non blocked signal was caught.\n");		
+	  FD_ZERO(&rfds);						
+	  FD_SET(fd, &rfds);				
+	} 
+      else 
+	{							
+	  fprintf(stderr, "Select failure.\n"); 
+	  return(1);					
+	}								
+    }								
+  
+  if (select_ret == 0) // Timeout
+    {
+      fprintf(stderr, "Timeout in read_tcp.\n");
+      return(1);	
+    }
+  
+
+  //fcntl(fd, F_SETFL, O_NONBLOCK);
+
+  begin = time(NULL);
+
+  int i = 0;
+  while (1) 
+    {
+      now = time(NULL);
+      
+      if (((now - begin) > timeout) && ( total_size > 0))
+	break;
+         
+      if ((now - begin) > timeout*2) 
+	break;
+
+      memset(chunk, 0, CHUNK_SIZE);
+      if ((size_recv = recv(fd, chunk, CHUNK_SIZE-2, MSG_DONTWAIT)) < 0)
+	{
+	  msleep(50);
+	}
+      else
+	{
+	  //chunk[CHUNK_SIZE-1] = '\0';
+	  total_size += size_recv;
+	  /*
+	  if (i < 5)
+	    {
+	      fprintf(stdout, "i:%d\n", i);
+	      fprintf(stdout, "%s\n\n", chunk);
+	    }
+	  */
+	  p = mystrcat(p,chunk);
+	  begin = time(NULL);
+	}
+      i++;
+    }
+  
+  if (total_size > 0)
+    return(0);
+  
+  if (total_size == 0) 
     fprintf(stderr, "Connection closed\n");
   
   return(1);
