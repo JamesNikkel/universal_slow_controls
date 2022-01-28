@@ -130,6 +130,14 @@ int read_sensor(struct inst_struct *i_s, struct sensor_struct *s_s, double *val_
 	  return(1);
 	}
 
+      if (strncmp( s_s->user1, "10^", 3) == 0)
+	*val_out = pow(10, (( s_s->parm1 + (double)ADC_counts ) * s_s->parm2));
+      else if (strncmp( s_s->user1, "log10", 5) == 0)
+	{
+	  if (( s_s->parm1 + (double)ADC_counts ) * s_s->parm2 > 0)
+	    *val_out = log10(( s_s->parm1 + (double)ADC_counts ) * s_s->parm2);
+	}
+      else
       *val_out = ( s_s->parm1 + (double)ADC_counts ) * s_s->parm2;  // standard conversion where parm1 is offset in ADC counts and parm2 is linear term
     }
   else if  (strncmp(s_s->subtype, "Temp", 4) == 0)
